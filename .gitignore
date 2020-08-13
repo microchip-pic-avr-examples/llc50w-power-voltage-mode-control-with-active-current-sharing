@@ -1,0 +1,45 @@
+# .gitignore file
+#
+# Set up for Microchip/MPLAB X development
+#
+# Updated May 07, 2015, C14029
+# Updated May 30, 2019, M91406
+# Updated Nov 06, 2019, M91406, excluding framework folder 'apps' and user code files in 'config' module folders
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Executables
+*.exe
+
+# Netbeans specific
+~*.*
+nbproject/build/
+nbproject/dist/
+nbproject/private/
+nbproject/disassembly/
+build/
+dist/
+private/
+disassembly/
+*.zip
+*.mk
+*.bash
+Makefile-genesis.properties
+
+# MPLAB X Trace specific
+*.log
+*.inx
+
+# KDE specific
+.directory
+
+# Misc
+.svn
+*.bak
+
+
+
