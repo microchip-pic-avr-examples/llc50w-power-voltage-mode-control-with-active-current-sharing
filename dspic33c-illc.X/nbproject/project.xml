@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>com.microchip.mplab.nbide.embedded.makeproject</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/make-project/1">
+            <name>dspic33c-illc</name>
+            <name>ILLC_50W_VMC_R1_0_0</name>
+            <name>ILLC_50W_R4x_VMC</name>
+            <name>ILLC_50W_R4x</name>
+            <name>ILLC_50W_R3x</name>
+            <name>ILLC_50W_R2x</name>
+            <name>ILLC_50W_R1x</name>
+            <name>ILLC_50W_R0x</name>
+            <creation-uuid>c762407a-c729-4662-8da8-28e61f0da67b</creation-uuid>
+            <make-project-type>0</make-project-type>
+            <c-extensions>c</c-extensions>
+            <cpp-extensions/>
+            <header-extensions>h</header-extensions>
+            <asminc-extensions/>
+            <sourceEncoding>ISO-8859-1</sourceEncoding>
+            <make-dep-projects/>
+            <sourceRootList>
+                <sourceRootElem>.</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>
+                    <name>default</name>
+                    <type>2</type>
+                </confElem>
+            </confList>
+            <formatting>
+                <project-formatting-style>false</project-formatting-style>
+            </formatting>
+        </data>
+    </configuration>
+</project>
