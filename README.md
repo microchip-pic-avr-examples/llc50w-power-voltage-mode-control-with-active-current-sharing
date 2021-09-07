@@ -4,18 +4,18 @@
 ![image](images/microchip.png) 
 
 --- 
-# dsPIC33 Four Switch Buck-Boost Converter <!-- omit in toc --> 
-### 4-Switch Buck-Boost Converter: Average Current Mode Control <!-- omit in toc --> 
+# dsPIC33 Interleaved LLC Converter <!-- omit in toc --> 
+### 2 phase Interleaved LLC converter with voltage mode control and phase current balancing. <!-- omit in toc --> 
 
 
 <p><center><a target="_blank" href="https://www.microchip.com/developmenttools/ProductDetails/PartNO/EV44M28A" rel="nofollow">
-<img src="images/4swbb_pic1_1280.jpg" alt="dsPIC33C 4-Switch Buck-Boost Converter" width="400">
+<img src="images/illc-00.png" alt="dsPIC33C Interleaved LLC Converter" width="400">
 </a></center></p>
 
 <p>
 <center>
 <a target="_blank" href="https://www.microchip.com/developmenttools/ProductDetails/PartNO/EV44M28A" rel="nofollow">
-dsPIC33 4-Switch Buck-Boost Converter
+dsPIC33 Interleaved LLC Converter
 </a>
 </center>
 </p>
@@ -28,6 +28,13 @@ dsPIC33 4-Switch Buck-Boost Converter
 
 - [How to use this document](#how-to-use-this-document)
 - [Summary](#summary)
+- [PWM setup](#pwm-setup)
+- [Phase Current Balancing](#phase-current-balancing)
+  - [State machine](#state-machine)
+    - [STANDBY state](#standby-state)
+    - [ENABLE state](#enable-state)
+    - [SOFTSTART state](#softstart-state)
+    - [UP AND RUNNING state](#up-and-running-state)
 - [Related Collateral](#related-collateral)
   - [Software Used](#software-used)
   - [Hardware Used](#hardware-used)
@@ -79,6 +86,138 @@ The firmware also includes a scheduler to allow the user to easily add their own
 [[back to top](#start-doc)]
 
 - - -
+
+<span id="current-balancing"><a name="current-balancing"> </a></span>
+
+## PWM setup
+
+
+
+- - -
+
+
+<span id="current-balancing"><a name="current-balancing"> </a></span>
+
+## Phase Current Balancing
+
+A current balancing scheme has been implemented on the demo firmware accompanying this board. The goal is that both phases share the load current equally. This scheme is only run if the total load current is above 1.4A (see the macro "IOUT_SRONIL" in the firmware), so the thermal stress is shared equally between the phases when the load is high enough that thermal management is warranted.
+
+The scheme works by changing the duty cycle of the SR drive signals on one phase until the currents are approximately the same, while keeping the duty cycle of the SR drives on the other phase fixed. When the scheme is launched, the (filtered) currents of both phases are compared. The phase with the smaller current runs at a fixed (just under 50%) duty cycle, while the duty cycle of the SRs on the phase with the larger current is varied between a min value (100ns) and a max value (just under 50%) until the two currents are as close as possible.
+
+Decreasing the duty cycle of the SR drives on a phase will decrease the amount of current flowing through this phase and increase the amount of current flowing through the other phase. The total output current remains the same.
+
+<span id="state-machine"><a name="state-machine"> </a></span>
+
+### State machine
+
+
+<p>
+  <center>
+    <img src="images/illc-01.png" alt="ILLC current balancing state machine" width="500">
+    <br>
+    Current balancing state machine
+  </center>
+</p>
+The state machine that runs the current balancing algorithm is illustrated above. It is run in the ADCAN0 interrupt, which is executed every 6th PWM period. 
+
+<br/>
+<br/>
+
+<span id="standby-state"><a name="standby-state"> </a></span>
+
+#### STANDBY state
+Both SRs are disabled, so any conduction is through the body diodes of the SRs. We stay in this state until the output voltage is above 6V (see macro "VOUT_SR_ACTIVE") and the total output current is above 1.4A (see macro "IOUT_SRONIL"). If both of these conditions are satisfied we go to the enable state. 
+
+<p>
+  <center>
+    <img src="images/illc-02.png" alt="standby-state-flowchart" width="450">
+    <br>
+    Flowchart for STANDBY state
+  </center>
+</p>
+
+<br/>
+<span id="enable-state"><a name="enable-state"> </a></span>
+
+#### ENABLE state
+
+Both SRs are still disabled. The two phase currents are compared. In our current balancing algorithm, the phase with the smaller current has a fixed SR duty cycle, and the SR duty of the other phase is varied to get the currents in balance. So the decision on which phase to fix and which to vary is made once at this point, and remains in force while the algorithm is active.
+
+Note that the phase current measurements used for the comparison are filtered to reduce the effect of noise on the decision.
+
+
+<p>
+  <center>
+    <img src="images/illc-03.png" alt="enable-state-flowchart" width="400">
+    <br>
+    Flowchart for ENABLE state
+  </center>
+</p>
+
+After the comparison is made, PWM2 and PWM4 (the PWMs used to drive the SRs for phase A and phase B respectively) are enabled and set at min duty cycle. The PWM setup is actually done in the STANDBY state, but the PWM outputs from the dsPIC are not enabled until the ENABLE state.
+
+<p>
+  <center>
+    <img src="images/illc-04.png" alt="pwm2-setup" width="800">
+    <br>
+    PWM 2 setup
+  </center>
+</p>
+
+As discussed in section XXX, the PWMs are configured in "Independent, dual output" mode. To recap, PG2 is used to drive the SRs for phase A, and PG4 is used to drive the SRs for phase B. 
+
+For phase A, the rising edge of PWM2H is set via the PG2TRIGA register (so the event is triggered when the internal period counter in PG2 reaches PG2TRIGA), and the falling edge set via PG2TRIGB. The rising edge of PWM2L is set by the PG2PHASE register, and the falling edge via the PG2DC register. 
+
+For phase B SR drive, PG4 is used, so PG4TRIGA, PG4TRIGB, PG4PHASE and PG4DC are used to set the rising and falling edges on PG4H and PG4L in the same way as for PG2. 
+
+<br/>
+<span id="softstart-state"><a name="softstart-state"> </a></span>
+
+#### SOFTSTART state
+
+In this state, the duty cycles of the SR drives on both PG2 and PG4 are linearly ramped from the min duty (100ns pulse width) to the max duty (PGxPER/2*250ps - 124ns) in steps of 10ns.
+
+<p>
+  <center>
+    <img src="images/illc-05.png" alt="enable-state-flowchart" width="800">
+    <br>
+    PWM 2 setup
+  </center>
+</p>
+
+The falling edges of the PWM2 and PWM4 outputs are fixed during the ramping of the duty cycle, and the rising edges are moved.
+For PG2, PG2TRIGB is fixed at 50ns before the end of period, and PG2DC fixed at 50ns before the end of the half-period. For PG4, PG4TRIGB is fixed at 50ns before the end of period, and PG4DC fixed at 50ns before the half-period.  
+
+During the soft-start ramp, PG2TRIGA, PG2PHASE, PG4TRIGA and PG4PHASE are decreased by steps equivalent to 10ns so that the duty cycle increases by 10ns each time.
+
+The ramp is stopped when the rising edge of PG2PHASE is 74ns from the start of the period. Thus at the end of the ramp, all SR drive signals are running at just under 50% duty cycle (precisely, this is [PG2PER/2*250ps] - 124ns).
+
+At the end of the ramp, we change to the UP AND RUNNING state.
+
+<br/>
+<span id="up-and-running-state"><a name="up-and-running-state"> </a></span>
+
+#### UP AND RUNNING state
+
+<p>
+  <center>
+    <img src="images/illc-06.png" alt="up-and-running-state-flowchart" width="1000">
+    <br>
+    Flowchart illustrating the UP AND RUNNING state
+  </center>
+</p>
+
+In this state, one of the SR drives of either phase A or phase B runs at a fixed duty cycle, and the other is moved. The decision on which phase to fix and which to vary is made in the ENABLE state and doesn't change thereafter. 
+
+If the output current through the phase being controlled is greater than the current through the other (fixed duty) phase, we decrease the duty cycle of the SR drives by 2ns. If the current is smaller, we increase the duty cycle on the SR drives by 2ns. The on-time of the SR drives is clamped at a max value of [PGxPER/2*250ps - 124ns], and at a min value of 100ns.
+
+
+If the total output current drops below 1.0A (see macro "IOUT_SROFFIL"), all SR drives are disabled, and we go back to the STANDBY state.
+
+[[back to top](#start-doc)]
+
+- - -
+
 
 <span id="related-collateral"><a name="related-collateral"> </a></span>
 
