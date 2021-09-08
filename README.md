@@ -87,11 +87,82 @@ The firmware also includes a scheduler to allow the user to easily add their own
 
 - - -
 
-<span id="current-balancing"><a name="current-balancing"> </a></span>
+<span id="pwm-setup"><a name="pwm-setup"> </a></span>
 
 ## PWM setup
 
+1. PWM routing 
 
+<p>
+  <center>
+    <img src="images/illc-07.png" alt="PWM phase A" width="700">
+    <br>
+    PWM routing for phase A
+  </center>
+</p>
+
+
+<p>
+  <center>
+    <img src="images/illc-08.png" alt="PWM phase B" width="700">
+    <br>
+    PWM routing for phase B
+  </center>
+</p>
+
+2. switching signals required for LLC: single phase then dual phase
+
+<p>
+  <center>
+    <img src="images/illc-10.png" alt="PWM1 config" width="400">
+    <br>
+    PWM1 setting
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-09.png" alt="PWM1 setup" width="1100">
+    <br>
+    PWM1 setup
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-11.png" alt="PWM2 setup" width="1100">
+    <br>
+    PWM2 setup
+  </center>
+</p>
+
+
+3. why independent, dual output mode?
+4. details on setup: single phase first. Then discuss syncing of PWMs
+
+phase A and phase B sync + ADC triggers
+
+<p>
+  <center>
+    <img src="images/illc-12.png" alt="PWM2 setup" width="1500">
+    <br>
+    PWM configuration in MCC
+  </center>
+</p>
+
+
+PWM1: TRIGC for ADC trigger
+PWM2: sync'd to PWM1 EOC
+      ADC trigger?
+      TRIGC to sync with PWM3
+PWM3: sync'd to PWM2 TRIGC. ADC trigger?
+PWM4: sync'd to PWM3 EOC
+
+
+5. ADC triggers
+
+
+[[back to top](#start-doc)]
 
 - - -
 
