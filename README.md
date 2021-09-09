@@ -138,17 +138,34 @@ The firmware also includes a scheduler to allow the user to easily add their own
 
 
 3. why independent, dual output mode?
-4. details on setup: single phase first. Then discuss syncing of PWMs
+4. details on setup: single phase first. Then discuss syncing of PWMs.
 
 phase A and phase B sync + ADC triggers
 
 <p>
   <center>
-    <img src="images/illc-12.png" alt="PWM2 setup" width="1500">
+    <img src="images/illc-12.png" alt="PWM config MCC" width="1500">
     <br>
-    PWM configuration in MCC
+    PWM configuration in MCC (easy setup)
   </center>
 </p>
+
+<p>
+  <center>
+    <img src="images/illc-13.png" alt="phase A config MCC" width="1500">
+    <br>
+    Phase A configuration in MCC (additional register settings)
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-14.png" alt="phase B config MCC" width="1500">
+    <br>
+    Phase B configuration in MCC (additional register settings)
+  </center>
+</p>
+
 
 
 PWM1: TRIGC for ADC trigger
