@@ -29,12 +29,17 @@ dsPIC33 Interleaved LLC Converter
 - [How to use this document](#how-to-use-this-document)
 - [Summary](#summary)
 - [PWM setup](#pwm-setup)
+  - [PWM routing](#pwm-routing)
+  - [LLC switching waveforms](#llc-switching-waveforms)
+    - [Phase A PWM setup](#phase-a-pwm-setup)
+    - [Phase B PWM setup](#phase-b-pwm-setup)
 - [Phase Current Balancing](#phase-current-balancing)
   - [State machine](#state-machine)
     - [STANDBY state](#standby-state)
     - [ENABLE state](#enable-state)
     - [SOFTSTART state](#softstart-state)
     - [UP AND RUNNING state](#up-and-running-state)
+  - [Results](#results)
 - [Related Collateral](#related-collateral)
   - [Software Used](#software-used)
   - [Hardware Used](#hardware-used)
@@ -91,7 +96,12 @@ The firmware also includes a scheduler to allow the user to easily add their own
 
 ## PWM setup
 
-1. PWM routing 
+<span id="pwm-routing"><a name="pwm-routing"> </a></span>
+
+### PWM routing
+The two schematics below show the routing of the PWM signals for phase A and phase B. PWM1 and PWM3 output are used for the primary drives for phase A and phase B respectively, while PWM2 and PWM4 are used for the SR drives.
+
+The dsPIC33C is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to pass through the isolation barrier. FET drivers are not shown here, please see the schematic on the users guide for more detail.
 
 <p>
   <center>
@@ -110,15 +120,29 @@ The firmware also includes a scheduler to allow the user to easily add their own
   </center>
 </p>
 
-2. switching signals required for LLC: single phase then dual phase
+<span id="llc-switching"><a name="llc-switching"> </a></span>
 
-<p>
-  <center>
-    <img src="images/illc-10.png" alt="PWM1 config" width="400">
-    <br>
-    PWM1 setting
-  </center>
-</p>
+### LLC switching waveforms
+
+-> TODO: other mode had some issues, discuss later!
+
+<span id="phase-a-pwm"><a name="phase-a-pwm"> </a></span>
+
+#### Phase A PWM setup
+
+For a single phase, the LLC primary drive signals should have a fixed duty cycle (just below 50%) and variable frequency, as shown below. The drive signals to the high side and low side of the primary side half-bridge (before the resonant tank) need to be complementary, with a dead time between the falling edge on the high side drive and the rising edge of the low side drive, and visa-versa. 
+
+In our example firmware, the frequency varies from 800kHz to 1MHz.
+
+To get this type of waveform from the PWM module, we configured the PWM peripherals in "Independent Edge, dual output mode". 
+
+In this mode of operation, each PWM edge is set independently via a register. Specifically,
+* PWM1H rising edge occurs when PWM1 counter = PG1PHASE.
+* PWM1H falling edge occurs when PWM1 counter = PG1DC.
+* PW1L rising edge occurs when PWM1 counter = PG1TRIGA.
+* PWM1L falling edge occurs when PWM1 counter = PG1TRIGB.
+
+The primary drive signals for phase A (from PWM1 peripheral) are shown below.
 
 <p>
   <center>
@@ -130,17 +154,54 @@ The firmware also includes a scheduler to allow the user to easily add their own
 
 <p>
   <center>
+    <img src="images/illc-10.png" alt="PWM1 config" width="400">
+    <br>
+    PWM mode: independent edge, dual output
+  </center>
+</p>
+
+The SR drive signals for phase A come from the PWM2 module. PWM2H drives the SR on the high side of the half-bridge on the secondary side, and PWM2L drives the SR on the low-side. PWM2 is also configured in "independent edge, dual output" mode, but the SWAP bit is set, so that PWM2H and PWM2L are swapped.
+The PWM2H and PWM2L setup is illustrated below.
+
+<p>
+  <center>
     <img src="images/illc-11.png" alt="PWM2 setup" width="1100">
     <br>
     PWM2 setup
   </center>
 </p>
 
+<span id="phase-b-pwm"><a name="phase-b-pwm"> </a></span>
 
-3. why independent, dual output mode?
-4. details on setup: single phase first. Then discuss syncing of PWMs.
+#### Phase B PWM setup
 
-phase A and phase B sync + ADC triggers
+Phase B setup as follows:
+
+* PWM3H drives primary side half-bridge, high side
+* PWM3L drives primary side half-bridge, low side
+* PWM4H drives secondary side (SR) half-bridge, high side
+* PWM4L drives secondary side (SR) half-bridge, low side
+
+Phase A and phase B run 90 degrees out of phase. 
+The synchronization scheme works as follows
+* PWM2 is synchronized to the EOC (End of Cycle) trigger of PWM1, so they run in phase
+* PWM3 is synchronized to PG2TRIGC via the PWM2 peripheral's PCI input and the PWM event A output. PG2TRIGC is set to (PG1PER / 4 ), so the PWM3 cycle starts 1/4 of a period after PWM1 and PWM2 cycle start.
+* PWM4 is synchronized to the EOC (End of Cycle) trigger of PWM3, so they run in phase.
+
+
+<p>
+  <center>
+    <img src="images/illc-15.png" alt="PWM2 setup" width="1100">
+    <br>
+    phase A and phase B sync
+  </center>
+</p>
+
+The ADC trigger for PWM1 is set to occur every 6th PWM1 period. It is set using PG1TRIGC (as PG1TRIGA and PG1TRIGB are already in use), and in the running firmware is set to be at the middle of the PG1H on-time so as to sample the average current.
+
+The ADC trigger for PWM3 is set to occur every 6th PWM3 period. It is set using PG3TRIGC, and in the running firmware is set to be at the middle of the PG3H on-time so as to sample the average current.
+
+The "easy setup" view for all 4 PWM modules is shown below.
 
 <p>
   <center>
@@ -170,13 +231,9 @@ phase A and phase B sync + ADC triggers
 
 PWM1: TRIGC for ADC trigger
 PWM2: sync'd to PWM1 EOC
-      ADC trigger?
-      TRIGC to sync with PWM3
-PWM3: sync'd to PWM2 TRIGC. ADC trigger?
+      TRIGC to sync with PWM3 via PCI event A
+PWM3: TRIGC for ADC trigger
 PWM4: sync'd to PWM3 EOC
-
-
-5. ADC triggers
 
 
 [[back to top](#start-doc)]
@@ -299,8 +356,30 @@ In this state, one of the SR drives of either phase A or phase B runs at a fixed
 
 If the output current through the phase being controlled is greater than the current through the other (fixed duty) phase, we decrease the duty cycle of the SR drives by 2ns. If the current is smaller, we increase the duty cycle on the SR drives by 2ns. The on-time of the SR drives is clamped at a max value of [PGxPER/2*250ps - 124ns], and at a min value of 100ns.
 
-
 If the total output current drops below 1.0A (see macro "IOUT_SROFFIL"), all SR drives are disabled, and we go back to the STANDBY state.
+
+### Results
+See results below. The two phase currents are out of balance until the total output current reaches 1.4A, at which point the current balancing algorithm kicks in, and the current is shared equally between the phases.
+
+
+<p>
+  <center>
+    <img src="images/illc-16.png" alt="ibalance-0" width="1500">
+    <br>
+    Current Balancing
+  </center>
+</p>
+
+Below we show how it works with a load step from 0 to 3A. The time-base is 200us/div, so you can see that the currents are in balance within 1.5ms.
+
+<p>
+  <center>
+    <img src="images/illc-17.png" alt="ibalance-1" width="1500">
+    <br>
+    Current Balancing with load step
+  </center>
+</p>
+
 
 [[back to top](#start-doc)]
 
