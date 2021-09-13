@@ -211,6 +211,8 @@ The "easy setup" view for all 4 PWM modules is shown below.
   </center>
 </p>
 
+Some registers in the "registers" view also need to be modified. The fields that need to be modified for phase A (related to PWM1 and PWM2) are highlighted below.
+
 <p>
   <center>
     <img src="images/illc-13.png" alt="phase A config MCC" width="1500">
@@ -219,6 +221,8 @@ The "easy setup" view for all 4 PWM modules is shown below.
   </center>
 </p>
 
+The fields that need to be modified for phase B (related to PWM3 and PWM4) are highlighted below.
+
 <p>
   <center>
     <img src="images/illc-14.png" alt="phase B config MCC" width="1500">
@@ -226,14 +230,6 @@ The "easy setup" view for all 4 PWM modules is shown below.
     Phase B configuration in MCC (additional register settings)
   </center>
 </p>
-
-
-
-PWM1: TRIGC for ADC trigger
-PWM2: sync'd to PWM1 EOC
-      TRIGC to sync with PWM3 via PCI event A
-PWM3: TRIGC for ADC trigger
-PWM4: sync'd to PWM3 EOC
 
 
 [[back to top](#start-doc)]
@@ -246,6 +242,14 @@ PWM4: sync'd to PWM3 EOC
 ## Phase Current Balancing
 
 A current balancing scheme has been implemented on the demo firmware accompanying this board. The goal is that both phases share the load current equally. This scheme is only run if the total load current is above 1.4A (see the macro "IOUT_SRONIL" in the firmware), so the thermal stress is shared equally between the phases when the load is high enough that thermal management is warranted.
+
+<p>
+  <center>
+    <img src="images/illc-18.png" alt="ILLC current balancing block dia" width="900">
+    <br>
+    Block diagram of LLC control loop with current balancing 
+  </center>
+</p>
 
 The scheme works by changing the duty cycle of the SR drive signals on one phase until the currents are approximately the same, while keeping the duty cycle of the SR drives on the other phase fixed. When the scheme is launched, the (filtered) currents of both phases are compared. The phase with the smaller current runs at a fixed (just under 50%) duty cycle, while the duty cycle of the SRs on the phase with the larger current is varied between a min value (100ns) and a max value (just under 50%) until the two currents are as close as possible.
 
