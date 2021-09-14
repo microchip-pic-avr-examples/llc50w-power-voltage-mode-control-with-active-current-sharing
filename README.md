@@ -171,6 +171,9 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
 6.  Click on the "Enable" button on the bottom of the landing page. This will initiate comms between the GUI and the firmware running on the DP-PIM.
 7.  When the comms is working, the "Communication status" indicator on the bottom of the LLC GUI landing page should flash alternating red and green.
 
+With Microchips Power Board Visualizer GUI we can easily visualize values and states visible on the ILLC Demo Board. We can also change the output voltage reference (closed loop) and switching frequency (open loop) on the running power supply with the GUI.
+On the Status tab we have an example showing the main values like voltages and currents as well as status bits from the power controller and Faults.
+
 <p>
   <center>
     <img src="images/illc-26.png" alt="board-power-visualizer-00" width="1500">
@@ -178,6 +181,17 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
     Board Power Visualizer Landing Page
   </center>
 </p>
+
+On the Schematic diagram tab there is the power supply block diagram with online updates of the most important values for easy understanding the working principles. This is shown below.
+
+<p>
+  <center>
+    <img src="images/illc-27.png" alt="board-power-visualizer-01" width="1500">
+    <br>
+    Board Power Visualizer Landing Page
+  </center>
+</p>
+
 
 [[back to top](#start-doc)]
 
