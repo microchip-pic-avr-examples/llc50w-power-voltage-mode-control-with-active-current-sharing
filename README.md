@@ -27,6 +27,10 @@ dsPIC33 Interleaved LLC Converter
 ## Table of Contents <!-- omit in toc --> 
 
 - [How to use this document](#how-to-use-this-document)
+- [Quick-start guide](#quick-start-guide)
+  - [Testing the board in open-loop mode](#testing-the-board-in-open-loop-mode)
+  - [Testing the board in closed-loop mode](#testing-the-board-in-closed-loop-mode)
+- [Setting up and connecting the Board Power Visualizer GUI](#setting-up-and-connecting-the-board-power-visualizer-gui)
 - [State machine](#state-machine)
   - [States PCS_SOFT_START_PRE1, PCS_SOFT_START_PRE2 and PCS_SOFT_START_PR](#states-pcs_soft_start_pre1-pcs_soft_start_pre2-and-pcs_soft_start_pr)
     - [State PCS_SOFT_START_PRE1](#state-pcs_soft_start_pre1)
@@ -48,7 +52,7 @@ dsPIC33 Interleaved LLC Converter
 - [Related Collateral](#related-collateral)
   - [Software Used](#software-used)
   - [Hardware Used](#hardware-used)
-- [Quick-start Guide](#quick-start-guide)
+- [Quick-start Guide](#quick-start-guide-1)
   - [Basic Hardware Setup](#basic-hardware-setup)
   - [Setting up and connecting the board power visualizer](#setting-up-and-connecting-the-board-power-visualizer)
   - [Running Closed Loop with Poti Reference](#running-closed-loop-with-poti-reference)
@@ -81,6 +85,104 @@ The user's guide can be found [here.](https://www.microchip.com/developmenttools
 [[back to top](#start-doc)]
 
 - - -
+
+
+<span id="quickstart"><a name="quickstart"> </a></span>
+
+## Quick-start guide
+
+<p>
+  <center>
+    <img src="images/illc-23.png" alt="state-machine" width="900">
+    <br>
+    Hardware connections
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-24.png" alt="hmi-control" width="900">
+    <br>
+    HMI control
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-25.png" alt="hmi-status" width="900">
+    <br>
+    HMI status 
+  </center>
+</p>
+
+<span id="open-loop-test"><a name="open-loop-test"> </a></span>
+
+### Testing the board in open-loop mode
+
+1. Connect computer to DP-PIM via USB cable
+2. Connect computer to ICD4, connect ICD4 to 6 pin header on DP-PIM
+3. Connect poti to 6 pin header on LLC power board as shown above
+4. Set poti wiper to max setting
+5. Connect input terminal of LLC power board to DC source capable of providing at least 40V. Leave DC source off for now.
+6. Connect scope probe to TP100 (this is phase A high-side primary drive signal, ensuring to ground the scope at GND_S (not GND_P).
+7. Connect a voltmeter to the output terminals of the LLC power board.
+8. Connect output terminals of LLC power board to resistor or constant current load (set to around 0.5A or 20R), turn on the load if it is an e-load
+9. Open illc project in MPLABx. Set as main project, then download the firmware to the dsPIC on the DP-PIM 
+10. When the firmware is running, you should see 
+   * the red LED on the DP-PIM slow blinking, indicating that the firmware is running
+   *  the green LED on the power board slow blinking, indicating that the power supply is not running
+   *  the red LED on the power board is on, indicating that a fault is active
+11. Turn on the DC source, setting it to 40V. Set current limit to 1.2A or lower.
+12. Short press the user button on the LLC power board. This turns on the converter. The status LED should be as follows
+    * Green LED on power board on, indicating that the power supply is running
+    * Red LED on power board slow-blinking, indicating that open-loop mode is active
+13. Check the PWM signal on TP100 with a scope. It should have a frequency of around 1MHz, and a duty cycle of around 45%. 
+14. Check the output voltage, with 0.5A load, it should be around 7.4V.
+15. Move the poti wiper towards the min setting, observe the signal on TP100 and the output voltage, you should see the frequency of the signal on TP100 decreasing, the duty staying (approximately) the same, and the output voltage increasing. 
+16. With the poti wiper at the min setting, the signal on TP100 should have a frequency of 800kHz and a duty cycle of 45%. With a 0.5A load, the output voltage should be around 10.7V.
+
+Note that at power-up, the firmware checks if a potentiometer is connected, and if so, uses the voltage on the potentiometer wiper for the output voltage reference. If a potentiometer is not connected, the output voltage reference is set at 9V. 
+
+<span id="closed-loop-test"><a name="closed-loop-test"> </a></span>
+
+### Testing the board in closed-loop mode
+
+1. Turn off the power supply if it is running by short pressing the USER button.
+2.  Press and hold the USER button for at least two seconds to change the working mode from open loop to closed loop. The red LED on the power board should turn off.
+3.  Short press the USER button to enable the power supply.
+4.  Check for valid output voltage and switching signal on TP100.
+5.  If the potentiometer is connected, moving the potentiometer wiper position will change the output voltage reference.
+6.  If the potentiometer is not used, the output voltage should be around 9V (TP100 signal should have frequency of around 870kHz and duty of 45%).
+7.  Using the board in closed-Loop mode creates a controlled stable output voltage. It must be independent from input voltage or load changes. The reference for the output voltage can be set with a potentiometer and/or with the GUI. We discuss using the Board Power Visualizer GUI in the next section.
+
+[[back to top](#start-doc)]
+
+- - - 
+
+<span id="bpv-gui"><a name="bpv-gui"> </a></span>
+
+## Setting up and connecting the Board Power Visualizer GUI
+
+1.  Ensure that the firmware is running on the DP-PIM and that the DP-PIM is connected to your computer via a USB cable.
+2.  Open the board power visualizer application on your computer.
+3.  On the window that appears, click "Open Project", then navigate to the "gui" folder in the ILLC firmware installation directory, and click on "ILLC_R1.xml". 
+4.  The ILLC landing page will open. Click on the "COM?" button on the bottom of this page.
+5.  Select the port which is used for the serial connection between your computer and the DP-PIM from the pull-down menu. Click "OK" and you will be brought back to the ILLC GUI landing page.
+6.  Click on the "Enable" button on the bottom of the landing page. This will initiate comms between the GUI and the firmware running on the DP-PIM.
+7.  When the comms is working, the "Communication status" indicator on the bottom of the LLC GUI landing page should flash alternating red and green.
+
+<p>
+  <center>
+    <img src="images/illc-26.png" alt="board-power-visualizer-00" width="1500">
+    <br>
+    Board Power Visualizer Landing Page
+  </center>
+</p>
+
+[[back to top](#start-doc)]
+
+- - - 
+
 <span id="state-machine"><a name="state-machine"> </a></span>
 
 ## State machine
