@@ -27,6 +27,11 @@ dsPIC33 Interleaved LLC Converter
 ## Table of Contents <!-- omit in toc --> 
 
 - [How to use this document](#how-to-use-this-document)
+- [State machine](#state-machine)
+  - [States PCS_SOFT_START_PRE1, PCS_SOFT_START_PRE2 and PCS_SOFT_START_PR](#states-pcs_soft_start_pre1-pcs_soft_start_pre2-and-pcs_soft_start_pr)
+    - [State PCS_SOFT_START_PRE1](#state-pcs_soft_start_pre1)
+    - [State PCS_SOFT_START_PRE2](#state-pcs_soft_start_pre2)
+    - [State PCS_SOFT_START](#state-pcs_soft_start)
 - [Summary](#summary)
 - [PWM setup](#pwm-setup)
   - [PWM routing](#pwm-routing)
@@ -34,7 +39,7 @@ dsPIC33 Interleaved LLC Converter
     - [Phase A PWM setup](#phase-a-pwm-setup)
     - [Phase B PWM setup](#phase-b-pwm-setup)
 - [Phase Current Balancing](#phase-current-balancing)
-  - [State machine](#state-machine)
+  - [State machine](#state-machine-1)
     - [STANDBY state](#standby-state)
     - [ENABLE state](#enable-state)
     - [SOFTSTART state](#softstart-state)
@@ -74,6 +79,96 @@ This document is intended as a supplement to the user's guide. We recommend that
 The user's guide can be found [here.](https://www.microchip.com/developmenttools/ProductDetails/PartNO/EV44M28A).
 
 [[back to top](#start-doc)]
+
+- - -
+<span id="state-machine"><a name="state-machine"> </a></span>
+
+## State machine
+
+The main power controller state machine is shown below. It is run every 100us. Most of the states are pretty standard. Perhaps the only states worth describing in detail are the soft-start states. Hence we describe these below.
+
+<p>
+  <center>
+    <img src="images/illc-19.png" alt="state-machine" width="500">
+    <br>
+    Power supply state machine
+  </center>
+</p>
+
+<span id="soft-start-states"><a name="soft-start-states"> </a></span>
+
+### States PCS_SOFT_START_PRE1, PCS_SOFT_START_PRE2 and PCS_SOFT_START_PR
+
+The soft-start ramp is split in 2 parts
+1. Open loop, fixed frequency of 1MHz (max frequency for our design), ramp duty cycle in steps of 2.5ns every 100us until duty reaches 50%.
+2. Closed loop, fix duty cycle at 50%, ramp control loop input from pre-bias output voltage to target output voltage setpoint.
+
+This first part is to prevent massive inrush current: this may happen if the duty cycle was set immediately to 50%. 
+
+Note that the SRs drives (PWM2 for phase A and PWM4 for phase B) are switched off during soft-start, so any output current conduction is through the body diodes of the SRs during this time.
+
+Also note that if we are running in interleaved mode, PG3 setup is identical to PG1, but PG3 lags PG1 by 90 degrees. 
+
+<br>
+
+<span id="soft-start-pre1"><a name="soft-start-pre1"> </a></span>
+
+#### State PCS_SOFT_START_PRE1
+
+In this state, the PWMs are running open loop (that is, they are not driven by the compensator).
+The frequency is fixed at 1MHz. The on-time of the primary side half-bridge drive signals is set to 50ns. 
+Then every 100us, the on-time (and hence duty cycle) is increase by 2.5ns.
+This continues until the duty cycle is 45% (as we allow for a dead-time of 50ns).
+
+<p>
+  <center>
+    <img src="images/illc-20.png" alt="ss-pre1-00" width="1000">
+    <br>
+    Half bridge high and low switching signals at power-on
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-21.png" alt="ss-pre1-01" width="1000">
+    <br>
+    Half bridge high and low switching signals during open-loop duty cycle ramp, with fixed Fsw = 1MHz
+  </center>
+</p>
+
+Once we reach the target on-time, we move to the state PCS_SOFT_START_PRE2.
+
+<br>
+
+<span id="soft-start-pre2"><a name="soft-start-pre2"> </a></span>
+
+#### State PCS_SOFT_START_PRE2
+
+In this state, we enable frequency modulation of the PWM outputs by the voltage mode compensator. The duty cycle of the PWM drive signals is fixed at (PG1PER/2 - 50ns). The voltage loop reference is initialized based on the measured output voltage at this point. 
+
+<br>
+
+<span id="soft-start"><a name="soft-start"> </a></span>
+
+#### State PCS_SOFT_START
+
+In this state, the reference to the voltage loop compensator is ramped linearly to the target setpoint. The compensator controls the frequency of the primary side LLC half-bridge signals. The duty cycle is always set to (PG1PER/2 - 50ns).
+
+Note that in this state the SRs are enabled.
+
+A oscilloscope screenshot of the entire start up phase is shown above. The different parts are described also.
+
+<p>
+  <center>
+    <img src="images/illc-22.png" alt="ss-00" width="1300">
+    <br>
+    Soft-start with different stages highlighted and described
+  </center>
+</p>
+
+
+[[back to top](#start-doc)]
+
 
 - - -
 <span id="summary"><a name="summary"> </a></span>
