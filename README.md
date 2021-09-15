@@ -57,6 +57,7 @@ dsPIC33 Interleaved LLC Converter
   - [Hardware Used](#hardware-used)
 - [Plant Frequency Response Simulation with MPLAB® Mindi™](#plant-frequency-response-simulation-with-mplab-mindi)
 - [Code structure](#code-structure)
+- [Fault Protection](#fault-protection)
 
 ---
 
@@ -679,9 +680,25 @@ Mindi™ is the Microchip-branded demo version of Simplis/SiMetrix. It supports 
 
 ---
 
-<span id="hardware-used"><a name="hardware-used"> </a></span>
+<span id="code-structure"><a name="code-structure"> </a></span>
 
 ## Code structure
+
+[[back to top](#start-doc)]
+
+---
+
+<span id="fault-protection"><a name="fault-protection"> </a></span>
+
+## Fault Protection
+
+Vdd: over voltage and under voltage
+Vout: over voltage
+Input over current for phase A
+Input over current  for phase B
+Output over current for phase A
+Output over current for phase B
+Auxillary out of range
 
 [[back to top](#start-doc)]
 
