@@ -36,7 +36,7 @@ dsPIC33 Interleaved LLC Converter Power Board
 - [__Modes of Operation: Single Phase or Interleaved__](#modes-of-operation-single-phase-or-interleaved)
 - [__Quick Start Guide__](#quick-start-guide)
   - [__Human Machine Interface__](#human-machine-interface)
-  - [Testing the Board in Open-Loop Mode](#testing-the-board-in-open-loop-mode)
+  - [__Testing the Board in Open-Loop Mode__](#testing-the-board-in-open-loop-mode)
   - [__Testing the Board in Closed-Loop Mode__](#testing-the-board-in-closed-loop-mode)
   - [__Setting Up and Connecting the Board Power Visualizer GUI__](#setting-up-and-connecting-the-board-power-visualizer-gui)
 - [__Firmware Overview__](#firmware-overview)
@@ -200,7 +200,7 @@ The board status as shown by the LEDs on the ILLC power board and the DP-PIM is 
 
 <span id="open-loop-test"><a name="open-loop-test"> </a></span>
 
-### Testing the Board in Open-Loop Mode
+### __Testing the Board in Open-Loop Mode__
 
 <p>
   <center>
