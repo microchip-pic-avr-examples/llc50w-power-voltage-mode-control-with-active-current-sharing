@@ -22,22 +22,30 @@ dsPIC33 Interleaved LLC Converter
 
 - - -
 
+
+
 <span id="start-doc"><a name="start-doc"></a></span> 
 
 ## Table of Contents <!-- omit in toc --> 
 
+- [Summary](#summary)
+- [Related Collateral](#related-collateral)
+  - [Software Used](#software-used)
+  - [Hardware Used](#hardware-used)
 - [How to use this document](#how-to-use-this-document)
 - [Quick-start guide](#quick-start-guide)
   - [Human Machine Interface](#human-machine-interface)
   - [Testing the board in open-loop mode](#testing-the-board-in-open-loop-mode)
   - [Testing the board in closed-loop mode](#testing-the-board-in-closed-loop-mode)
-- [Setting up and connecting the Board Power Visualizer GUI](#setting-up-and-connecting-the-board-power-visualizer-gui)
-- [State machine](#state-machine)
-  - [States PCS_SOFT_START_PRE1, PCS_SOFT_START_PRE2 and PCS_SOFT_START_PR](#states-pcs_soft_start_pre1-pcs_soft_start_pre2-and-pcs_soft_start_pr)
+  - [Setting up and connecting the Board Power Visualizer GUI](#setting-up-and-connecting-the-board-power-visualizer-gui)
+- [Modes of operation](#modes-of-operation)
+- [Firmware overview](#firmware-overview)
+- [Converter State machine](#converter-state-machine)
+  - [Soft-start](#soft-start)
     - [State PCS_SOFT_START_PRE1](#state-pcs_soft_start_pre1)
     - [State PCS_SOFT_START_PRE2](#state-pcs_soft_start_pre2)
     - [State PCS_SOFT_START](#state-pcs_soft_start)
-- [Summary](#summary)
+- [Fault Protection](#fault-protection)
 - [PWM setup](#pwm-setup)
   - [PWM routing](#pwm-routing)
     - [Phase A PWM setup](#phase-a-pwm-setup)
@@ -52,20 +60,63 @@ dsPIC33 Interleaved LLC Converter
     - [SOFTSTART state](#softstart-state)
     - [UP AND RUNNING state](#up-and-running-state)
   - [Results](#results)
-- [Related Collateral](#related-collateral)
-  - [Software Used](#software-used)
-  - [Hardware Used](#hardware-used)
 - [Plant Frequency Response Simulation with MPLAB® Mindi™](#plant-frequency-response-simulation-with-mplab-mindi)
-- [Code structure](#code-structure)
-- [Fault Protection](#fault-protection)
+  - [Firmware Fault Protection](#firmware-fault-protection)
+  - [Hardware fault protection](#hardware-fault-protection)
 
 ---
+<span id="summary"><a name="summary"> </a></span>
+
+## Summary
+
+This solution demonstrates the implementation of an interleaved (2 phase) LLC converter using voltage mode control on the 50W Interleaved LLC Converter Development Board.
+
+The 50W Interleaved LLC Converter Development Board is a generic development 
+board for this topology that supports rapid prototyping and code development based on dsPIC33 devices. The board provides two identical half-bridge stages with LLC tank circuitry at the primary and voltage doubler rectification at the secondary. The board offers well organized building blocks that include an input filter, power stage, AUX supply, mating socket for Microchip’s newest Digital Power Plug-In Modules (DP PIMs), Human Machine Interface (HMI) and test points.
+The electrical characteristics are prepared to allow safe voltage levels of up to 50 VDC in and up to 12 VDC out. Topology and design are scalable and can be easily turned into real industrial demands targeting 400 VDC or 800 VDC bus operating voltage. A mating socket for dsPIC33 plug-in modules allows the system to be evaluated with different controllers. The pinout is compatible for EP, CK and CH dsPIC® DSC DP PIMs. A Human-Machine-Interface (HMI) and test points allow for easy evaluation and debugging.
+
+- - -
+
+[[back to top](#start-doc)]
+
+<span id="related-collateral"><a name="related-collateral"> </a></span>
+
+
+## Related Collateral
+
+The related documentation can be found on the appropriate product website
+- [Interleaved LLC Development Board](https://www.microchip.com/en-us/development-tool/DV330102)
+- [dsPIC33CK256MP508 Family Data Sheet](https://www.microchip.com/70005349)
+- [dsPIC33CK256MP508 Family Silicon Errata and Data Sheet Clarification](https://www.microchip.com/80000796)
+
+Please always check for the latest data sheets on the respective product websites:
+- [dsPIC33CK256MP508 Family](https://www.microchip.com/dsPIC33CK256MP508)
+- [dsPIC33CH512MP508 Family](https://www.microchip.com/dsPIC33CH512MP508)
+
+<span id="software-used"><a name="software-used"> </a></span>
+
+### Software Used
+- [Power Board Visualizer GUI](https://www.microchip.com/SWLibraryWeb/product.aspx?product=POWER_BOARD_VISUALIZER)
+- [MPLAB&reg; X IDE v5.45](https://www.microchip.com/mplabx-ide-windows-installer)
+- [MPLAB&reg; XC16 Compiler v1.61](https://www.microchip.com/mplabxc16windows)
+- [Microchip Code Configurator v4.0.2](https://www.microchip.com/mplab/mplab-code-configurator)
+- [Digital Compensator Design Tool](https://www.microchip.com/developmenttools/ProductDetails/DCDT)
+- [MPLAB&reg; Mindi™ Simulator](https://www.microchip.com/SWLibraryWeb/producttc.aspx?product=AnalogSimMPLABMindi)
+
+
+<span id="hardware-used"><a name="hardware-used"> </a></span>
+
+### Hardware Used
+- Interleaved LLC Development Board, Part-No. [DV330102](https://www.microchip.com/en-us/development-tool/DV330102)
+- dsPIC33CK256MP506 Digital Power PIM, Part-No. [MA330048](https://www.microchip.com/MA330048)
+
+[[back to top](#start-doc)]
 
 <span id="how-to-use-this-document"><a name="how-to-use-this-document"> </a></span>
 
 ## How to use this document
 This document is intended as a supplement to the user's guide. We recommend that the user's guide is studied before reading this document. 
-The user's guide can be found [here.](https://www.microchip.com/developmenttools/ProductDetails/PartNO/EV44M28A).
+The user's guide can be found [here.](https://www.microchip.com/en-us/development-tool/DV330102).
 
 [[back to top](#start-doc)]
 
@@ -166,7 +217,7 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
 
 <span id="bpv-gui"><a name="bpv-gui"> </a></span>
 
-## Setting up and connecting the Board Power Visualizer GUI
+### Setting up and connecting the Board Power Visualizer GUI
 
 1.  Ensure that the firmware is running on the DP-PIM and that the DP-PIM is connected to your computer via a USB cable.
 2.  Open the board power visualizer application on your computer.
@@ -202,11 +253,100 @@ On the Schematic diagram tab there is the power supply block diagram with online
 
 - - - 
 
+
+<span id="modes-of-operation"><a name="modes-of-operation"> </a></span>
+
+## Modes of operation
+
+The LLC power board contains two phases, phase A and phase B. The firmware can be configured to run a single phase (phase A), or run in interleaved mode (phase A and phase B running).
+
+To configure the mode of operation, open the header file "project_settings.h".
+
+<p>
+  <center>
+    <img src="images/illc-37.png" alt="project-settings" width="400">
+    <br>
+    Location of project_settings.h
+  </center>
+</p>
+
+Scroll down to line 58. 
+
+To run in interleaved mode, POWER_STAGE_CONFIG_INTERLEAVED needs to be defined and POWER_STAGE_CONFIG_PHASE_A_ONLY should not be defined.
+
+To run in phase A only, POWER_STAGE_CONFIG_PHASE_A_ONLY needs to be defined and POWER_STAGE_CONFIG_INTERLEAVED  should not be defined.
+
+If neither or both are defined, you will get a compile error.
+
+<p>
+  <center>
+    <img src="images/illc-38.png" alt="project-settings" width="1200">
+    <br>
+    Configuration #defines
+  </center>
+</p>
+
+- - -
+
+<span id="code-structure"><a name="code-structure"> </a></span>
+
+## Firmware overview
+
+An overview of the firmware is shown below. 
+The power controller state machine and fault handler are executed every 100us by the scheduler. So also are the GUI handler is run every 1ms, and the HMI driver every 100ms.
+
+There are 5 interrupt sources.
+* ISRADCCANO: executed every 6th phase A PWM cycle. Measure phase A secondary current and Vout every pass, then cycle through sampling other ADC channels on the shared core. Voltage loop is executed here, as well as SR state machine.
+* ISRADCCAN1: executed every 6th phase B PWM cycle. Measure phase B secondary current.
+* ISRSCCP1: triggered every 4th input capture event (SCCP peripheral), used to measure Vdd via a PWM signal from primary side whose duty cycle is proportional to the Vdd level.
+* ISRCMP1: triggered if comparator 1 trips, which happens if there is a large output over current on phase A.
+* ISRCMP3: triggered if comparator 3 trips, which happens if there is a large output over current on phase B.
+
+<p>
+  <center>
+    <img src="images/illc-34.png" alt="firmware-0" width="1500">
+    <br>
+    Firmware overview
+  </center>
+</p>
+
+[[back to top](#start-doc)]
+
+MCC is used to configured the peripherals, and they are configured at run-time at the start of main(), before the background loop is initiated.
+
+The main files are as follows:
+* driver/drv_adc.c: this contains the 5 interrupt service routines.
+* power_controller/drv_pwrctrl_ILLC.c: power controller state machine that is executed every 100us
+* power_controller/drv_pwrctrl_ILLC_fault.c: fault handlers
+* power_controller/drv_pwrctrl_ILLC_ILPH_SRandControl.c: power supply voltage loop and SR state machine and driver functions when running in interleaved mode.
+* power_controller/drv_pwrctrl_ILLC_PHA_SRandControl.c: contains power supply voltage loop and SR state machine and driver functions when running phase A only.
+* misc/fault_common.c: generic fault functions
+
+<p>
+  <center>
+    <img src="images/illc-36.png" alt="firmware-0" width="1500">
+    <br>
+    Firmware block diagram
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-35.png" alt="firmware-0" width="1500">
+    <br>
+    Firmware block details
+  </center>
+</p>
+
+
+
+- - - 
+
 <span id="state-machine"><a name="state-machine"> </a></span>
 
-## State machine
+## Converter State machine
 
-The main power controller state machine is shown below. It is run every 100us. Most of the states are pretty standard. Perhaps the only states worth describing in detail are the soft-start states. Hence we describe these below.
+The main power controller state machine is illustrated below. It is run every 100us. The code is located in "power_controller/drv_pwrctrl_ILLC.c", see the function Drv_PwrCtrl_ILLC_Task_100us(). Most of the states are pretty standard. Perhaps the only states worth describing in detail are the soft-start states, as these differ a bit from other DC/DC converter state machines. Hence we describe these below.
 
 <p>
   <center>
@@ -218,7 +358,7 @@ The main power controller state machine is shown below. It is run every 100us. M
 
 <span id="soft-start-states"><a name="soft-start-states"> </a></span>
 
-### States PCS_SOFT_START_PRE1, PCS_SOFT_START_PRE2 and PCS_SOFT_START_PR
+### Soft-start
 
 The soft-start ramp is split in 2 parts
 1. Open loop, fixed frequency of 1MHz (max frequency for our design), ramp duty cycle in steps of 2.5ns every 100us until duty reaches 50%.
@@ -290,24 +430,17 @@ A oscilloscope screenshot of the entire start up phase is shown above. The diffe
 
 [[back to top](#start-doc)]
 
-
 - - -
-<span id="summary"><a name="summary"> </a></span>
 
-## Summary
+<span id="fault-protection"><a name="fault-protection"> </a></span>
 
-This solution demonstrates the implementation of an interleaved (2 phase) LLC converter using voltage mode control on the 50W Interleaved LLC Converter Development Board.
+## Fault Protection
 
-The 50W Interleaved LLC Converter Development Board is a generic development 
-board for this topology that supports rapid prototyping and code development based on dsPIC33 devices. The board provides two identical half-bridge stages with LLC tank circuitry at the primary and voltage doubler rectification at the secondary. The board offers well organized building blocks that include an input filter, power stage, AUX supply, mating socket for Microchip’s newest Digital Power Plug-In Modules (DP PIMs), Human Machine Interface (HMI) and test points.
-The electrical characteristics are prepared to allow safe voltage levels of up to 50 VDC in and up to 12 VDC out. Topology and design are scalable and can be easily turned into real industrial demands targeting 400 VDC or 800 VDC bus operating voltage. A mating socket for dsPIC33 plug-in modules allows the system to be evaluated with different controllers. The pinout is compatible for EP, CK and CH dsPIC® DSC DP PIMs. A Human-Machine-Interface (HMI) and test points allow for easy evaluation and debugging.
+There are two types of protection on this project
+1. Firmware fault protection
+2. Hardware fault protection
 
-
-
-
-[[back to top](#start-doc)]
-
-- - -
+The firmware fault protection is implemented on the dsPIC on the DP-PIM. The hardware fault protection is implemented on the LLC power board. It's purpose is to prevent catastrophic board damage, particularly due to input and output over current events.
 
 <span id="pwm-setup"><a name="pwm-setup"> </a></span>
 
@@ -489,6 +622,7 @@ Discuss how to do this on DP-PIM
 ## Phase Current Balancing
 
 A current balancing scheme has been implemented on the demo firmware accompanying this board. The goal is that both phases share the load current equally. This scheme is only run if the total load current is above 1.4A (see the macro "IOUT_SRONIL" in the firmware), so the thermal stress is shared equally between the phases when the load is high enough that thermal management is warranted.
+The code is located in the function Drv_PwrCtrl_ILLC_ILPHVoltageLoop(), which is in the file power_controller/drv_pwrctrl_ILLC_SRandControl.c. This function is called from the ADCAN0 interrupt, which is located in the file driver/drv_adc.c. 
 
 <p>
   <center>
@@ -636,41 +770,6 @@ Below we show how it works with a load step from 0 to 3A. The time-base is 200us
 - - -
 
 
-<span id="related-collateral"><a name="related-collateral"> </a></span>
-
-
-## Related Collateral
-
-The related documentation can be found on the appropriate product website
-- [Interleaved LLC Development Board](https://www.microchip.com/en-us/development-tool/DV330102)
-- [dsPIC33CK256MP508 Family Data Sheet](https://www.microchip.com/70005349)
-- [dsPIC33CK256MP508 Family Silicon Errata and Data Sheet Clarification](https://www.microchip.com/80000796)
-
-Please always check for the latest data sheets on the respective product websites:
-- [dsPIC33CK256MP508 Family](https://www.microchip.com/dsPIC33CK256MP508)
-- [dsPIC33CH512MP508 Family](https://www.microchip.com/dsPIC33CH512MP508)
-
-<span id="software-used"><a name="software-used"> </a></span>
-
-### Software Used
-- [Power Board Visualizer GUI](https://www.microchip.com/SWLibraryWeb/product.aspx?product=POWER_BOARD_VISUALIZER)
-- [MPLAB&reg; X IDE v5.45](https://www.microchip.com/mplabx-ide-windows-installer)
-- [MPLAB&reg; XC16 Compiler v1.61](https://www.microchip.com/mplabxc16windows)
-- [Microchip Code Configurator v4.0.2](https://www.microchip.com/mplab/mplab-code-configurator)
-- [Digital Compensator Design Tool](https://www.microchip.com/developmenttools/ProductDetails/DCDT)
-- [MPLAB&reg; Mindi™ Simulator](https://www.microchip.com/SWLibraryWeb/producttc.aspx?product=AnalogSimMPLABMindi)
-
-
-<span id="hardware-used"><a name="hardware-used"> </a></span>
-
-### Hardware Used
-- Interleaved LLC Development Board, Part-No. [DV330102](https://www.microchip.com/en-us/development-tool/DV330102)
-- dsPIC33CK256MP506 Digital Power PIM, Part-No. [MA330048](https://www.microchip.com/MA330048)
-
-[[back to top](#start-doc)]
-
----
-
 <span id="plant-frequency-response-simulation-with-mplab-mindi"><a name="plant-frequency-response-simulation-with-mplab-mindi"> </a></span>
 
 ## Plant Frequency Response Simulation with MPLAB® Mindi™
@@ -680,25 +779,82 @@ Mindi™ is the Microchip-branded demo version of Simplis/SiMetrix. It supports 
 
 ---
 
-<span id="code-structure"><a name="code-structure"> </a></span>
+<span id="firmware-fault-protection"><a name="firmware-fault-protection"> </a></span>
 
-## Code structure
+### Firmware Fault Protection
 
-[[back to top](#start-doc)]
+All of our firmware fault protection has the same functionality. Each fault has a trigger threshold, a clear threshold, a fault blanking time and a fault clear time.
 
----
+This is illustrated below, for a fault with a "max" threshold, which means that the fault is triggered when the fault source is above a threshold (output over voltage protection, for example).
 
-<span id="fault-protection"><a name="fault-protection"> </a></span>
+Once the fault source breaches the trigger threshold, a timer is started. If the fault source stays above the trigger threshold for longer than the fault blanking time, then the fault becomes active, the PWMs are switched off and the converter state machine goes to "FAULT ACTIVE" state. During the fault blanking time, if the fault source drops back below the trigger threshold, the timer is reset.  
 
-## Fault Protection
+When the fault is active. if the fault source stays below the fault clear threshold for the fault clear time, then the fault is cleared. When all fault sources are cleared, the converter will attempt to restart.
 
-Vdd: over voltage and under voltage
-Vout: over voltage
-Input over current for phase A
-Input over current  for phase B
-Output over current for phase A
-Output over current for phase B
-Auxillary out of range
+<p>
+  <center>
+    <img src="images/illc-29.png" alt="fault-protection" width="1500">
+    <br>
+    Firmware Fault protection
+  </center>
+</p>
+
+This is shown in more detail in a flowchart below. When "fault active == true", then the fault is active and the converter is disabled. When "fault active == false" the converter can attempt to start up.
+
+<p>
+  <center>
+    <img src="images/illc-30.png" alt="fault-protection" width="1500">
+    <br>
+    Flowchart illustrating the firmware fault protection
+  </center>
+</p>
+
+All faults shown in the table below have firmware protection like this. In our firmware, this fault protection is run every 100us.
+
+<p>
+  <center>
+    <img src="images/illc-31.png" alt="fault-protection" width="1500">
+    <br>
+    ILLC faults with firmware protection
+  </center>
+</p>
+
+<span id="hardware-fault-protection"><a name="hardware-fault-protection"> </a></span>
+
+### Hardware fault protection
+
+The purpose of the hardware fault protection is to prevent catastrophic board damage, particularly from input or output over current. 
+Once triggered, it kicks in immediately (there is no fault blanking time). It sets all PWM drive signals to 0, which will turn off the converter. Note that this is completely independent of the dsPIC, so even if there are drive signals coming from the dsPIC when the hardware fault protection is tripped, they will be forced to 0V (through AND gates on the hardware) before they get to the FET drivers. 
+
+<p>
+  <center>
+    <img src="images/illc-32.png" alt="fault-protection" width="400">
+    <br>
+    ILLC faults with hardware protection
+  </center>
+</p>
+
+If the hardware fault protection is triggered, the red LED LD700 will turn on. The protection is latched, meaning that once triggered it will not clear itself, it needs to be manually cleared.
+
+If you want to re-run the board, you need to 
+* disable all PWMs first, either by holding down the RESET push button, or erasing the dsPIC firmware (we recommend the second option as it is safer)
+* then short press the "RESET protection" push button on the HMI interface. 
+
+On the dsPIC, output over current protection using comparators and DAsC is also implemented as follows:
+* Current transformer phase A secondary sense tied to CMP1DAC (pin 22 of dsPIC)
+* Current transformer phase B secondary sense tied to CMP3DAC (pin 18 of dsPIC)
+
+Either of these comparators tripping will trigger the highest priority interrupt, which disables all PWM drive signals and puts the converter in the "FAULT ACTIVE" state.
+Like the hardware fault protection, this fault protection is also latched, meaning that the dsPIC needs to be reset to restart the converter. If this fault protection is triggered, the RESET flag in the Board Power Visualizer GUI will be set, as shown below, indicating that the dsPIC needs to be reset to re-start the LLC converter.
+
+<p>
+  <center>
+    <img src="images/illc-33.png" alt="fault-protection" width="200">
+    <br>
+    ILLC faults with hardware protection
+  </center>
+</p>
+
 
 [[back to top](#start-doc)]
 
