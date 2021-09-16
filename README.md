@@ -15,7 +15,7 @@
 <p>
 <center>
 <a target="_blank" href="https://www.microchip.com/en-us/development-tool/DV330102" rel="nofollow">
-dsPIC33 Interleaved LLC Converter
+dsPIC33 Interleaved LLC Converter Power Board
 </a>
 </center>
 </p>
@@ -28,46 +28,46 @@ dsPIC33 Interleaved LLC Converter
 
 ## Table of Contents <!-- omit in toc --> 
 
-- [Summary](#summary)
-- [Related Collateral](#related-collateral)
-  - [Software Used](#software-used)
-  - [Hardware Used](#hardware-used)
-- [How to use this document](#how-to-use-this-document)
-- [Quick-start guide](#quick-start-guide)
-  - [Human Machine Interface](#human-machine-interface)
-  - [Testing the board in open-loop mode](#testing-the-board-in-open-loop-mode)
-  - [Testing the board in closed-loop mode](#testing-the-board-in-closed-loop-mode)
-  - [Setting up and connecting the Board Power Visualizer GUI](#setting-up-and-connecting-the-board-power-visualizer-gui)
-- [Modes of operation](#modes-of-operation)
-- [Firmware overview](#firmware-overview)
-- [Converter State machine](#converter-state-machine)
-  - [Soft-start](#soft-start)
-    - [State PCS_SOFT_START_PRE1](#state-pcs_soft_start_pre1)
-    - [State PCS_SOFT_START_PRE2](#state-pcs_soft_start_pre2)
-    - [State PCS_SOFT_START](#state-pcs_soft_start)
-- [Fault Protection](#fault-protection)
-- [PWM setup](#pwm-setup)
-  - [PWM routing](#pwm-routing)
-    - [Phase A PWM setup](#phase-a-pwm-setup)
-    - [Phase B PWM setup](#phase-b-pwm-setup)
-- [Control Method](#control-method)
-  - [Plant Measurement](#plant-measurement)
-  - [Loop Measurements](#loop-measurements)
-- [Phase Current Balancing](#phase-current-balancing)
-  - [SR Drive State machine](#sr-drive-state-machine)
-    - [STANDBY state](#standby-state)
-    - [ENABLE state](#enable-state)
-    - [SOFTSTART state](#softstart-state)
-    - [UP AND RUNNING state](#up-and-running-state)
-  - [Results](#results)
-- [Plant Frequency Response Simulation with MPLAB® Mindi™](#plant-frequency-response-simulation-with-mplab-mindi)
-  - [Firmware Fault Protection](#firmware-fault-protection)
-  - [Hardware fault protection](#hardware-fault-protection)
+- [__Summary__](#summary)
+- [__Related Collateral__](#related-collateral)
+  - [__Software Used__](#software-used)
+  - [__Hardware Used__](#hardware-used)
+- [__How to Use This Document__](#how-to-use-this-document)
+- [__Modes of Operation: Single Phase or Interleaved__](#modes-of-operation-single-phase-or-interleaved)
+- [__Quick Start Guide__](#quick-start-guide)
+  - [__Human Machine Interface__](#human-machine-interface)
+  - [Testing the Board in Open-Loop Mode](#testing-the-board-in-open-loop-mode)
+  - [__Testing the Board in Closed-Loop Mode__](#testing-the-board-in-closed-loop-mode)
+  - [__Setting Up and Connecting the Board Power Visualizer GUI__](#setting-up-and-connecting-the-board-power-visualizer-gui)
+- [__Firmware Overview__](#firmware-overview)
+- [__Converter State Machine__](#converter-state-machine)
+  - [__Soft-Starting the Converter__](#soft-starting-the-converter)
+    - [__State PCS_SOFT_START_PRE1__](#state-pcs_soft_start_pre1)
+    - [__State PCS_SOFT_START_PRE2__](#state-pcs_soft_start_pre2)
+    - [__State PCS_SOFT_START__](#state-pcs_soft_start)
+- [__Fault Protection__](#fault-protection)
+  - [__Firmware Fault Protection__](#firmware-fault-protection)
+  - [__Hardware fault protection__](#hardware-fault-protection)
+- [__PWM Setup__](#pwm-setup)
+  - [__PWM Routing__](#pwm-routing)
+    - [__Phase A PWM Setup__](#phase-a-pwm-setup)
+    - [__Phase B PWM Setup__](#phase-b-pwm-setup)
+- [__Control Method__](#control-method)
+  - [__Plant Measurement__](#plant-measurement)
+  - [__Loop Measurements__](#loop-measurements)
+- [__Phase Current Balancing__](#phase-current-balancing)
+  - [__SR Drive State Machine__](#sr-drive-state-machine)
+    - [__STANDBY State__](#standby-state)
+    - [__ENABLE State__](#enable-state)
+    - [__SOFTSTART State__](#softstart-state)
+    - [__UP AND RUNNING State__](#up-and-running-state)
+  - [__Results__](#results)
+- [__Plant Frequency Response Simulation with MPLAB® Mindi™__](#plant-frequency-response-simulation-with-mplab-mindi)
 
 ---
 <span id="summary"><a name="summary"> </a></span>
 
-## Summary
+## __Summary__
 
 This solution demonstrates the implementation of an interleaved (2 phase) LLC converter using voltage mode control on the 50W Interleaved LLC Converter Development Board.
 
@@ -75,14 +75,14 @@ The 50W Interleaved LLC Converter Development Board is a generic development
 board for this topology that supports rapid prototyping and code development based on dsPIC33 devices. The board provides two identical half-bridge stages with LLC tank circuitry at the primary and voltage doubler rectification at the secondary. The board offers well organized building blocks that include an input filter, power stage, AUX supply, mating socket for Microchip’s newest Digital Power Plug-In Modules (DP PIMs), Human Machine Interface (HMI) and test points.
 The electrical characteristics are prepared to allow safe voltage levels of up to 50 VDC in and up to 12 VDC out. Topology and design are scalable and can be easily turned into real industrial demands targeting 400 VDC or 800 VDC bus operating voltage. A mating socket for dsPIC33 plug-in modules allows the system to be evaluated with different controllers. The pinout is compatible for EP, CK and CH dsPIC® DSC DP PIMs. A Human-Machine-Interface (HMI) and test points allow for easy evaluation and debugging.
 
-- - -
-
 [[back to top](#start-doc)]
+
+- - -
 
 <span id="related-collateral"><a name="related-collateral"> </a></span>
 
 
-## Related Collateral
+## __Related Collateral__
 
 The related documentation can be found on the appropriate product website
 - [Interleaved LLC Development Board](https://www.microchip.com/en-us/development-tool/DV330102)
@@ -95,7 +95,7 @@ Please always check for the latest data sheets on the respective product website
 
 <span id="software-used"><a name="software-used"> </a></span>
 
-### Software Used
+### __Software Used__
 - [Power Board Visualizer GUI](https://www.microchip.com/SWLibraryWeb/product.aspx?product=POWER_BOARD_VISUALIZER)
 - [MPLAB&reg; X IDE v5.45](https://www.microchip.com/mplabx-ide-windows-installer)
 - [MPLAB&reg; XC16 Compiler v1.61](https://www.microchip.com/mplabxc16windows)
@@ -106,15 +106,17 @@ Please always check for the latest data sheets on the respective product website
 
 <span id="hardware-used"><a name="hardware-used"> </a></span>
 
-### Hardware Used
+### __Hardware Used__
 - Interleaved LLC Development Board, Part-No. [DV330102](https://www.microchip.com/en-us/development-tool/DV330102)
 - dsPIC33CK256MP506 Digital Power PIM, Part-No. [MA330048](https://www.microchip.com/MA330048)
 
-[[back to top](#start-doc)]
-
 <span id="how-to-use-this-document"><a name="how-to-use-this-document"> </a></span>
 
-## How to use this document
+[[back to top](#start-doc)]
+
+- - -
+
+## __How to Use This Document__
 This document is intended as a supplement to the user's guide. We recommend that the user's guide is studied before reading this document. 
 The user's guide can be found [here.](https://www.microchip.com/en-us/development-tool/DV330102).
 
@@ -122,22 +124,49 @@ The user's guide can be found [here.](https://www.microchip.com/en-us/developmen
 
 - - -
 
+<span id="modes-of-operation"><a name="modes-of-operation"> </a></span>
 
-<span id="quickstart"><a name="quickstart"> </a></span>
+## __Modes of Operation: Single Phase or Interleaved__
 
-## Quick-start guide
+The LLC power board contains two phases, phase A and phase B. The firmware can be configured to run a single phase (phase A), or run in interleaved mode (phase A and phase B running).
+
+To configure the mode of operation, open the header file "project_settings.h".
 
 <p>
   <center>
-    <img src="images/illc-23.png" alt="state-machine" width="900">
+    <img src="images/illc-37.png" alt="project-settings" width="400">
     <br>
-    Hardware connections
+    Location of project_settings.h
   </center>
 </p>
 
+Scroll down to line 58. 
+
+To run in interleaved mode, POWER_STAGE_CONFIG_INTERLEAVED needs to be defined and POWER_STAGE_CONFIG_PHASE_A_ONLY should not be defined.
+
+To run in phase A only, POWER_STAGE_CONFIG_PHASE_A_ONLY needs to be defined and POWER_STAGE_CONFIG_INTERLEAVED  should not be defined.
+
+If neither or both are defined, you will get a compile error.
+
+<p>
+  <center>
+    <img src="images/illc-38.png" alt="project-settings" width="1200">
+    <br>
+    Configuration #defines
+  </center>
+</p>
+
+- - -
+
+<span id="quickstart"><a name="quickstart"> </a></span>
+
+## __Quick Start Guide__
+
+In this section we describe how to bring up the board both in open loop and closed loop modes, with and without the Board Power Visualizer GUI.
+
 <span id="hmi"><a name="hmi"> </a></span>
 
-### Human Machine Interface
+### __Human Machine Interface__
 
 The ILLC board has a simple Human-Machine-Interface (HMI) with LEDs showing status and push buttons for control. This is shown below.
 
@@ -171,7 +200,15 @@ The board status as shown by the LEDs on the ILLC power board and the DP-PIM is 
 
 <span id="open-loop-test"><a name="open-loop-test"> </a></span>
 
-### Testing the board in open-loop mode
+### Testing the Board in Open-Loop Mode
+
+<p>
+  <center>
+    <img src="images/illc-23.png" alt="state-machine" width="900">
+    <br>
+    Hardware connections
+  </center>
+</p>
 
 Note that we use the ICD4 in-circuit debugger to program the dsPIC, but any type of Microchip In-Circuit Debugger can be used here.
 
@@ -201,7 +238,7 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
 
 <span id="closed-loop-test"><a name="closed-loop-test"> </a></span>
 
-### Testing the board in closed-loop mode
+### __Testing the Board in Closed-Loop Mode__
 
 1. Turn off the power supply if it is running by short pressing the USER button.
 2.  Press and hold the USER button for at least two seconds to change the working mode from open loop to closed loop. The red LED on the power board should turn off.
@@ -217,7 +254,7 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
 
 <span id="bpv-gui"><a name="bpv-gui"> </a></span>
 
-### Setting up and connecting the Board Power Visualizer GUI
+### __Setting Up and Connecting the Board Power Visualizer GUI__
 
 1.  Ensure that the firmware is running on the DP-PIM and that the DP-PIM is connected to your computer via a USB cable.
 2.  Open the board power visualizer application on your computer.
@@ -251,46 +288,12 @@ On the Schematic diagram tab there is the power supply block diagram with online
 
 [[back to top](#start-doc)]
 
-- - - 
-
-
-<span id="modes-of-operation"><a name="modes-of-operation"> </a></span>
-
-## Modes of operation
-
-The LLC power board contains two phases, phase A and phase B. The firmware can be configured to run a single phase (phase A), or run in interleaved mode (phase A and phase B running).
-
-To configure the mode of operation, open the header file "project_settings.h".
-
-<p>
-  <center>
-    <img src="images/illc-37.png" alt="project-settings" width="400">
-    <br>
-    Location of project_settings.h
-  </center>
-</p>
-
-Scroll down to line 58. 
-
-To run in interleaved mode, POWER_STAGE_CONFIG_INTERLEAVED needs to be defined and POWER_STAGE_CONFIG_PHASE_A_ONLY should not be defined.
-
-To run in phase A only, POWER_STAGE_CONFIG_PHASE_A_ONLY needs to be defined and POWER_STAGE_CONFIG_INTERLEAVED  should not be defined.
-
-If neither or both are defined, you will get a compile error.
-
-<p>
-  <center>
-    <img src="images/illc-38.png" alt="project-settings" width="1200">
-    <br>
-    Configuration #defines
-  </center>
-</p>
 
 - - -
 
 <span id="code-structure"><a name="code-structure"> </a></span>
 
-## Firmware overview
+## __Firmware Overview__
 
 An overview of the firmware is shown below. 
 The power controller state machine and fault handler are executed every 100us by the scheduler. So also are the GUI handler is run every 1ms, and the HMI driver every 100ms.
@@ -312,15 +315,15 @@ There are 5 interrupt sources.
 
 [[back to top](#start-doc)]
 
-MCC is used to configured the peripherals, and they are configured at run-time at the start of main(), before the background loop is initiated.
+MCC is used to configured the peripherals, and they are configured at run-time at the start of _main()_, before the background loop is initiated.
 
 The main files are as follows:
-* driver/drv_adc.c: this contains the 5 interrupt service routines.
-* power_controller/drv_pwrctrl_ILLC.c: power controller state machine that is executed every 100us
-* power_controller/drv_pwrctrl_ILLC_fault.c: fault handlers
-* power_controller/drv_pwrctrl_ILLC_ILPH_SRandControl.c: power supply voltage loop and SR state machine and driver functions when running in interleaved mode.
-* power_controller/drv_pwrctrl_ILLC_PHA_SRandControl.c: contains power supply voltage loop and SR state machine and driver functions when running phase A only.
-* misc/fault_common.c: generic fault functions
+* _driver/drv_adc.c_: this contains the 5 interrupt service routines.
+* _power_controller/drv_pwrctrl_ILLC.c_: power controller state machine that is executed every 100us
+* _power_controller/drv_pwrctrl_ILLC_fault.c_: fault handlers
+* _power_controller/drv_pwrctrl_ILLC_ILPH_SRandControl.c_: power supply voltage loop and SR state machine and driver functions when running in interleaved mode.
+* _power_controller/drv_pwrctrl_ILLC_PHA_SRandControl.c_: contains power supply voltage loop and SR state machine and driver functions when running phase A only.
+* _misc/fault_common.c_: generic fault functions
 
 <p>
   <center>
@@ -338,15 +341,15 @@ The main files are as follows:
   </center>
 </p>
 
-
+[[back to top](#start-doc)]
 
 - - - 
 
 <span id="state-machine"><a name="state-machine"> </a></span>
 
-## Converter State machine
+## __Converter State Machine__
 
-The main power controller state machine is illustrated below. It is run every 100us. The code is located in "power_controller/drv_pwrctrl_ILLC.c", see the function Drv_PwrCtrl_ILLC_Task_100us(). Most of the states are pretty standard. Perhaps the only states worth describing in detail are the soft-start states, as these differ a bit from other DC/DC converter state machines. Hence we describe these below.
+The main power controller state machine is illustrated below. It is run every 100us. The code is located in _power_controller/drv_pwrctrl_ILLC.c_, see the function _Drv_PwrCtrl_ILLC_Task_100us()_. Most of the states are pretty standard. Perhaps the only states worth describing in detail are the soft-start states, as these differ a bit from other DC/DC converter state machines. Hence we describe these below.
 
 <p>
   <center>
@@ -358,7 +361,7 @@ The main power controller state machine is illustrated below. It is run every 10
 
 <span id="soft-start-states"><a name="soft-start-states"> </a></span>
 
-### Soft-start
+### __Soft-Starting the Converter__
 
 The soft-start ramp is split in 2 parts
 1. Open loop, fixed frequency of 1MHz (max frequency for our design), ramp duty cycle in steps of 2.5ns every 100us until duty reaches 50%.
@@ -370,11 +373,11 @@ Note that the SRs drives (PWM2 for phase A and PWM4 for phase B) are switched of
 
 Also note that if we are running in interleaved mode, PG3 setup is identical to PG1, but PG3 lags PG1 by 90 degrees. 
 
-<br>
+
 
 <span id="soft-start-pre1"><a name="soft-start-pre1"> </a></span>
 
-#### State PCS_SOFT_START_PRE1
+#### __State PCS_SOFT_START_PRE1__
 
 In this state, the PWMs are running open loop (that is, they are not driven by the compensator).
 The frequency is fixed at 1MHz. The on-time of the primary side half-bridge drive signals is set to 50ns. 
@@ -399,19 +402,16 @@ This continues until the duty cycle is 45% (as we allow for a dead-time of 50ns)
 
 Once we reach the target on-time, we move to the state PCS_SOFT_START_PRE2.
 
-<br>
-
 <span id="soft-start-pre2"><a name="soft-start-pre2"> </a></span>
 
-#### State PCS_SOFT_START_PRE2
+#### __State PCS_SOFT_START_PRE2__
 
 In this state, we enable frequency modulation of the PWM outputs by the voltage mode compensator. The duty cycle of the PWM drive signals is fixed at (PG1PER/2 - 50ns). The voltage loop reference is initialized based on the measured output voltage at this point. 
 
-<br>
 
 <span id="soft-start"><a name="soft-start"> </a></span>
 
-#### State PCS_SOFT_START
+#### __State PCS_SOFT_START__
 
 In this state, the reference to the voltage loop compensator is ramped linearly to the target setpoint. The compensator controls the frequency of the primary side LLC half-bridge signals. The duty cycle is always set to (PG1PER/2 - 50ns).
 
@@ -434,21 +434,106 @@ A oscilloscope screenshot of the entire start up phase is shown above. The diffe
 
 <span id="fault-protection"><a name="fault-protection"> </a></span>
 
-## Fault Protection
+## __Fault Protection__
 
-There are two types of protection on this project
+The fault protection code is executed every 100us at the start of the converter state machine in the function _Drv_PwrCtrl_ILLC_Fault_Check()_. The body of the fault code is located in the files _power_controller/drv_pwr_ctrl_ILLC_fault.c_ and _misc/fault_common.c_.
+
+There are two types of protection on this project.
 1. Firmware fault protection
 2. Hardware fault protection
 
 The firmware fault protection is implemented on the dsPIC on the DP-PIM. The hardware fault protection is implemented on the LLC power board. It's purpose is to prevent catastrophic board damage, particularly due to input and output over current events.
 
+<span id="firmware-fault-protection"><a name="firmware-fault-protection"> </a></span>
+
+### __Firmware Fault Protection__
+
+All of our firmware fault protection has the same functionality. Each fault has a trigger threshold, a clear threshold, a fault blanking time and a fault clear time.
+
+This is illustrated below, for a fault with a "max" threshold, which means that the fault is triggered when the fault source is above a threshold (output over voltage protection, for example).
+
+Once the fault source breaches the trigger threshold, a timer is started. If the fault source stays above the trigger threshold for longer than the fault blanking time, then the fault becomes active, the PWMs are switched off and the converter state machine goes to "FAULT ACTIVE" state. During the fault blanking time, if the fault source drops back below the trigger threshold, the timer is reset.  
+
+When the fault is active. if the fault source stays below the fault clear threshold for the fault clear time, then the fault is cleared. When all fault sources are cleared, the converter will attempt to restart.
+
+<p>
+  <center>
+    <img src="images/illc-29.png" alt="fault-protection" width="1500">
+    <br>
+    Firmware Fault protection
+  </center>
+</p>
+
+This is shown in more detail in a flowchart below. When "fault active == true", then the fault is active and the converter is disabled. When "fault active == false" the converter can attempt to start up.
+
+<p>
+  <center>
+    <img src="images/illc-30.png" alt="fault-protection" width="1500">
+    <br>
+    Flowchart illustrating the firmware fault protection
+  </center>
+</p>
+
+All faults shown in the table below have firmware protection like this. In our firmware, this fault protection is run every 100us.
+
+<p>
+  <center>
+    <img src="images/illc-31.png" alt="fault-protection" width="1500">
+    <br>
+    ILLC faults with firmware protection
+  </center>
+</p>
+
+<span id="hardware-fault-protection"><a name="hardware-fault-protection"> </a></span>
+
+### __Hardware fault protection__
+
+The purpose of the hardware fault protection is to prevent catastrophic board damage, particularly from input or output over current. 
+Once triggered, it kicks in immediately (there is no fault blanking time). It sets all PWM drive signals to 0, which will turn off the converter. Note that this is completely independent of the dsPIC, so even if there are drive signals coming from the dsPIC when the hardware fault protection is tripped, they will be forced to 0V (through AND gates on the hardware) before they get to the FET drivers. 
+
+<p>
+  <center>
+    <img src="images/illc-32.png" alt="fault-protection" width="400">
+    <br>
+    ILLC faults with hardware protection
+  </center>
+</p>
+
+If the hardware fault protection is triggered, the red LED LD700 will turn on. The protection is latched, meaning that once triggered it will not clear itself, it needs to be manually cleared.
+
+If you want to re-run the board, you need to 
+* disable all PWMs first, either by holding down the RESET push button, or erasing the dsPIC firmware (we recommend the second option as it is safer)
+* then short press the "RESET protection" push button on the HMI interface. 
+
+On the dsPIC, output over current protection using comparators and DAsC is also implemented as follows:
+* Current transformer phase A secondary sense tied to CMP1DAC (pin 22 of dsPIC)
+* Current transformer phase B secondary sense tied to CMP3DAC (pin 18 of dsPIC)
+
+Either of these comparators tripping will trigger the highest priority interrupt, which disables all PWM drive signals and puts the converter in the "FAULT ACTIVE" state.
+Like the hardware fault protection, this fault protection is also latched, meaning that the dsPIC needs to be reset to restart the converter. If this fault protection is triggered, the RESET flag in the Board Power Visualizer GUI will be set, as shown below, indicating that the dsPIC needs to be reset to re-start the LLC converter.
+
+<p>
+  <center>
+    <img src="images/illc-33.png" alt="fault-protection" width="200">
+    <br>
+    ILLC faults with hardware protection
+  </center>
+</p>
+
+
+[[back to top](#start-doc)]
+
+- - -
+
 <span id="pwm-setup"><a name="pwm-setup"> </a></span>
 
-## PWM setup
+## __PWM Setup__
+
+Most of the PWM setup is done by calling MCC generated initialization functions at the top of _main()_. Some configuration is also done at runtime as required.
 
 <span id="pwm-routing"><a name="pwm-routing"> </a></span>
 
-### PWM routing
+### __PWM Routing__
 The two schematics below show the routing of the PWM signals for phase A and phase B. PWM1 and PWM3 output are used for the primary drives for phase A and phase B respectively, while PWM2 and PWM4 are used for the SR drives.
 
 The dsPIC33C is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to pass through the isolation barrier. FET drivers are not shown here, please see the schematic on the users guide for more detail.
@@ -474,7 +559,7 @@ The switching frequency range of our LLC solution is from 800kHz and 1Mhz. To ac
 
 <span id="phase-a-pwm"><a name="phase-a-pwm"> </a></span>
 
-#### Phase A PWM setup
+#### __Phase A PWM Setup__
 
 For a single phase, the LLC primary drive signals should have a fixed duty cycle (just below 50%) and variable frequency, as shown below. The drive signals to the high side and low side of the primary side half-bridge (before the resonant tank) need to be complementary, with a dead time between the falling edge on the high side drive and the rising edge of the low side drive, and visa-versa. 
 
@@ -519,7 +604,7 @@ The PWM2H and PWM2L setup is illustrated below.
 
 <span id="phase-b-pwm"><a name="phase-b-pwm"> </a></span>
 
-#### Phase B PWM setup
+#### __Phase B PWM Setup__
 
 Phase B setup as follows:
 
@@ -584,7 +669,7 @@ The fields that need to be modified for phase B (related to PWM3 and PWM4) are h
 
 <span id="control-method"><a name="control-method"> </a></span>
 
-## Control Method
+## __Control Method__
 
 Uses voltage mode control.
 
@@ -599,7 +684,7 @@ Uses voltage mode control.
 
 <span id="plant-measurement"><a name="plant-measurement"> </a></span>
 
-### Plant Measurement
+### __Plant Measurement__
 
 Discuss how to do this on DP-PIM
 
@@ -609,7 +694,7 @@ Discuss how to do this on DP-PIM
 
 <span id="loop-measurements"><a name="loop-measurements"> </a></span>
 
-### Loop Measurements
+### __Loop Measurements__
 
 
 [[back to top](#start-doc)]
@@ -619,10 +704,10 @@ Discuss how to do this on DP-PIM
 
 <span id="current-balancing"><a name="current-balancing"> </a></span>
 
-## Phase Current Balancing
+## __Phase Current Balancing__
 
-A current balancing scheme has been implemented on the demo firmware accompanying this board. The goal is that both phases share the load current equally. This scheme is only run if the total load current is above 1.4A (see the macro "IOUT_SRONIL" in the firmware), so the thermal stress is shared equally between the phases when the load is high enough that thermal management is warranted.
-The code is located in the function Drv_PwrCtrl_ILLC_ILPHVoltageLoop(), which is in the file power_controller/drv_pwrctrl_ILLC_SRandControl.c. This function is called from the ADCAN0 interrupt, which is located in the file driver/drv_adc.c. 
+A current balancing scheme has been implemented on the demo firmware accompanying this board. The goal is that both phases share the load current equally. This scheme is only run if the total load current is above 1.4A (see the macro _IOUT_SRONIL_ in the firmware), so the thermal stress is shared equally between the phases when the load is high enough that thermal management is warranted.
+The code is located in the function _Drv_PwrCtrl_ILLC_ILPHVoltageLoop()_, which is in the file _power_controller/drv_pwrctrl_ILLC_SRandControl.c_. This function is called from the ADCAN0 interrupt, which is located in the file _driver/drv_adc.c_. 
 
 <p>
   <center>
@@ -638,7 +723,7 @@ Decreasing the duty cycle of the SR drives on a phase will decrease the amount o
 
 <span id="sr-drive-state-machine"><a name="sr-drive-state-machine"> </a></span>
 
-### SR Drive State machine
+### __SR Drive State Machine__
 
 <p>
   <center>
@@ -654,8 +739,8 @@ The state machine that runs the current balancing algorithm is illustrated above
 
 <span id="standby-state"><a name="standby-state"> </a></span>
 
-#### STANDBY state
-Both SRs are disabled, so any conduction is through the body diodes of the SRs. We stay in this state until the output voltage is above 6V (see macro "VOUT_SR_ACTIVE") and the total output current is above 1.4A (see macro "IOUT_SRONIL"). If both of these conditions are satisfied we go to the enable state. 
+#### __STANDBY State__
+Both SRs are disabled, so any conduction is through the body diodes of the SRs. We stay in this state until the output voltage is above 6V (see macro _VOUT_SR_ACTIVE_) and the total output current is above 1.4A (see macro _IOUT_SRONIL_). If both of these conditions are satisfied we go to the enable state. 
 
 <p>
   <center>
@@ -668,7 +753,7 @@ Both SRs are disabled, so any conduction is through the body diodes of the SRs. 
 <br/>
 <span id="enable-state"><a name="enable-state"> </a></span>
 
-#### ENABLE state
+#### __ENABLE State__
 
 Both SRs are still disabled. The two phase currents are compared. In our current balancing algorithm, the phase with the smaller current has a fixed SR duty cycle, and the SR duty of the other phase is varied to get the currents in balance. So the decision on which phase to fix and which to vary is made once at this point, and remains in force while the algorithm is active.
 
@@ -702,7 +787,7 @@ For phase B SR drive, PG4 is used, so PG4TRIGA, PG4TRIGB, PG4PHASE and PG4DC are
 <br/>
 <span id="softstart-state"><a name="softstart-state"> </a></span>
 
-#### SOFTSTART state
+#### __SOFTSTART State__
 
 In this state, the duty cycles of the SR drives on both PG2 and PG4 are linearly ramped from the min duty (100ns pulse width) to the max duty (PGxPER/2*250ps - 124ns) in steps of 10ns.
 
@@ -726,7 +811,7 @@ At the end of the ramp, we change to the UP AND RUNNING state.
 <br/>
 <span id="up-and-running-state"><a name="up-and-running-state"> </a></span>
 
-#### UP AND RUNNING state
+#### __UP AND RUNNING State__
 
 <p>
   <center>
@@ -740,9 +825,9 @@ In this state, one of the SR drives of either phase A or phase B runs at a fixed
 
 If the output current through the phase being controlled is greater than the current through the other (fixed duty) phase, we decrease the duty cycle of the SR drives by 2ns. If the current is smaller, we increase the duty cycle on the SR drives by 2ns. The on-time of the SR drives is clamped at a max value of [PGxPER/2*250ps - 124ns], and at a min value of 100ns.
 
-If the total output current drops below 1.0A (see macro "IOUT_SROFFIL"), all SR drives are disabled, and we go back to the STANDBY state.
+If the total output current drops below 1.0A (see macro _IOUT_SROFFIL_), all SR drives are disabled, and we go back to the STANDBY state.
 
-### Results
+### __Results__
 See results below. The two phase currents are out of balance until the total output current reaches 1.4A, at which point the current balancing algorithm kicks in, and the current is shared equally between the phases.
 
 
@@ -772,89 +857,8 @@ Below we show how it works with a load step from 0 to 3A. The time-base is 200us
 
 <span id="plant-frequency-response-simulation-with-mplab-mindi"><a name="plant-frequency-response-simulation-with-mplab-mindi"> </a></span>
 
-## Plant Frequency Response Simulation with MPLAB® Mindi™
+## __Plant Frequency Response Simulation with MPLAB® Mindi™__
 Mindi™ is the Microchip-branded demo version of Simplis/SiMetrix. It supports the common features of the Simplis standard license but limits the number of circuit nodes. 
-
-[[back to top](#start-doc)]
-
----
-
-<span id="firmware-fault-protection"><a name="firmware-fault-protection"> </a></span>
-
-### Firmware Fault Protection
-
-All of our firmware fault protection has the same functionality. Each fault has a trigger threshold, a clear threshold, a fault blanking time and a fault clear time.
-
-This is illustrated below, for a fault with a "max" threshold, which means that the fault is triggered when the fault source is above a threshold (output over voltage protection, for example).
-
-Once the fault source breaches the trigger threshold, a timer is started. If the fault source stays above the trigger threshold for longer than the fault blanking time, then the fault becomes active, the PWMs are switched off and the converter state machine goes to "FAULT ACTIVE" state. During the fault blanking time, if the fault source drops back below the trigger threshold, the timer is reset.  
-
-When the fault is active. if the fault source stays below the fault clear threshold for the fault clear time, then the fault is cleared. When all fault sources are cleared, the converter will attempt to restart.
-
-<p>
-  <center>
-    <img src="images/illc-29.png" alt="fault-protection" width="1500">
-    <br>
-    Firmware Fault protection
-  </center>
-</p>
-
-This is shown in more detail in a flowchart below. When "fault active == true", then the fault is active and the converter is disabled. When "fault active == false" the converter can attempt to start up.
-
-<p>
-  <center>
-    <img src="images/illc-30.png" alt="fault-protection" width="1500">
-    <br>
-    Flowchart illustrating the firmware fault protection
-  </center>
-</p>
-
-All faults shown in the table below have firmware protection like this. In our firmware, this fault protection is run every 100us.
-
-<p>
-  <center>
-    <img src="images/illc-31.png" alt="fault-protection" width="1500">
-    <br>
-    ILLC faults with firmware protection
-  </center>
-</p>
-
-<span id="hardware-fault-protection"><a name="hardware-fault-protection"> </a></span>
-
-### Hardware fault protection
-
-The purpose of the hardware fault protection is to prevent catastrophic board damage, particularly from input or output over current. 
-Once triggered, it kicks in immediately (there is no fault blanking time). It sets all PWM drive signals to 0, which will turn off the converter. Note that this is completely independent of the dsPIC, so even if there are drive signals coming from the dsPIC when the hardware fault protection is tripped, they will be forced to 0V (through AND gates on the hardware) before they get to the FET drivers. 
-
-<p>
-  <center>
-    <img src="images/illc-32.png" alt="fault-protection" width="400">
-    <br>
-    ILLC faults with hardware protection
-  </center>
-</p>
-
-If the hardware fault protection is triggered, the red LED LD700 will turn on. The protection is latched, meaning that once triggered it will not clear itself, it needs to be manually cleared.
-
-If you want to re-run the board, you need to 
-* disable all PWMs first, either by holding down the RESET push button, or erasing the dsPIC firmware (we recommend the second option as it is safer)
-* then short press the "RESET protection" push button on the HMI interface. 
-
-On the dsPIC, output over current protection using comparators and DAsC is also implemented as follows:
-* Current transformer phase A secondary sense tied to CMP1DAC (pin 22 of dsPIC)
-* Current transformer phase B secondary sense tied to CMP3DAC (pin 18 of dsPIC)
-
-Either of these comparators tripping will trigger the highest priority interrupt, which disables all PWM drive signals and puts the converter in the "FAULT ACTIVE" state.
-Like the hardware fault protection, this fault protection is also latched, meaning that the dsPIC needs to be reset to restart the converter. If this fault protection is triggered, the RESET flag in the Board Power Visualizer GUI will be set, as shown below, indicating that the dsPIC needs to be reset to re-start the LLC converter.
-
-<p>
-  <center>
-    <img src="images/illc-33.png" alt="fault-protection" width="200">
-    <br>
-    ILLC faults with hardware protection
-  </center>
-</p>
-
 
 [[back to top](#start-doc)]
 
