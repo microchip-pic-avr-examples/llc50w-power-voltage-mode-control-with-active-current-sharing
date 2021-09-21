@@ -546,7 +546,6 @@ The dsPIC33C is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to 
   </center>
 </p>
 
-
 <p>
   <center>
     <img src="images/illc-08.png" alt="PWM phase B" width="700">
