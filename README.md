@@ -9,7 +9,7 @@
 
 
 <p><center><a target="_blank" href="https://www.microchip.com/en-us/development-tool/DV330102" rel="nofollow">
-<img src="images/illc-00.png" alt="dsPIC33C Interleaved LLC Converter" width="400">
+<img src="images/illc-00.png" alt="dsPIC33C Interleaved LLC Converter" width="700">
 </a></center></p>
 
 <p>
@@ -184,7 +184,7 @@ The USER button control is outlined in the table below.
   <center>
     <img src="images/illc-24.png" alt="hmi-control" width="900">
     <br>
-    HMI control
+    HMI control USER push button action
   </center>
 </p>
 
@@ -194,7 +194,7 @@ The board status as shown by the LEDs on the ILLC power board and the DP-PIM is 
   <center>
     <img src="images/illc-25.png" alt="hmi-status" width="900">
     <br>
-    HMI status 
+    HMI status LEDs
   </center>
 </p>
 
