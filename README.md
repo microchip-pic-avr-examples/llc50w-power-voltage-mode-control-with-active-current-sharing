@@ -299,7 +299,7 @@ An overview of the firmware is shown below.
 The power controller state machine and fault handler are executed every 100us by the scheduler. So also are the GUI handler is run every 1ms, and the HMI driver every 100ms.
 
 There are 5 interrupt sources.
-* ISRADCCANO: executed every 6th phase A PWM cycle. Measure phase A secondary current and Vout every pass, then cycle through sampling other ADC channels on the shared core. Voltage loop is executed here, as well as SR state machine.
+* ISRADCCAN0: executed every 6th phase A PWM cycle. Measure phase A secondary current and Vout every pass, then cycle through sampling other ADC channels on the shared core. Voltage loop is executed here, as well as SR state machine.
 * ISRADCCAN1: executed every 6th phase B PWM cycle. Measure phase B secondary current.
 * ISRSCCP1: triggered every 4th input capture event (SCCP peripheral), used to measure Vdd via a PWM signal from primary side whose duty cycle is proportional to the Vdd level.
 * ISRCMP1: triggered if comparator 1 trips, which happens if there is a large output over current on phase A.
@@ -398,6 +398,7 @@ This continues until the duty cycle is 45% (as we allow for a dead-time of 50ns)
     <br>
     Half bridge high and low switching signals during open-loop duty cycle ramp, with fixed Fsw = 1MHz
   </center>
+
 </p>
 
 Once we reach the target on-time, we move to the state PCS_SOFT_START_PRE2.
