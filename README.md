@@ -515,7 +515,7 @@ Like the hardware fault protection, this fault protection is also latched, meani
 
 <p>
   <center>
-    <img src="images/illc-33.png" alt="fault-protection" width="200">
+    <img src="images/illc-33.png" alt="fault-protection" width="700">
     <br>
     ILLC faults with hardware protection
   </center>
@@ -585,7 +585,7 @@ The primary drive signals for phase A (from PWM1 peripheral) are shown below.
 
 <p>
   <center>
-    <img src="images/illc-10.png" alt="PWM1 config" width="400">
+    <img src="images/illc-10.png" alt="PWM1 config" width="600">
     <br>
     PWM mode: independent edge, dual output
   </center>
@@ -614,11 +614,11 @@ Phase B setup as follows:
 * PWM4L drives secondary side (SR) half-bridge, low side
 
 Phase A and phase B run 90 degrees out of phase. 
-The synchronization scheme works as follows
+The synchronization scheme works as follows:
 * PWM2 is synchronized to the EOC (End of Cycle) trigger of PWM1, so they run in phase
 * PWM3 is synchronized to PG2TRIGC via the PWM2 peripheral's PCI input and the PWM event A output. PG2TRIGC is set to (PG1PER / 4 ), so the PWM3 cycle starts 1/4 of a period after PWM1 and PWM2 cycle start.
 * PWM4 is synchronized to the EOC (End of Cycle) trigger of PWM3, so they run in phase.
-
+  
 
 <p>
   <center>
@@ -729,7 +729,7 @@ Decreasing the duty cycle of the SR drives on a phase will decrease the amount o
   <center>
     <img src="images/illc-01.png" alt="ILLC current balancing state machine" width="500">
     <br>
-    Current balancing state machine
+    Current balancing state machine 
   </center>
 </p>
 The state machine that runs the current balancing algorithm is illustrated above. It is run in the ADCAN0 interrupt, which is executed every 6th PWM period. 
@@ -746,7 +746,7 @@ Both SRs are disabled, so any conduction is through the body diodes of the SRs. 
   <center>
     <img src="images/illc-02.png" alt="standby-state-flowchart" width="450">
     <br>
-    Flowchart for STANDBY state
+    Flowchart for STANDBY state 
   </center>
 </p>
 
@@ -768,7 +768,7 @@ Note that the phase current measurements used for the comparison are filtered to
   </center>
 </p>
 
-After the comparison is made, PWM2 and PWM4 (the PWMs used to drive the SRs for phase A and phase B respectively) are enabled and set at min duty cycle. The PWM setup is actually done in the STANDBY state, but the PWM outputs from the dsPIC are not enabled until the ENABLE state.
+After the comparison is made, PWM2 and PWM4 (the PWMs used to drive the SRs for phase A and phase B respectively) are enabled and set at min duty cycle. The PWM setup is actually done in the STANDBY state, but the PWM outputs from the dsPIC are not enabled until the ENABLE state. 
 
 <p>
   <center>
@@ -782,14 +782,14 @@ As discussed in section XXX, the PWMs are configured in "Independent, dual outpu
 
 For phase A, the rising edge of PWM2H is set via the PG2TRIGA register (so the event is triggered when the internal period counter in PG2 reaches PG2TRIGA), and the falling edge set via PG2TRIGB. The rising edge of PWM2L is set by the PG2PHASE register, and the falling edge via the PG2DC register. 
 
-For phase B SR drive, PG4 is used, so PG4TRIGA, PG4TRIGB, PG4PHASE and PG4DC are used to set the rising and falling edges on PG4H and PG4L in the same way as for PG2. 
+For phase B SR drive, PG4 is used, so PG4TRIGA, PG4TRIGB, PG4PHASE and PG4DC are used to set the rising and falling edges on PG4H and PG4L in the same way as for PG2.  
 
 <br/>
 <span id="softstart-state"><a name="softstart-state"> </a></span>
 
 #### __SOFTSTART State__
 
-In this state, the duty cycles of the SR drives on both PG2 and PG4 are linearly ramped from the min duty (100ns pulse width) to the max duty (PGxPER/2*250ps - 124ns) in steps of 10ns.
+In this state, the duty cycles of the SR drives on both PG2 and PG4 are linearly ramped from the min duty (100ns pulse width) to the max duty (PGxPER/2*250ps - 124ns) in steps of 10ns. 
 
 <p>
   <center>
@@ -817,7 +817,7 @@ At the end of the ramp, we change to the UP AND RUNNING state.
   <center>
     <img src="images/illc-06.png" alt="up-and-running-state-flowchart" width="1000">
     <br>
-    Flowchart illustrating the UP AND RUNNING state
+    Flowchart illustrating the UP AND RUNNING state 
   </center>
 </p>
 
@@ -835,7 +835,7 @@ See results below. The two phase currents are out of balance until the total out
   <center>
     <img src="images/illc-16.png" alt="ibalance-0" width="1500">
     <br>
-    Current Balancing
+    Current Balancing 
   </center>
 </p>
 
@@ -850,7 +850,7 @@ Below we show how it works with a load step from 0 to 3A. The time-base is 200us
 </p>
 
 
-[[back to top](#start-doc)]
+[[back to top](#start-doc)] 
 
 - - -
 
