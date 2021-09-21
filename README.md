@@ -494,7 +494,7 @@ Once triggered, it kicks in immediately (there is no fault blanking time). It se
 
 <p>
   <center>
-    <img src="images/illc-32.png" alt="fault-protection" width="400">
+    <img src="images/illc-32.png" alt="fault-protection" width="900">
     <br>
     ILLC faults with hardware protection
   </center>
