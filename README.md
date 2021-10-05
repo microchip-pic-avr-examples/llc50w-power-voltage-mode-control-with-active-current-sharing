@@ -33,7 +33,7 @@ dsPIC33 Interleaved LLC Converter Power Board
   - [__Software Used__](#software-used)
   - [__Hardware Used__](#hardware-used)
 - [__How to Use This Document__](#how-to-use-this-document)
-- [__Modes of Operation: Single Phase or Interleaved__](#modes-of-operation-single-phase-or-interleaved)
+- [__LLC Modes of Operation: Single Phase or Interleaved__](#llc-modes-of-operation-single-phase-or-interleaved)
 - [__Quick Start Guide__](#quick-start-guide)
   - [__Human Machine Interface__](#human-machine-interface)
   - [__Testing the Board in Open-Loop Mode__](#testing-the-board-in-open-loop-mode)
@@ -97,9 +97,9 @@ Please always check for the latest data sheets on the respective product website
 
 ### __Software Used__
 - [Power Board Visualizer GUI](https://www.microchip.com/SWLibraryWeb/product.aspx?product=POWER_BOARD_VISUALIZER)
-- [MPLAB&reg; X IDE v5.45](https://www.microchip.com/mplabx-ide-windows-installer)
-- [MPLAB&reg; XC16 Compiler v1.61](https://www.microchip.com/mplabxc16windows)
-- [Microchip Code Configurator v4.0.2](https://www.microchip.com/mplab/mplab-code-configurator)
+- [MPLAB&reg; X IDE v5.50](https://www.microchip.com/mplabx-ide-windows-installer)
+- [MPLAB&reg; XC16 Compiler v1.70](https://www.microchip.com/mplabxc16windows)
+- [Microchip Code Configurator v4.2.1](https://www.microchip.com/mplab/mplab-code-configurator)
 - [Digital Compensator Design Tool](https://www.microchip.com/developmenttools/ProductDetails/DCDT)
 - [MPLAB&reg; Mindi™ Simulator](https://www.microchip.com/SWLibraryWeb/producttc.aspx?product=AnalogSimMPLABMindi)
 
@@ -126,9 +126,9 @@ The user's guide can be found [here.](https://www.microchip.com/en-us/developmen
 
 <span id="modes-of-operation"><a name="modes-of-operation"> </a></span>
 
-## __Modes of Operation: Single Phase or Interleaved__
+## __LLC Modes of Operation: Single Phase or Interleaved__
 
-The LLC power board contains two phases, phase A and phase B. The firmware can be configured to run a single phase (phase A), or run in interleaved mode (phase A and phase B running).
+The LLC power board contains two phases, phase A and phase B. The firmware can be configured to run just a single phase (phase A), or run in interleaved mode (phase A and phase B both running).
 
 To configure the mode of operation, open the header file "project_settings.h".
 
@@ -140,7 +140,7 @@ To configure the mode of operation, open the header file "project_settings.h".
   </center>
 </p>
 
-Scroll down to line 58. 
+Scroll down to line 58 (see below).
 
 To run in interleaved mode, POWER_STAGE_CONFIG_INTERLEAVED needs to be defined and POWER_STAGE_CONFIG_PHASE_A_ONLY should not be defined.
 
@@ -162,13 +162,13 @@ If neither or both are defined, you will get a compile error.
 
 ## __Quick Start Guide__
 
-In this section we describe how to bring up the board both in open loop and closed loop modes, with and without the Board Power Visualizer GUI.
+In this section we describe how to bring up the board both in open loop and closed loop modes, and with and without using the Board Power Visualizer GUI.
 
 <span id="hmi"><a name="hmi"> </a></span>
 
 ### __Human Machine Interface__
 
-The ILLC board has a simple Human-Machine-Interface (HMI) with LEDs showing status and push buttons for control. This is shown below.
+The interleaved LLC board has a simple Human-Machine-Interface (HMI) with LEDs showing status, and push buttons for control. This is shown below.
 
 <p>
   <center>
@@ -178,7 +178,7 @@ The ILLC board has a simple Human-Machine-Interface (HMI) with LEDs showing stat
   </center>
 </p>
 
-The USER button control is outlined in the table below.
+The USER button control action is outlined in the table below.
 
 <p>
   <center>
@@ -201,6 +201,7 @@ The board status as shown by the LEDs on the ILLC power board and the DP-PIM is 
 <span id="open-loop-test"><a name="open-loop-test"> </a></span>
 
 ### __Testing the Board in Open-Loop Mode__
+The hardware connections for running the board in open loop mode is shown below.
 
 <p>
   <center>
@@ -212,29 +213,31 @@ The board status as shown by the LEDs on the ILLC power board and the DP-PIM is 
 
 Note that we use the ICD4 in-circuit debugger to program the dsPIC, but any type of Microchip In-Circuit Debugger can be used here.
 
-1. Connect computer to DP-PIM via USB cable
-2. Connect computer to ICD4, connect ICD4 to 6 pin header on DP-PIM
-3. Connect poti to 6 pin header on LLC power board as shown above
-4. Set poti wiper to max setting
+Please follow these steps to run the ILLC board in open loop mode.
+
+1. Connect computer directly to DP-PIM via USB cable (USB Micro Type-B on DP-PIM).
+2. Connect computer to ICD4 via USB cable, connect ICD4 to 6 pin header on DP-PIM via RJ11 cable and RJ11 to ICSP adapter.
+3. Connect poti (5kR or 10kR) to 6 pin header on LLC power board as shown above.
+4. Set poti wiper to max setting.
 5. Connect input terminal of LLC power board to DC source capable of providing at least 40V. Leave DC source off for now.
-6. Connect scope probe to TP100 (this is phase A high-side primary drive signal, ensuring to ground the scope at GND_S (not GND_P).
+6. Connect scope probe to TP100 (this is phase A high-side primary drive signal) ensuring to ground the scope at GND_S (not GND_P).
 7. Connect a voltmeter to the output terminals of the LLC power board.
-8. Connect output terminals of LLC power board to resistor or constant current load (set to around 0.5A or 20R), turn on the load if it is an e-load
-9. Open illc project in MPLABx. Set as main project, then download the firmware to the dsPIC on the DP-PIM 
+8. Connect output terminals of LLC power board to resistive or constant current load (set current load to around 0.5A or resistive load to around 20R), turn on the load if it is an e-load.
+9. Open ILLC project in MPLABx. Set as the main project, then download the firmware to the dsPIC on the DP-PIM.
 10. When the firmware is running, you should see 
-   * the red LED on the DP-PIM slow blinking, indicating that the firmware is running
-   *  the green LED on the power board slow blinking, indicating that the power supply is not running
-   *  the red LED on the power board is on, indicating that a fault is active
-11. Turn on the DC source, setting it to 40V. Set current limit to 1.2A or lower.
-12. Short press the user button on the LLC power board. This turns on the converter. The status LED should be as follows
-    * Green LED on power board on, indicating that the power supply is running
-    * Red LED on power board slow-blinking, indicating that open-loop mode is active
-13. Check the PWM signal on TP100 with a scope. It should have a frequency of around 1MHz, and a duty cycle of around 45%. 
-14. Check the output voltage, with 0.5A load, it should be around 7.4V.
-15. Move the poti wiper towards the min setting, observe the signal on TP100 and the output voltage, you should see the frequency of the signal on TP100 decreasing, the duty staying (approximately) the same, and the output voltage increasing. 
+   * the red LED on the DP-PIM slow blinking, indicating that the firmware is running.
+   *  the green LED on the power board slow blinking, indicating that the power supply is not running.
+   *  the red LED on the power board is on, indicating that a fault is active.
+11. Set the DC source to 40V. Set current limit to 1.2A or lower. Turn on DC source.
+12. Short press the USER button on the LLC power board. This turns on the converter. The status LEDs should behave as follows:
+    * Green LED on power board constant on, indicating that the power supply is running.
+    * Red LED on power board slow-blinking, indicating that open-loop mode is active.
+13. Check the PWM signal on TP100 with an oscilloscope. The signal should have a frequency of around 1MHz, and a duty cycle of 45%.
+14. Check the output voltage with the voltmeter: with 0.5A load, it should be around 7.4V.
+15. Move the poti wiper slowly towards the min setting. While doing this, observe the signal on TP100 and the output voltage, you should see the frequency of the signal on TP100 decreasing, the duty staying (approximately) the same, and the output voltage increasing. 
 16. With the poti wiper at the min setting, the signal on TP100 should have a frequency of 800kHz and a duty cycle of 45%. With a 0.5A load, the output voltage should be around 10.7V.
 
-Note that at power-up, the firmware checks if a potentiometer is connected, and if so, uses the voltage on the potentiometer wiper for the output voltage reference. If a potentiometer is not connected, the output voltage reference is set at 9V. 
+Note that at power-up, the firmware checks if a potentiometer is connected, and if so, the voltage on the potentiometer wiper sets the output voltage reference. If a potentiometer is not connected, the output voltage reference is fixed at 9V. The firmware will not detect that the poti is present if the poti is connected after power up, so you need to reset the dsPIC if this is the case.
 
 <span id="closed-loop-test"><a name="closed-loop-test"> </a></span>
 
@@ -246,7 +249,9 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
 4.  Check for valid output voltage and switching signal on TP100.
 5.  If the potentiometer is connected, moving the potentiometer wiper position will change the output voltage reference.
 6.  If the potentiometer is not used, the output voltage should be around 9V (TP100 signal should have frequency of around 870kHz and duty of 45%).
-7.  Using the board in closed-Loop mode creates a controlled stable output voltage. It must be independent from input voltage or load changes. The reference for the output voltage can be set with a potentiometer and/or with the GUI. We discuss using the Board Power Visualizer GUI in the next section.
+7.  Using the board in closed-Loop mode creates a controlled stable output voltage. It must be independent from input voltage or load changes. The reference for the output voltage can be set with a potentiometer and/or with the Board Power Visualizer GUI. 
+  
+  We discuss using the Board Power Visualizer GUI in the next section.
 
 [[back to top](#start-doc)]
 
@@ -264,8 +269,9 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
 6.  Click on the "Enable" button on the bottom of the landing page. This will initiate comms between the GUI and the firmware running on the DP-PIM.
 7.  When the comms is working, the "Communication status" indicator on the bottom of the LLC GUI landing page should flash alternating red and green.
 
-With Microchips Power Board Visualizer GUI we can easily visualize values and states visible on the ILLC Demo Board. We can also change the output voltage reference (closed loop) and switching frequency (open loop) on the running power supply with the GUI.
-On the Status tab we have an example showing the main values like voltages and currents as well as status bits from the power controller and Faults.
+With Microchips Power Board Visualizer GUI we can easily visualize values and states visible on the ILLC Demo Board. We can also change the output voltage reference (closed loop only) and switching frequency (open loop only) on the running power supply with the GUI.
+
+On the "Status" tab we show an example below with the main values like voltages and currents as well as status bits from the power controller and Faults.
 
 <p>
   <center>
@@ -275,7 +281,7 @@ On the Status tab we have an example showing the main values like voltages and c
   </center>
 </p>
 
-On the Schematic diagram tab there is the power supply block diagram with online updates of the most important values for easy understanding the working principles. This is shown below.
+On the "Schematic diagram" tab there is the power supply block diagram with online updates of the most important values for easy understanding the working principles. This is shown below.
 
 <p>
   <center>
@@ -296,14 +302,14 @@ On the Schematic diagram tab there is the power supply block diagram with online
 ## __Firmware Overview__
 
 An overview of the firmware is shown below. 
-The power controller state machine and fault handler are executed every 100us by the scheduler. So also are the GUI handler is run every 1ms, and the HMI driver every 100ms.
+The power controller state machine and fault handler are executed every 100us by the scheduler. So also are the GUI handler (every 1ms), and the HMI driver (every 100ms).
 
 There are 5 interrupt sources.
-* ISRADCCAN0: executed every 6th phase A PWM cycle. Measure phase A secondary current and Vout every pass, then cycle through sampling other ADC channels on the shared core. Voltage loop is executed here, as well as SR state machine.
+* ISRADCCAN0: executed every 6th phase A PWM cycle. Measure phase A secondary current and Vout every pass, then cycle through sampling other ADC channels on the shared ADC core. Voltage loop is executed here, as well as SR state machine.
 * ISRADCCAN1: executed every 6th phase B PWM cycle. Measure phase B secondary current.
 * ISRSCCP1: triggered every 4th input capture event (SCCP peripheral), used to measure Vdd via a PWM signal from primary side whose duty cycle is proportional to the Vdd level.
-* ISRCMP1: triggered if comparator 1 trips, which happens if there is a large output over current on phase A.
-* ISRCMP3: triggered if comparator 3 trips, which happens if there is a large output over current on phase B.
+* ISRCMP1: triggered if comparator 1 trips, which happens if there is a large output over current event on phase A.
+* ISRCMP3: triggered if comparator 3 trips, which happens if there is a large output over current event on phase B.
 
 <p>
   <center>
@@ -315,15 +321,15 @@ There are 5 interrupt sources.
 
 [[back to top](#start-doc)]
 
-MCC is used to configured the peripherals, and they are configured at run-time at the start of _main()_, before the background loop is initiated.
+Microchip Code Configurator (MCC) is used to configure the peripherals. They are configured at run-time at the start of _main()_, before the background loop is initiated.
 
 The main files are as follows:
 * _driver/drv_adc.c_: this contains the 5 interrupt service routines.
-* _power_controller/drv_pwrctrl_ILLC.c_: power controller state machine that is executed every 100us
-* _power_controller/drv_pwrctrl_ILLC_fault.c_: fault handlers
+* _power_controller/drv_pwrctrl_ILLC.c_: power controller state machine that is executed every 100us.
+* _power_controller/drv_pwrctrl_ILLC_fault.c_: fault handlers.
 * _power_controller/drv_pwrctrl_ILLC_ILPH_SRandControl.c_: power supply voltage loop and SR state machine and driver functions when running in interleaved mode.
 * _power_controller/drv_pwrctrl_ILLC_PHA_SRandControl.c_: contains power supply voltage loop and SR state machine and driver functions when running phase A only.
-* _misc/fault_common.c_: generic fault functions
+* _misc/fault_common.c_: generic fault functions.
 
 <p>
   <center>
@@ -349,7 +355,7 @@ The main files are as follows:
 
 ## __Converter State Machine__
 
-The main power controller state machine is illustrated below. It is run every 100us. The code is located in _power_controller/drv_pwrctrl_ILLC.c_, see the function _Drv_PwrCtrl_ILLC_Task_100us()_. Most of the states are pretty standard. Perhaps the only states worth describing in detail are the soft-start states, as these differ a bit from other DC/DC converter state machines. Hence we describe these below.
+The main power controller state machine is illustrated below. It is executed every 100us. The code is located in _power_controller/drv_pwrctrl_ILLC.c_, see the function _Drv_PwrCtrl_ILLC_Task_100us()_. Most of the states are pretty standard for a digital DC/DC converter state machine (see state diagram below). Perhaps the only states worth describing in detail are the soft-start states, as these differ somewhat from other DC/DC converter state machines. Hence these are described in some detail below.
 
 <p>
   <center>
@@ -364,22 +370,26 @@ The main power controller state machine is illustrated below. It is run every 10
 ### __Soft-Starting the Converter__
 
 The soft-start ramp is split in 2 parts
-1. Open loop, fixed frequency of 1MHz (max frequency for our design), ramp duty cycle in steps of 2.5ns every 100us until duty reaches 50%.
-2. Closed loop, fix duty cycle at 50%, ramp control loop input from pre-bias output voltage to target output voltage setpoint.
+1. Run primary drive PWMs open-loop, at a fixed frequency of 1MHz (max frequency for our design)
+  - start at the minimum duty cycle (Ton = 50ns).
+  - ramp the duty cycle linearly in steps of 2.5ns every 100us until the duty reaches 45%.
+2. Run primary-drive PWMs closed-loop
+  - fixed duty cycle of 45%. 
+  - compensator sets PWM frequency.
+  - ramp compensator reference linearly from pre-bias output voltage to target output voltage set-point.
 
-This first part is to prevent massive inrush current: this may happen if the duty cycle was set immediately to 50%. 
+Part 1 of the soft-start ramp is to prevent massive inrush current: if the duty cycle was set immediately to 50% the inrush current required to charge the output capacitor would trip the hardware over current protection. Thus part 1 is a duty cycle soft-start.
 
 Note that the SRs drives (PWM2 for phase A and PWM4 for phase B) are switched off during soft-start, so any output current conduction is through the body diodes of the SRs during this time.
 
 Also note that if we are running in interleaved mode, PG3 setup is identical to PG1, but PG3 lags PG1 by 90 degrees. 
 
 
-
 <span id="soft-start-pre1"><a name="soft-start-pre1"> </a></span>
 
 #### __State PCS_SOFT_START_PRE1__
 
-In this state, the PWMs are running open loop (that is, they are not driven by the compensator).
+In this state, the PWMs are running in open-loop mode (that is, they are not driven by the compensator).
 The frequency is fixed at 1MHz. The on-time of the primary side half-bridge drive signals is set to 50ns. 
 Then every 100us, the on-time (and hence duty cycle) is increase by 2.5ns.
 This continues until the duty cycle is 45% (as we allow for a dead-time of 50ns).
@@ -401,24 +411,23 @@ This continues until the duty cycle is 45% (as we allow for a dead-time of 50ns)
 
 </p>
 
-Once we reach the target on-time, we move to the state PCS_SOFT_START_PRE2.
+Once we reach the target primary drive on-time (equivalent to 45% duty cycle), we move to the state PCS_SOFT_START_PRE2.
 
 <span id="soft-start-pre2"><a name="soft-start-pre2"> </a></span>
 
 #### __State PCS_SOFT_START_PRE2__
 
-In this state, we enable frequency modulation of the PWM outputs by the voltage mode compensator. The duty cycle of the PWM drive signals is fixed at (PG1PER/2 - 50ns). The voltage loop reference is initialized based on the measured output voltage at this point. 
-
+In this state, we enable frequency modulation of the PWM outputs by the voltage mode compensator (closed-loop mode of operation). The on-time of the primary side PWM drive signals is fixed at (PG1PER/2 - 50ns). The voltage loop reference is initialized based on the measured output voltage at this point. Once we complete this initialization, we move to the state PCS_SOFT_START_.
 
 <span id="soft-start"><a name="soft-start"> </a></span>
 
 #### __State PCS_SOFT_START__
 
-In this state, the reference to the voltage loop compensator is ramped linearly to the target setpoint. The compensator controls the frequency of the primary side LLC half-bridge signals. The duty cycle is always set to (PG1PER/2 - 50ns).
+In this state, the reference to the voltage loop compensator is ramped linearly to the target set-point. The compensator controls the frequency of the primary side LLC half-bridge signals. The duty cycle is always set to (PG1PER/2 - 50ns).
 
 Note that in this state the SRs are enabled.
 
-A oscilloscope screenshot of the entire start up phase is shown above. The different parts are described also.
+A oscilloscope screenshot of the entire start up phase is shown below. The different parts are described also.
 
 <p>
   <center>
@@ -439,7 +448,7 @@ A oscilloscope screenshot of the entire start up phase is shown above. The diffe
 
 The fault protection code is executed every 100us at the start of the converter state machine in the function _Drv_PwrCtrl_ILLC_Fault_Check()_. The body of the fault code is located in the files _power_controller/drv_pwr_ctrl_ILLC_fault.c_ and _misc/fault_common.c_.
 
-There are two types of protection on this project.
+There are two types of protection:
 1. Firmware fault protection
 2. Hardware fault protection
 
@@ -451,11 +460,13 @@ The firmware fault protection is implemented on the dsPIC on the DP-PIM. The har
 
 All of our firmware fault protection has the same functionality. Each fault has a trigger threshold, a clear threshold, a fault blanking time and a fault clear time.
 
-This is illustrated below, for a fault with a "max" threshold, which means that the fault is triggered when the fault source is above a threshold (output over voltage protection, for example).
+This is illustrated below, for a fault with a "max" threshold, which means that the fault is triggered when the fault source is above a threshold (output over voltage protection, for example). 
 
-Once the fault source breaches the trigger threshold, a timer is started. If the fault source stays above the trigger threshold for longer than the fault blanking time, then the fault becomes active, the PWMs are switched off and the converter state machine goes to "FAULT ACTIVE" state. During the fault blanking time, if the fault source drops back below the trigger threshold, the timer is reset.  
+Once the fault source breaches the trigger threshold, a timer is started. If the fault source stays above the trigger threshold for longer than the fault blanking time, then the fault becomes active, which means that the PWMs are switched off and the converter state machine is set to the "FAULT ACTIVE" state. 
 
-When the fault is active. if the fault source stays below the fault clear threshold for the fault clear time, then the fault is cleared. When all fault sources are cleared, the converter will attempt to restart.
+If the fault source drops back below the trigger threshold before the fault blanking time has expired, the timer is reset.  
+
+When the fault is active, if the fault source stays below the fault clear threshold for the duration of the fault clear time, then the fault is cleared. When all fault sources are cleared, the converter will attempt to restart.
 
 <p>
   <center>
@@ -489,8 +500,8 @@ All faults shown in the table below have firmware protection like this. In our f
 
 ### __Hardware fault protection__
 
-The purpose of the hardware fault protection is to prevent catastrophic board damage, particularly from input or output over current. 
-Once triggered, it kicks in immediately (there is no fault blanking time). It sets all PWM drive signals to 0, which will turn off the converter. Note that this is completely independent of the dsPIC, so even if there are drive signals coming from the dsPIC when the hardware fault protection is tripped, they will be forced to 0V (through AND gates on the hardware) before they get to the FET drivers. 
+The purpose of the hardware fault protection is to prevent catastrophic board damage, particularly from input or output over current.
+Once triggered, it kicks in immediately (there is no fault blanking time). It sets all PWM drive signals to 0, which will turn off the converter. Note that this is completely independent of the dsPIC, so even if there are drive signals coming from the dsPIC when the hardware fault protection is tripped, the hardware protection will over-ride these signals (through AND gates on the hardware) before they get to the FET drivers. 
 
 <p>
   <center>
@@ -506,7 +517,7 @@ If you want to re-run the board, you need to
 * disable all PWMs first, either by holding down the RESET push button, or erasing the dsPIC firmware (we recommend the second option as it is safer)
 * then short press the "RESET protection" push button on the HMI interface. 
 
-On the dsPIC, output over current protection using comparators and DAsC is also implemented as follows:
+On the dsPIC, output over current protection using comparators and DACs is also implemented as follows:
 * Current transformer phase A secondary sense tied to CMP1DAC (pin 22 of dsPIC)
 * Current transformer phase B secondary sense tied to CMP3DAC (pin 18 of dsPIC)
 
@@ -515,7 +526,7 @@ Like the hardware fault protection, this fault protection is also latched, meani
 
 <p>
   <center>
-    <img src="images/illc-33.png" alt="fault-protection" width="700">
+    <img src="images/illc-33.png" alt="fault-protection" width="250">
     <br>
     ILLC faults with hardware protection
   </center>
@@ -530,14 +541,14 @@ Like the hardware fault protection, this fault protection is also latched, meani
 
 ## __PWM Setup__
 
-Most of the PWM setup is done by calling MCC generated initialization functions at the top of _main()_. Some configuration is also done at runtime as required.
+Most of the PWM setup is done by calling initialization functions generated by MCC at the top of _main()_. Some more custom configuration is also done at runtime as required.
 
 <span id="pwm-routing"><a name="pwm-routing"> </a></span>
 
 ### __PWM Routing__
-The two schematics below show the routing of the PWM signals for phase A and phase B. PWM1 and PWM3 output are used for the primary drives for phase A and phase B respectively, while PWM2 and PWM4 are used for the SR drives.
+The two simplified schematics below show the routing of the PWM signals for phase A and phase B. PWM1 and PWM3 output are used for the primary drives for phase A and phase B respectively, while PWM2 and PWM4 are used for the SR drives.
 
-The dsPIC33C is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to pass through the isolation barrier. FET drivers are not shown here, please see the schematic on the users guide for more detail.
+The dsPIC is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to pass through the isolation barrier. FET drivers are not shown here, please see the full schematic in the users guide for more detail.
 
 <p>
   <center>
@@ -555,15 +566,15 @@ The dsPIC33C is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to 
   </center>
 </p>
 
-The switching frequency range of our LLC solution is from 800kHz and 1Mhz. To achieve robust operation in this frequency range with a PWM resolution of 250ps, we needed some special PWM module configuration, which will be describe in the following sections.
+The switching frequency range of our LLC solution is from 800kHz and 1MHz. To achieve robust operation in this frequency range with a PWM resolution of 250ps, we needed some special PWM module configuration, which will be describe in the following sections.
 
 <span id="phase-a-pwm"><a name="phase-a-pwm"> </a></span>
 
 #### __Phase A PWM Setup__
 
-For a single phase, the LLC primary drive signals should have a fixed duty cycle (just below 50%) and variable frequency, as shown below. The drive signals to the high side and low side of the primary side half-bridge (before the resonant tank) need to be complementary, with a dead time between the falling edge on the high side drive and the rising edge of the low side drive, and visa-versa. 
+For a single phase, the LLC primary drive signals should have a fixed duty cycle (50% minus some dead time) and variable frequency, as shown below. The voltage loop compensator output modulates the switching frequency of the converter. The drive signals to the high side and low side of the primary side half-bridge (before the resonant tank) need to be complementary, with a dead time between the falling edge on the high side drive and the rising edge of the low side drive, and visa-versa. 
 
-In our example firmware, the frequency varies from 800kHz to 1MHz.
+In our example firmware, the frequency can cary from 800kHz (max output voltage) to 1MHz (min output voltage).
 
 To get this type of waveform from the PWM module, we configured the PWM peripherals in "Independent Edge, dual output mode". 
 
@@ -615,9 +626,9 @@ Phase B setup as follows:
 
 Phase A and phase B run 90 degrees out of phase. 
 The synchronization scheme works as follows:
-* PWM2 is synchronized to the EOC (End of Cycle) trigger of PWM1, so they run in phase
+* PWM2 is synchronized to the EOC (End of Cycle) trigger of PWM1, so they run in phase.
 * PWM3 is synchronized to PG2TRIGC via the PWM2 peripheral's PCI input and the PWM event A output. PG2TRIGC is set to (PG1PER / 4 ), so the PWM3 cycle starts 1/4 of a period after PWM1 and PWM2 cycle start.
-* PWM4 is synchronized to the EOC (End of Cycle) trigger of PWM3, so they run in phase.
+* PWM4 is synchronized to the EOC (End of Cycle) trigger of PWM3, so PWM3 and PWM4 run in phase.
   
 
 <p>
@@ -662,7 +673,6 @@ The fields that need to be modified for phase B (related to PWM3 and PWM4) are h
   </center>
 </p>
 
-
 [[back to top](#start-doc)]
 
 - - -
@@ -671,7 +681,7 @@ The fields that need to be modified for phase B (related to PWM3 and PWM4) are h
 
 ## __Control Method__
 
-Uses voltage mode control.
+Uses voltage mode control. Elaborate here!!
 
 <p>
   <center>
@@ -717,7 +727,7 @@ The code is located in the function _Drv_PwrCtrl_ILLC_ILPHVoltageLoop()_, which 
   </center>
 </p>
 
-The scheme works by changing the duty cycle of the SR drive signals on one phase until the currents are approximately the same, while keeping the duty cycle of the SR drives on the other phase fixed. When the scheme is launched, the (filtered) currents of both phases are compared. The phase with the smaller current runs at a fixed (just under 50%) duty cycle, while the duty cycle of the SRs on the phase with the larger current is varied between a min value (100ns) and a max value (just under 50%) until the two currents are as close as possible.
+The scheme works by changing the duty cycle of the SR drive signals on one phase until both phase currents are approximately the same, while keeping the duty cycle of the SR drives on the other phase fixed. When the scheme is launched, the (filtered) currents of both phases are compared. The phase with the smaller current runs at a fixed (just under 50%) duty cycle, while the duty cycle of the SRs on the phase with the larger current is varied between a min value (100ns) and a max value (just under 50%) until the two currents are as close as possible.
 
 Decreasing the duty cycle of the SR drives on a phase will decrease the amount of current flowing through this phase and increase the amount of current flowing through the other phase. The total output current remains the same.
 
@@ -778,7 +788,7 @@ After the comparison is made, PWM2 and PWM4 (the PWMs used to drive the SRs for 
   </center>
 </p>
 
-As discussed in section XXX, the PWMs are configured in "Independent, dual output" mode. To recap, PG2 is used to drive the SRs for phase A, and PG4 is used to drive the SRs for phase B. 
+As discussed previously, the PWMs are configured in "Independent, dual output" mode. To recap, PG2 is used to drive the SRs for phase A, and PG4 is used to drive the SRs for phase B. 
 
 For phase A, the rising edge of PWM2H is set via the PG2TRIGA register (so the event is triggered when the internal period counter in PG2 reaches PG2TRIGA), and the falling edge set via PG2TRIGB. The rising edge of PWM2L is set by the PG2PHASE register, and the falling edge via the PG2DC register. 
 
@@ -795,7 +805,7 @@ In this state, the duty cycles of the SR drives on both PG2 and PG4 are linearly
   <center>
     <img src="images/illc-05.png" alt="enable-state-flowchart" width="800">
     <br>
-    PWM 2 setup
+    PWM2 signal during soft-start
   </center>
 </p>
 
@@ -804,7 +814,7 @@ For PG2, PG2TRIGB is fixed at 50ns before the end of period, and PG2DC fixed at 
 
 During the soft-start ramp, PG2TRIGA, PG2PHASE, PG4TRIGA and PG4PHASE are decreased by steps equivalent to 10ns so that the duty cycle increases by 10ns each time.
 
-The ramp is stopped when the rising edge of PG2PHASE is 74ns from the start of the period. Thus at the end of the ramp, all SR drive signals are running at just under 50% duty cycle (precisely, this is [PG2PER/2*250ps] - 124ns).
+The ramp is stopped when the rising edge of PG2PHASE is 74ns from the start of the period. Thus at the end of the ramp, all SR drive signals are running at just under 50% duty cycle (precisely, the on-time is [PG2PER/2*250ps] - 124ns).
 
 At the end of the ramp, we change to the UP AND RUNNING state.
 
