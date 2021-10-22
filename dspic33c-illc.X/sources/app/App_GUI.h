@@ -1,23 +1,21 @@
 /**
-  Generated main.c file from MPLAB Code Configurator
-
   @Company
     Microchip Technology Inc.
 
   @File Name
-    main.c
+    App_GUI.h
 
   @Summary
-    This is the generated main.c using PIC24 / dsPIC33 / PIC32MM MCUs.
+    This source file provides the application specific HUI functions
 
   @Description
-    This source file provides main entry point for system initialization and application code development.
+    This source file provides the application specific HUI functions
     Generation Information :
-        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.169.0
-        Device            :  dsPIC33CK256MP506
+        Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
+        Device            :  dsPIC33CK256MP506      
     The generated drivers are tested against the following:
         Compiler          :  XC16 v1.50
-        MPLAB 	          :  MPLAB X v5.40
+        MPLAB 	          :  MPLAB X v5.35
 */
 
 /*
@@ -42,50 +40,6 @@
     TERMS.
 */
 
-/**
-  Section: Included Files
-*/
-#include "mcc_generated_files/system.h"
-#include "os/os.h"
 
-#include "device/dev_button.h"
-#include "device/dev_gui_comm.h"
-#include "app/App_HMI.h"
-#include "app/App_GUI.h"
-#include "driver/drv_led.h"
-#include "driver/power_controller/drv_pwrctrl_ILLC.h"
-
-/*
-                         Main application
- */
-
-int main(void)
-{
-    Nop();
-    Nop();
-    Nop();
-  
-    // initialize the device
-    SYSTEM_Initialize();
-
-    Dev_Button_Init();
-    Drv_LED_Init();
-    App_HMI_Init();
-
-    OS_Init();
-
-    Drv_PwrCtrl_ILLC_Init();
-    Dev_GuiComm_Init(); //Init before App_GUI_Init())
-    App_GUI_Init();
-
-    OS_Scheduler_RunForever();
-    while (1)
-    {
-      // Add your application code
-    }
-    return 1;
-}
-/**
- End of File
-*/
-
+void App_GUI_Init(void);
+void App_GUI_Task_1ms(void);

@@ -43,9 +43,10 @@
 #include "mcc_generated_files/system.h"
 #include "mcc_generated_files/pin_manager.h"
 
-#include "device/dev_uart_comm.h"
+#include "device/dev_gui_comm.h"
 #include "device/dev_button.h"
 #include "app/App_HMI.h"
+#include "app/App_GUI.h"
 #include "driver/drv_led.h"
 
 #include "driver/power_controller/drv_pwrctrl_ILLC.h"
@@ -81,8 +82,11 @@ extern uint16_t os_resetCause;  //@sw??
 
 void Tasks_Realtime_100us(void)
 {
- // put your application specific code here that needs to be called every 100 micro seconds from the interrupt
- Drv_PwrCtrl_ILLC_Task_100us();
+    // put your application specific code here that needs to be called every 100 micro seconds from the interrupt
+    Drv_PwrCtrl_ILLC_Task_100us();
+    //Scope record function
+    //Dev_GuiComm_Scope_Record_2CH(   pwr_ctrl_adc_data.drv_adc_val_FB_Vout,
+    //                                pwr_ctrl_adc_data.drv_adc_val_FB_Iout);
 }
 
 //=======================================================================================================
@@ -100,10 +104,7 @@ void Tasks_Realtime_1ms(void)
 //=======================================================================================================
 void Tasks_100us(void)
 {
-//  tp24_SetHigh();  //FTXX
-//  Nop();
-//  Nop();
-//  tp24_SetLow();
+    Dev_GuiComm_Task_100us();
 }
 
 //=======================================================================================================
@@ -112,21 +113,7 @@ void Tasks_100us(void)
 //=======================================================================================================
 void Tasks_1ms(void)
 {
-  static uint8_t UARTSendCounter = 0;
-
-  UART_load_for_send();
- 
-  if(++UARTSendCounter > 2)
-  {  
-    UARTsend();
-    UARTSendCounter = 0;
-  }  
-  
-	if (UART_RxTx.RXFrameReady)
-	{
-		UART_RxTx.RXFrameReady = 0;
-		UARTreceive();
-	}
+    App_GUI_Task_1ms();
 }
 
 //=======================================================================================================
@@ -135,8 +122,8 @@ void Tasks_1ms(void)
 //=======================================================================================================
 void Tasks_10ms(void)
 {
-  // put your application specific code here that needs to be called every 10 milliseconds
-  Dev_Button_Task_10ms();
+    // put your application specific code here that needs to be called every 10 milliseconds
+    Dev_Button_Task_10ms();
 }
 
 //=======================================================================================================
@@ -146,9 +133,9 @@ void Tasks_10ms(void)
 
 void Tasks_100ms(void)
 {
-  // put your application specific code here that needs to be called every 100 milliseconds
-  App_HMI_Task_100ms();
-  Drv_LED_Task_100ms();
+    // put your application specific code here that needs to be called every 100 milliseconds
+    App_HMI_Task_100ms();
+    Drv_LED_Task_100ms();
 }
 
 //=======================================================================================================
@@ -158,7 +145,7 @@ void Tasks_100ms(void)
 
 void Tasks_1s(void)
 {
-  // put your application specific code here that needs to be called every second
+    // put your application specific code here that needs to be called every second
 }
 
 //=======================================================================================================

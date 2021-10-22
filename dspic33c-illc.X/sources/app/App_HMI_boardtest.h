@@ -3,13 +3,13 @@
     Microchip Technology Inc.
 
   @File Name
-    dev_uart_comm.h
+    app_hmi_boardtest.h
 
   @Summary
     This is the generated driver implementation file using PIC24 / dsPIC33 / PIC32MM MCUs
 
   @Description
-    This source file provides APIs UART communication using SMPS protocol.
+    This source file provides APIs for the inputs from the buttons and controls the ILLC and LEDs.
     Generation Information :
         Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.167.0
         Device            :  dsPIC33CK256MP506      
@@ -40,53 +40,24 @@
     TERMS.
 */
 
+#ifndef _APP_HMI_BOARDTEST_H_
+#define	_APP_HMI_BOARDTEST_H_
 
-// This is a guard condition so that contents of this file are not included
-// more than once.  
-#ifndef UART_FUNCTIONS_H
-#define	UART_FUNCTIONS_H
+#include <stdbool.h>
 
-#include <xc.h> // include processor files - each processor file is guarded.  
 
 //======================================================================================================================
-// @brief flags and variables for UART communication structure
+// @brief extern declarations
 //======================================================================================================================
 
-typedef struct {
-
-    struct {
-        volatile unsigned RXFrameReady : 1;
-        volatile unsigned TXFrameReady : 1;
-        volatile unsigned TXSendDone : 1;
-        volatile unsigned SOF : 1;
-        volatile unsigned : 4;
-
-        volatile uint8_t RXBytes[128];
-        volatile uint8_t UartRecCounter;
-        volatile uint16_t UartRecActionID;
-        volatile uint8_t UartRecLength;
-        volatile uint16_t RecCRC;
-
-        volatile uint8_t TXBytes[128];
-        volatile uint8_t UartSendCounter;
-        volatile uint8_t UartSendLength;
-
-        volatile uint16_t SendCRC;
-        volatile uint16_t ReceiveCRC;
-    };
-
-} UART_T;
-
-extern UART_T UART_RxTx;
+extern bool App_HMI_useRefFromPoti;
+extern bool App_HMI_useFixedRef;
+extern bool App_HMI_useRefFromGUI;
 
 //======================================================================================================================
 // @brief function prototypes
 //======================================================================================================================
+void App_HMI_BoardTest_Init(void);
+void App_HMI_BoardTest_Task_100ms(void);
 
-void UARTsend(void);
-void UART_load_for_send(void);
-void UARTTxInit(void);
-void UARTreceive(void);
-
-#endif	/* XC_HEADER_TEMPLATE_H */
-
+#endif	// _APP_HMI_BOARDTEST_H_

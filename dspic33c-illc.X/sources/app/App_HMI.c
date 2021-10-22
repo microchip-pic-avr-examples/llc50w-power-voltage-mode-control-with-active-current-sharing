@@ -106,28 +106,28 @@ void CheckButtons(void)
 
 void SetLEDs_100ms()
 {
-  //state < running --> toggle grenn LED on power board
-  if (!pwr_ctrl_flagbits.run)
-  {
-    Drv_LED_Blink(LED_BOARD_GREEN);
-  }
+    //state < running --> toggle grenn LED on power board
+    if (!pwr_ctrl_flagbits.run)
+    {
+      Drv_LED_Blink(LED_BOARD_GREEN);
+    }
 
-  //fault fheck
-  PWR_CTRL_FAULTS faults = Drv_PwrCtrl_ILLC_GetFaults();
+    //fault fheck
+    PWR_CTRL_FAULTS faults = Drv_PwrCtrl_ILLC_GetFaults();
 
-  //any fault --> fast toggle red LED on power board
-  if (os_resetCause & 0x01 || faults.CollectiveFaults != 0)
-  {
-    Drv_LED_On(LED_BOARD_RED);
-  }
-  else if (pwr_ctrl_flagbits.inopenloop)
-  {
-    Drv_LED_Blink(LED_BOARD_RED);
-  }
-  else
-  {
-    Drv_LED_Off(LED_BOARD_RED);
-  }
+    //any fault --> fast toggle red LED on power board
+    if (os_resetCause & 0x01 || faults.CollectiveFaults != 0)
+    {
+      Drv_LED_On(LED_BOARD_RED);
+    }
+    else if (pwr_ctrl_flagbits.inopenloop)
+    {
+      Drv_LED_Blink(LED_BOARD_RED);
+    }
+    else
+    {
+      Drv_LED_Off(LED_BOARD_RED);
+    }
 }
 
 //======================================================================================================================

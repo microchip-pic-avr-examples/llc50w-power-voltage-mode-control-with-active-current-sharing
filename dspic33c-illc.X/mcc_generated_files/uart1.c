@@ -51,9 +51,6 @@
 #include "xc.h"
 #include "uart1.h"
 
-//@FTX added
-#include "device/dev_uart_comm.h"
-
 /**
   Section: Data Type Definitions
 */
@@ -84,7 +81,7 @@ static bool volatile rxOverflowed;
  * the extra byte.
  */
 #define UART1_CONFIG_TX_BYTEQ_LENGTH (8+1)
-#define UART1_CONFIG_RX_BYTEQ_LENGTH (11+1) //@FTX changed from 8 to 11
+#define UART1_CONFIG_RX_BYTEQ_LENGTH (14+1)
 
 /** UART Driver Queue
 
@@ -228,13 +225,12 @@ void UART1_SetRxInterruptHandler(void(* interruptHandler)(void))
 
 void __attribute__ ( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
 {
-//@ FTX  
-//    if(UART1_RxDefaultInterruptHandler)
-//    {
-//        UART1_RxDefaultInterruptHandler();
-//    }
-//    
-//    IFS0bits.U1RXIF = 0;
+    if(UART1_RxDefaultInterruptHandler)
+    {
+        UART1_RxDefaultInterruptHandler();
+    }
+    
+    IFS0bits.U1RXIF = 0;
 
     while(!(U1STAHbits.URXBE == 1))
     {
@@ -258,50 +254,12 @@ void __attribute__ ( ( interrupt, no_auto_psv ) ) _U1RXInterrupt( void )
             rxOverflowed = true;
         }
     }
-    
-    //@FTX added
-    if(UART1_RxDefaultInterruptHandler)
-    {
-        UART1_RxDefaultInterruptHandler();
-    }
-    
-    IFS0bits.U1RXIF = 0;
-    //@end
 }
-
-//------------------------------------------------------------------------------
-//@FTX  added UART protocol for SMPS
-//------------------------------------------------------------------------------
 
 void __attribute__ ((weak)) UART1_Receive_CallBack(void)
 {
-  if ((rxQueue[0] == 0x55) && (!UART_RxTx.SOF))
-  {
-    UART_RxTx.RXBytes[0] = 0x55;
-    UART_RxTx.UartRecCounter = 1;
-    UART_RxTx.SOF = 1;
-  }  
-  else
-  {
-    UART_RxTx.RXBytes[UART_RxTx.UartRecCounter++] = *(rxTail-1);
-  }
-   
-  if (UART_RxTx.UartRecCounter > 4)
-  {
-    UART_RxTx.UartRecLength = (UART_RxTx.RXBytes[3] << 8) | UART_RxTx.RXBytes[4];
-  }  
-  
-  if ((rxQueue[rxTail - rxHead] == 0x0D) && (UART_RxTx.UartRecCounter > (UART_RxTx.UartRecLength + 7)) \
-      && (UART_RxTx.SOF))
-  {
-    UART_RxTx.RXFrameReady = 1;
-    UART_RxTx.UartRecActionID = (UART_RxTx.RXBytes[1] << 8) | UART_RxTx.RXBytes[2];
-    UART_RxTx.SOF = 0;
-    rxTail = rxHead;
-  }  
-}
 
-//------------------------------------------------------------------------------
+}
 
 void __attribute__ ( ( interrupt, no_auto_psv ) ) _U1EInterrupt ( void )
 {
