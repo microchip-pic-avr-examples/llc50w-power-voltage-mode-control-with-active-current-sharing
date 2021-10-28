@@ -53,7 +53,7 @@
 #include "sources/driver/power_controller/drv_pwrctrl_ILLC_internal.h"
 
 extern uint16_t os_resetCause;  //@sw??
-
+bool run_gui_comm_in_background = false;
 //=======================================================================================================
 //
 //                          put your application specific code in the following functions:
@@ -104,7 +104,7 @@ void Tasks_Realtime_1ms(void)
 //=======================================================================================================
 void Tasks_100us(void)
 {
-    Dev_GuiComm_Task_100us();
+    run_gui_comm_in_background = true;
 }
 
 //=======================================================================================================
@@ -160,4 +160,9 @@ void Tasks_Background(void)
 //  tp26_SetLow();
     // put your application specific code here that needs to be called in the background.
     // your application needs to take care of it's timing.
+    if (run_gui_comm_in_background)
+    {
+        run_gui_comm_in_background = false;
+        Dev_GuiComm_Task_100us();
+    }
 }
