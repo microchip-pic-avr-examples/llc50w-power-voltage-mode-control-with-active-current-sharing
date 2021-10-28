@@ -248,22 +248,18 @@ void Drv_PwrCtrl_ILLC_Task_100us(void)
 
       if (pwr_ctrl_flagbits.run == 0)
       {
-        pwr_ctrl_state = PCS_STANDBY;
-        Drv_PwrCtrl_ILLC_SwitchOffPWM();
+          pwr_ctrl_state = PCS_STANDBY;
+          Drv_PwrCtrl_ILLC_SwitchOffPWM();
       }
-
       if (ILLCFaults.CollectiveFaults)
       {
-        pwr_ctrl_state = PCS_WAIT_IF_FAULT_ACTIVE;
-        Drv_PwrCtrl_ILLC_SwitchOffPWM();
+          pwr_ctrl_state = PCS_WAIT_IF_FAULT_ACTIVE;
+          Drv_PwrCtrl_ILLC_SwitchOffPWM();
       }
-        //Comment out for basic test
       else
       {
-        App_HMI_Task_100ms(); //check ref value instead waiting on the 100ms task
-        pwr_ctrl_state = PCS_SOFT_START;
-
-        SMPS_Controller2P2ZInitialize(&VMC2p2z); // Clear histories Voltage Controller
+          pwr_ctrl_state = PCS_SOFT_START;
+          SMPS_Controller2P2ZInitialize(&VMC2p2z); // Clear histories Voltage Controller
       }
 
       break;

@@ -97,16 +97,14 @@ void Drv_PwrCtrl_ILLC_SetMode_ClosedLoop(void)
 
 void Drv_PwrCtrl_ILLC_SetReferenceRaw(uint16_t ref) //@FTX
 {
-  
-  
-  if (pwr_ctrl_flagbits.inclosedloop)
-  {
-    if(ref < 2300) ref = VREF_FIXED8V; //2300;
-    if(ref > 3500) ref = VREF_FIXED12V; //3500;
-    
-  }  
-  pwr_ctrl_ref_data.drv_val_VoutRef = ref;
- 
+    if (pwr_ctrl_flagbits.inclosedloop)
+    {
+        if(ref < VREF_FIXED8V)          // 2308
+            ref = VREF_FIXED8V;
+        else if(ref > VREF_FIXED12V)    // 3463
+            ref = VREF_FIXED12V;
+    }
+    pwr_ctrl_ref_data.drv_val_VoutRef = ref;
 }
 
 //==============================================================================
@@ -238,40 +236,37 @@ void StartUpMaxFrequencyDCSweep(uint16_t PhaseX)
 
 void StartUpFrequencySweepCL(void)
 {
-  static uint16_t SweepCLCounter = 0;
+    static uint16_t SweepCLCounter = 0;
 
-  if (SweepCLCounter++ > 3)
-  {
-    if (pwr_ctrl_ref_data.val_VoutRef_internal <= pwr_ctrl_ref_data.drv_val_VoutRef)
+    if (SweepCLCounter++ > 3)
     {
-      if (((pwr_ctrl_ref_data.val_VoutRef_internal + SOFT_START_RAMP_SPEED_FR) < pwr_ctrl_ref_data.drv_val_VoutRef)
+        if (pwr_ctrl_ref_data.val_VoutRef_internal <= pwr_ctrl_ref_data.drv_val_VoutRef)
+        {
+            if (((pwr_ctrl_ref_data.val_VoutRef_internal + SOFT_START_RAMP_SPEED_FR) < pwr_ctrl_ref_data.drv_val_VoutRef)
               && ((pwr_ctrl_ref_data.val_VoutRef_internal + SOFT_START_RAMP_SPEED_FR) >= SOFT_START_RAMP_SPEED_FR)) //@FTX check is important to be > 0 all the time
-      {
-        pwr_ctrl_ref_data.val_VoutRef_internal += SOFT_START_RAMP_SPEED_FR;
-      }
-      else
-      {
-         pwr_ctrl_state = PCS_UP_AND_RUNNING;
-      }
-    }
-
-    else
-
-    {
-      if (((pwr_ctrl_ref_data.val_VoutRef_internal + SOFT_START_RAMP_SPEED_FR) > pwr_ctrl_ref_data.drv_val_VoutRef)
+            {
+                pwr_ctrl_ref_data.val_VoutRef_internal += SOFT_START_RAMP_SPEED_FR;
+            }
+            else
+            {
+                pwr_ctrl_state = PCS_UP_AND_RUNNING;
+            }
+        }
+        else
+        {
+            if (((pwr_ctrl_ref_data.val_VoutRef_internal + SOFT_START_RAMP_SPEED_FR) > pwr_ctrl_ref_data.drv_val_VoutRef)
               && ((pwr_ctrl_ref_data.val_VoutRef_internal + SOFT_START_RAMP_SPEED_FR) > SOFT_START_RAMP_SPEED_FR)) //@FTX check is important to be > 0 all the time
-      {
-        pwr_ctrl_ref_data.val_VoutRef_internal -= SOFT_START_RAMP_SPEED_FR;
-      }
-      else
-      { //wird nie erreicht !!!
-        pwr_ctrl_ref_data.val_VoutRef_internal = pwr_ctrl_ref_data.drv_val_VoutRef;
-        pwr_ctrl_state = PCS_UP_AND_RUNNING;
-      }
-
+            {
+                pwr_ctrl_ref_data.val_VoutRef_internal -= SOFT_START_RAMP_SPEED_FR;
+            }
+            else
+            { //wird nie erreicht !!!
+                pwr_ctrl_ref_data.val_VoutRef_internal = pwr_ctrl_ref_data.drv_val_VoutRef;
+                pwr_ctrl_state = PCS_UP_AND_RUNNING;
+            }
+        }
+        SweepCLCounter = 0;
     }
-    SweepCLCounter = 0;
-  }
  }
 
 //==============================================================================

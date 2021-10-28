@@ -143,6 +143,9 @@ void App_GUI_Task_1ms(void)
         //Message pos 15
         Dev_GuiComm_Stream_SendWord(pwr_ctrl_adc_data.drv_adc_val_FB_Temp);
         
+        //Message pos 16
+        Dev_GuiComm_Stream_SendWord(pwr_ctrl_ref_data.val_VoutRef_internal);
+        
         Dev_GuiComm_Stream_FinishSending();
     }
 }

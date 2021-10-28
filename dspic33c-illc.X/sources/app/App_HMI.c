@@ -109,7 +109,7 @@ void SetLEDs_100ms()
     //state < running --> toggle grenn LED on power board
     if (!pwr_ctrl_flagbits.run)
     {
-      Drv_LED_Blink(LED_BOARD_GREEN);
+        Drv_LED_Blink(LED_BOARD_GREEN);
     }
 
     //fault fheck
@@ -118,15 +118,15 @@ void SetLEDs_100ms()
     //any fault --> fast toggle red LED on power board
     if (os_resetCause & 0x01 || faults.CollectiveFaults != 0)
     {
-      Drv_LED_On(LED_BOARD_RED);
+        Drv_LED_On(LED_BOARD_RED);
     }
     else if (pwr_ctrl_flagbits.inopenloop)
     {
-      Drv_LED_Blink(LED_BOARD_RED);
+        Drv_LED_Blink(LED_BOARD_RED);
     }
     else
     {
-      Drv_LED_Off(LED_BOARD_RED);
+        Drv_LED_Off(LED_BOARD_RED);
     }
 }
 
@@ -136,16 +136,16 @@ void SetLEDs_100ms()
 
 void App_HMI_Task_100ms(void)
 {
-  CheckButtons();
+    CheckButtons();
 
-  if (App_HMI_useRefFromPoti)
-    Drv_PwrCtrl_ILLC_SetReferenceRaw(pwr_ctrl_adc_data.drv_adc_val_AN15); //Poti connected
-  if (App_HMI_useRefFromGUI)
-    Nop();
-  else if (App_HMI_useFixedRef)
-    Drv_PwrCtrl_ILLC_SetReferenceRaw(2600); //xxV @FTX
+    if (App_HMI_useRefFromPoti)
+        Drv_PwrCtrl_ILLC_SetReferenceRaw(pwr_ctrl_adc_data.drv_adc_val_AN15); //Poti connected
+    if (App_HMI_useRefFromGUI)
+        Nop();
+    else if (App_HMI_useFixedRef)
+        Drv_PwrCtrl_ILLC_SetReferenceRaw(2600); //xxV @FTX
 
-  SetLEDs_100ms();
+    SetLEDs_100ms();
 }
 
 //======================================================================================================================

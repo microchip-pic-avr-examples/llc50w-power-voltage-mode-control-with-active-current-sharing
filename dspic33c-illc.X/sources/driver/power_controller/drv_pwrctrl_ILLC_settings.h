@@ -105,8 +105,8 @@
 #define IOUT_SROFF_FLOATIL 	(float)((((0.5*0.384)+0.517)*2*4096)/3.3) //IL 0.5A tt
 #define IOUT_SROFFIL        (uint16_t) IOUT_SROFF_FLOATIL 
 
-#define VREF_FIXED12V_FLOAT (float)((4096/4.3/3.3)*12)   //12V
+#define VREF_FIXED12V_FLOAT (float)((4095/4.3/3.3)*12)   //12V
 #define VREF_FIXED12V       (uint16_t) VREF_FIXED12V_FLOAT
-#define VREF_FIXED8V_FLOAT (float)((4096/4.3/3.3)*8)   //8V
+#define VREF_FIXED8V_FLOAT (float)((4095/4.3/3.3)*8)   //8V
 #define VREF_FIXED8V       (uint16_t) VREF_FIXED8V_FLOAT
 
