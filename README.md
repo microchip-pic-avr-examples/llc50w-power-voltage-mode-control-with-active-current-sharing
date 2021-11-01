@@ -808,7 +808,7 @@ Finally, we take the ADC measurement of the voltage on AN18 (that is, the distur
   <center>
     <img src="images/illc-44.png" alt="plant-05" width="600">
     <br>
-    Routing the disturbance back out of the dsPIC on a DAC
+    Routing the disturbance back out of the dsPIC on a DAC.  
   </center>
 </p>
 
@@ -822,7 +822,7 @@ Here we show the results at a single operating point: Vin = 39V, Fsw = 840kHz, I
   <center>
     <img src="images/illc-39.png" alt="plant-00" width="900">
     <br>
-    Plant measurement 
+    Plant measurement.
   </center>
 </p>
 
@@ -990,7 +990,7 @@ Below we show how it works with a load step from 0 to 3A. The time-base is 200us
   <center>
     <img src="images/illc-17.png" alt="ibalance-1" width="1500">
     <br>
-    Current Balancing with load step
+    Current Balancing with load step.
   </center>
 </p>
 
@@ -1004,6 +1004,16 @@ Below we show how it works with a load step from 0 to 3A. The time-base is 200us
 
 ### __Plant Frequency Response Simulation with MPLAB® Mindi™__
 Mindi™ is the Microchip-branded demo version of Simplis/SiMetrix. It supports the common features of the Simplis standard license but limits the number of circuit nodes. 
+
+We hav inlcuded a model of the LLC converter in this deployment for educational purposes. See "mindi" folder.
+
+<p>
+  <center>
+    <img src="images/illc-46.png" alt="mindi-00" width="1500">
+    <br>
+    Mindi Model of LLC converter.
+  </center>
+</p>
 
 [[back to top](#start-doc)]
 
