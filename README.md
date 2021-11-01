@@ -719,11 +719,13 @@ Uses voltage mode control. Elaborate here!!
 
 #### __Plant Measurement__
 
-It can be useful to measure the open loop plant gain and phase, to allow the compensator to be designed appropriately. In this section we describe a way to do this. 
+It can be useful to measure the open loop frequency response of the plant, to allow the compensator to be designed appropriately.
+In this section we describe a way to do this. 
 
-Firstly, please read section 1.4 of [[MA330048]](https://www.microchip.com/MA330048). This describes how to measure the gain and phase of the plant using the DP-PIM and a Bode 100.
+Firstly, please read section 1.4 of [[MA330048]](https://www.microchip.com/MA330048). 
+This describes how to measure the loop-gain of the plant using the DP-PIM and a vector network analyzer such as the Bode 100.
 
-We made some small modifications to this procedure, see below.
+For this design, we made some small modifications to this procedure, see below.
 
 <p>
   <center>
@@ -733,12 +735,12 @@ We made some small modifications to this procedure, see below.
   </center>
 </p>
 
-In the diagram above, orange colour blocks mean circuitry inside the dsPIC. Blue blocks are measurement circuitry (from the Bode 100 in our case). The Bode 100 generator output (which creates a small signal AC sinusoid, which is swept over frequency) is connected across TP1 and TP2 of the DP-PIM.
-The purpose of the operational amplifier circuit on the DP-PIM is to add a VDD/2 (1.65V) offset, as the ADC on the dsPIC can only digitize positive voltages, and the output of the Bode 100 is AC.
+In the diagram above, circuitry inside the dsPIC is designated by an orange colour. Blue blocks are measurement circuitry (from the Bode 100 in our case). The plant is shown in green. The Bode 100 generator output (which creates a small AC sinusoid that is swept over frequency as part of the open loop frequency response measurement) is connected across TP1 and TP2 of the DP-PIM. This signal then passes through an operational amplifier circuit on the DP-PIM.
+The purpose of the operational amplifier circuit is to add an offset of 1.65V to the AC signal, as the ADC on the dsPIC can only digitize positive voltages and the output of the Bode 100 is AC.
 
-This signal is then digitized by the ADC on pin AN18. The ADC code equivalent to the 1.65V offset is removed in firmware and the result is added to the control signal. Thus in this way the control signal is "disturbed" by this small signal AC sinusoid. 
+This AC signal with a 1.65V DC offset is then digitized by the ADC on pin AN18 of the dsPIC. The ADC code equivalent to the 1.65V DC offset is subtracted in the firmware, and the result (which is a digitized AC signal) is added to the control input. Thus the control input is "disturbed" by this digitized AC sinusoid. For an LLC, the control input modulates the switching frequency. So as the control input moves up and down, so will the switching frequency. 
 
-The plant frequency response measurement includes the digital modulator and so is calculated as "control to output", that is 
+The plant frequency response measurement includes the digital modulator and so is calculated as "control to output".
 
 <p>
   <center>
@@ -748,11 +750,11 @@ The plant frequency response measurement includes the digital modulator and so i
   </center>
 </p>
 
-It is a measure of how much Vout varies in gain and phase as the control signal is disturbed. The disturbance on the control signal is a small AC signal, and the frequency of this AC signal is swept from almost DC to (usually) the ADC sampling frequency / 2.
+This is a measure of how much Vout varies in gain and phase as the control input is disturbed. Each measurement point corresponds to a frequency, this is the frequency of the AC signal disturbing the control input. The frequency of the AC disturbance is swept from almost DC to (usually) the ADC sampling frequency / 2.
 
-This means that channel 1 of the Bode 100 should be connected to the disturbance input, as this is the signal that is "disturbing" the control signal. Channel 2 of the Bode 100 should be connected to the output terminals of the converter.
+This means that channel 1 of the Bode 100 should be connected as close as possible to where the control input is disturbed, as this is the signal that is "disturbing" the control input. Channel 2 of the Bode 100 should be connected to the output of the converter.
 
-Channel 1 could be connected directly to the AN18 pin. In this case, the pant gain measurement would be accurate, but the phase response will not be accurate at higher frequencies because of the ADC sampling delay (the disturbance and Vout are sampled at a frequency of Fsw/7).  Hence, we take the ADC measurement on AN18 and convert it back to the analog domain by loading the digital value into a DAC on the dsPIC. This leads to a more accurate phase measurement at higher frequencies.
+Channel 1 could be connected directly to the AN18 pin. In this case, the plant gain measurement would be accurate, but the phase response would not be accurate at higher frequencies because of the ADC sampling delay (as the disturbance and Vout are sampled at a frequency of Fsw/7).  Hence, we take the ADC measurement on AN18 and convert it back to the analog domain by loading the digital value into a DAC on the dsPIC. This leads to a more accurate phase measurements at higher frequencies.
 
 <span id="plant-firmware"><a name="plant-firmware"> </a></span>
 
@@ -783,24 +785,24 @@ We use the shared ADC core to measure both the disturbance and Vout. Firstly, we
   </center>
 </p>
 
-The measurement of the voltage on AN18 (with the 1.65V DC bias removed) is stored in _pwr_ctrl_adc_data.drv_adc_val_AN18_. Note that since the DC bias has been removed, this result can be negative or positive. This is correct as we want to control signal to move in both directions.
+The measurement of the voltage on AN18 (with the 1.65V DC bias removed) is stored in _pwr_ctrl_adc_data.drv_adc_val_AN18_. Note that since the DC bias has been removed, this result can be negative or positive. This is correct as we want to control input to move in both directions.
 
-We need to apply this disturbance to the control signal.
+We need to apply this disturbance to the control input.
 In the function _Drv_PwrCtrl_ILLC_ILPHVoltageLoop()_, we added the following code for this purpose.  
 
 <p>
   <center>
     <img src="images/illc-42.png" alt="plant-03" width="900">
     <br>
-    Adding the disturbance to the control signal
+    Adding the disturbance to the control input
   </center>
 </p>
 
-In the line highlighted above, the disturbance is added to the control signal. Note that the disturbance at this point has been digitized and the DC bias has been removed, so this line adds the small signal AC disturbance to the control signal. It can cause the control signal to both increase or decrease.
+In the line highlighted above, the disturbance is added to the control input. Note that the disturbance at this point has been digitized and the DC bias has been removed, so this line adds the (digitized) small signal AC disturbance to the control input. It can cause the control input to both increase or decrease.
 
-In the final line of the code snippet above, the control signal is converted to a PWM period, as ultimately the switching period is modulated for the LLC topology.
+In the final line of the code snippet above, the control input is converted to a period for the PWM peripherals, as the switching period is modulated for the LLC topology.
 
-Finally, we take the ADC measurement of the voltage on AN18 (that is, the disturbance input from bode measurement instrument) and load this digital value into DAC2 (which is connected to pin 17, and also to the test point on the top of the DP-PIM). To this end, this line should be added after the control signal is updated. The output of DAC2 is measured with channel 1 of the Bode 100.
+Finally, we take the ADC measurement of the voltage on AN18 (that is, the disturbance input from bode measurement instrument) and load this digital value into DAC2 (which is connected to pin 17, and also to the test point on the top of the DP-PIM). To this end, this line should be added after the control input is updated. The output of DAC2 is measured with channel 1 of the Bode 100.
 
 <p>
   <center>
@@ -823,6 +825,11 @@ Here we show the results at a single operating point: Vin = 39V, Fsw = 840kHz, I
     Plant measurement 
   </center>
 </p>
+
+* Why 840kHz?
+* ask Milan to relate hardware to poles and zeros
+* response at different operating points
+* SRs on or off?
 
 [[back to top](#start-doc)]
 
