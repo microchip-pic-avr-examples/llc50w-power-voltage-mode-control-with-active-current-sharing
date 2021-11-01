@@ -3,7 +3,7 @@
 
 ![image](images/microchip.png) 
 
---- 
+---
 # dsPIC33 Interleaved LLC Converter <!-- omit in toc --> 
 ### 2 phase Interleaved LLC converter with voltage mode control and phase current balancing. <!-- omit in toc --> 
 
@@ -29,40 +29,44 @@ dsPIC33 Interleaved LLC Converter Power Board
 ## Table of Contents <!-- omit in toc --> 
 
 - [__Summary__](#summary)
+  - [__Highlights__](#highlights)
 - [__Related Collateral__](#related-collateral)
-  - [__Software Used__](#software-used)
+  - [__Software Tools Used__](#software-tools-used)
   - [__Hardware Used__](#hardware-used)
 - [__How to Use This Document__](#how-to-use-this-document)
-- [__LLC Modes of Operation: Single Phase or Interleaved__](#llc-modes-of-operation-single-phase-or-interleaved)
 - [__Quick Start Guide__](#quick-start-guide)
   - [__Human Machine Interface__](#human-machine-interface)
   - [__Testing the Board in Open-Loop Mode__](#testing-the-board-in-open-loop-mode)
   - [__Testing the Board in Closed-Loop Mode__](#testing-the-board-in-closed-loop-mode)
-  - [__Setting Up and Connecting the Board Power Visualizer GUI__](#setting-up-and-connecting-the-board-power-visualizer-gui)
+  - [__Setting Up and Connecting the Power Board Visualizer GUI__](#setting-up-and-connecting-the-power-board-visualizer-gui)
 - [__Firmware Overview__](#firmware-overview)
-- [__Converter State Machine__](#converter-state-machine)
-  - [__Soft-Starting the Converter__](#soft-starting-the-converter)
-    - [__State PCS_SOFT_START_PRE1__](#state-pcs_soft_start_pre1)
-    - [__State PCS_SOFT_START_PRE2__](#state-pcs_soft_start_pre2)
-    - [__State PCS_SOFT_START__](#state-pcs_soft_start)
-- [__Fault Protection__](#fault-protection)
-  - [__Firmware Fault Protection__](#firmware-fault-protection)
-  - [__Hardware fault protection__](#hardware-fault-protection)
-- [__PWM Setup__](#pwm-setup)
-  - [__PWM Routing__](#pwm-routing)
-    - [__Phase A PWM Setup__](#phase-a-pwm-setup)
-    - [__Phase B PWM Setup__](#phase-b-pwm-setup)
-- [__Control Method__](#control-method)
-  - [__Plant Measurement__](#plant-measurement)
-  - [__Loop Measurements__](#loop-measurements)
-- [__Phase Current Balancing__](#phase-current-balancing)
-  - [__SR Drive State Machine__](#sr-drive-state-machine)
-    - [__STANDBY State__](#standby-state)
-    - [__ENABLE State__](#enable-state)
-    - [__SOFTSTART State__](#softstart-state)
-    - [__UP AND RUNNING State__](#up-and-running-state)
-  - [__Results__](#results)
-- [__Plant Frequency Response Simulation with MPLAB® Mindi™__](#plant-frequency-response-simulation-with-mplab-mindi)
+- [__Firmware Deep Dive__](#firmware-deep-dive)
+  - [__LLC Modes of Operation: Single Phase or Interleaved__](#llc-modes-of-operation-single-phase-or-interleaved)
+  - [__Converter State Machine__](#converter-state-machine)
+    - [__Soft-Starting the Converter__](#soft-starting-the-converter)
+      - [__State PCS_SOFT_START_PRE1__](#state-pcs_soft_start_pre1)
+      - [__State PCS_SOFT_START_PRE2__](#state-pcs_soft_start_pre2)
+      - [__State PCS_SOFT_START__](#state-pcs_soft_start)
+  - [__Fault Protection__](#fault-protection)
+    - [__Firmware Fault Protection__](#firmware-fault-protection)
+    - [__Hardware fault protection__](#hardware-fault-protection)
+  - [__PWM Setup__](#pwm-setup)
+    - [__PWM Routing__](#pwm-routing)
+      - [__Phase A PWM Setup__](#phase-a-pwm-setup)
+      - [__Phase B PWM Setup__](#phase-b-pwm-setup)
+  - [__Control Method__](#control-method)
+    - [__Plant Measurement__](#plant-measurement)
+      - [__Firmware Modifications__](#firmware-modifications)
+      - [__Results__](#results)
+    - [__Loop Measurements__](#loop-measurements)
+  - [__Phase Current Balancing__](#phase-current-balancing)
+    - [__SR Drive State Machine__](#sr-drive-state-machine)
+      - [__STANDBY State__](#standby-state)
+      - [__ENABLE State__](#enable-state)
+      - [__SOFTSTART State__](#softstart-state)
+      - [__UP AND RUNNING State__](#up-and-running-state)
+    - [__Results__](#results-1)
+  - [__Plant Frequency Response Simulation with MPLAB® Mindi™__](#plant-frequency-response-simulation-with-mplab-mindi)
 
 ---
 <span id="summary"><a name="summary"> </a></span>
@@ -74,6 +78,16 @@ This solution demonstrates the implementation of an interleaved (2 phase) LLC co
 The 50W Interleaved LLC Converter Development Board is a generic development 
 board for this topology that supports rapid prototyping and code development based on dsPIC33 devices. The board provides two identical half-bridge stages with LLC tank circuitry at the primary and voltage doubler rectification at the secondary. The board offers well organized building blocks that include an input filter, power stage, AUX supply, mating socket for Microchip’s newest Digital Power Plug-In Modules (DP PIMs), Human Machine Interface (HMI) and test points.
 The electrical characteristics are prepared to allow safe voltage levels of up to 50 VDC in and up to 12 VDC out. Topology and design are scalable and can be easily turned into real industrial demands targeting 400 VDC or 800 VDC bus operating voltage. A mating socket for dsPIC33 plug-in modules allows the system to be evaluated with different controllers. The pinout is compatible for EP, CK and CH dsPIC® DSC DP PIMs. A Human-Machine-Interface (HMI) and test points allow for easy evaluation and debugging.
+
+<span id="summary"><a name="summary"> </a></span>
+
+### __Highlights__
+
+What is special about this that can't easily be done in analog? What is the USP?
+Showcases
+* current sharing
+* interleaved mode
+
 
 [[back to top](#start-doc)]
 
@@ -95,7 +109,7 @@ Please always check for the latest data sheets on the respective product website
 
 <span id="software-used"><a name="software-used"> </a></span>
 
-### __Software Used__
+### __Software Tools Used__
 - [Power Board Visualizer GUI](https://www.microchip.com/SWLibraryWeb/product.aspx?product=POWER_BOARD_VISUALIZER)
 - [MPLAB&reg; X IDE v5.50](https://www.microchip.com/mplabx-ide-windows-installer)
 - [MPLAB&reg; XC16 Compiler v1.70](https://www.microchip.com/mplabxc16windows)
@@ -124,45 +138,11 @@ The user's guide can be found [here.](https://www.microchip.com/en-us/developmen
 
 - - -
 
-<span id="modes-of-operation"><a name="modes-of-operation"> </a></span>
-
-## __LLC Modes of Operation: Single Phase or Interleaved__
-
-The LLC power board contains two phases, phase A and phase B. The firmware can be configured to run just a single phase (phase A), or run in interleaved mode (phase A and phase B both running).
-
-To configure the mode of operation, open the header file "project_settings.h".
-
-<p>
-  <center>
-    <img src="images/illc-37.png" alt="project-settings" width="400">
-    <br>
-    Location of project_settings.h
-  </center>
-</p>
-
-Scroll down to line 58 (see below).
-
-To run in interleaved mode, POWER_STAGE_CONFIG_INTERLEAVED needs to be defined and POWER_STAGE_CONFIG_PHASE_A_ONLY should not be defined.
-
-To run in phase A only, POWER_STAGE_CONFIG_PHASE_A_ONLY needs to be defined and POWER_STAGE_CONFIG_INTERLEAVED  should not be defined.
-
-If neither or both are defined, you will get a compile error.
-
-<p>
-  <center>
-    <img src="images/illc-38.png" alt="project-settings" width="1200">
-    <br>
-    Configuration #defines
-  </center>
-</p>
-
-- - -
-
 <span id="quickstart"><a name="quickstart"> </a></span>
 
 ## __Quick Start Guide__
 
-In this section we describe how to bring up the board both in open loop and closed loop modes, and with and without using the Board Power Visualizer GUI.
+In this section we describe how to bring up the board both in open loop and closed loop modes, and with and without using the Power Board Visualizer GUI.
 
 <span id="hmi"><a name="hmi"> </a></span>
 
@@ -249,9 +229,9 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
 4.  Check for valid output voltage and switching signal on TP100.
 5.  If the potentiometer is connected, moving the potentiometer wiper position will change the output voltage reference.
 6.  If the potentiometer is not used, the output voltage should be around 9V (TP100 signal should have frequency of around 870kHz and duty of 45%).
-7.  Using the board in closed-Loop mode creates a controlled stable output voltage. It must be independent from input voltage or load changes. The reference for the output voltage can be set with a potentiometer and/or with the Board Power Visualizer GUI. 
+7.  Using the board in closed-Loop mode creates a controlled stable output voltage. It must be independent from input voltage or load changes. The reference for the output voltage can be set with a potentiometer and/or with the Power Board Visualizer GUI. 
   
-  We discuss using the Board Power Visualizer GUI in the next section.
+  We discuss using the Power Board Visualizer GUI in the next section.
 
 [[back to top](#start-doc)]
 
@@ -259,10 +239,10 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
 
 <span id="bpv-gui"><a name="bpv-gui"> </a></span>
 
-### __Setting Up and Connecting the Board Power Visualizer GUI__
+### __Setting Up and Connecting the Power Board Visualizer GUI__
 
 1.  Ensure that the firmware is running on the DP-PIM and that the DP-PIM is connected to your computer via a USB cable.
-2.  Open the board power visualizer application on your computer.
+2.  Open the Power Board Visualizer application on your computer.
 3.  On the window that appears, click "Open Project", then navigate to the "gui" folder in the ILLC firmware installation directory, and click on "ILLC_R1.xml". 
 4.  The ILLC landing page will open. Click on the "COM?" button on the bottom of this page.
 5.  Select the port which is used for the serial connection between your computer and the DP-PIM from the pull-down menu. Click "OK" and you will be brought back to the ILLC GUI landing page.
@@ -277,7 +257,7 @@ On the "Status" tab we show an example below with the main values like voltages 
   <center>
     <img src="images/illc-26.png" alt="board-power-visualizer-00" width="1500">
     <br>
-    Board Power Visualizer Landing Page
+    Power Board Visualizer Landing Page
   </center>
 </p>
 
@@ -287,7 +267,7 @@ On the "Schematic diagram" tab there is the power supply block diagram with onli
   <center>
     <img src="images/illc-27.png" alt="board-power-visualizer-01" width="1500">
     <br>
-    Board Power Visualizer Landing Page
+    Power Board Visualizer Landing Page
   </center>
 </p>
 
@@ -297,7 +277,7 @@ On the "Schematic diagram" tab there is the power supply block diagram with onli
 
 - - -
 
-<span id="code-structure"><a name="code-structure"> </a></span>
+<span id="firmware-overview"><a name="firmware-overview"> </a></span>
 
 ## __Firmware Overview__
 
@@ -351,9 +331,52 @@ The main files are as follows:
 
 - - - 
 
+<span id="firmware-deep-dive"><a name="firmware-deep-dive"> </a></span>
+
+## __Firmware Deep Dive__
+
+We now will go into more detail on certain parts of the firmware project that we deemed important and/or difficult to understand.
+
+- - - 
+
+<span id="modes-of-operation"><a name="modes-of-operation"> </a></span>
+
+### __LLC Modes of Operation: Single Phase or Interleaved__
+
+The LLC power board contains two phases, phase A and phase B. The firmware can be configured to run just a single phase (phase A), or run in interleaved mode (phase A and phase B both running).
+
+To configure the mode of operation, open the header file "project_settings.h".
+
+<p>
+  <center>
+    <img src="images/illc-37.png" alt="project-settings" width="400">
+    <br>
+    Location of project_settings.h
+  </center>
+</p>
+
+Scroll down to line 58 (see below).
+
+To run in interleaved mode, POWER_STAGE_CONFIG_INTERLEAVED needs to be defined and POWER_STAGE_CONFIG_PHASE_A_ONLY should not be defined.
+
+To run in phase A only, POWER_STAGE_CONFIG_PHASE_A_ONLY needs to be defined and POWER_STAGE_CONFIG_INTERLEAVED  should not be defined.
+
+If neither or both are defined, you will get a compile error.
+
+<p>
+  <center>
+    <img src="images/illc-38.png" alt="project-settings" width="1200">
+    <br>
+    Configuration #defines
+  </center>
+</p>
+
+- - -
+
+
 <span id="state-machine"><a name="state-machine"> </a></span>
 
-## __Converter State Machine__
+### __Converter State Machine__
 
 The main power controller state machine is illustrated below. It is executed every 100us. The code is located in _power_controller/drv_pwrctrl_ILLC.c_, see the function _Drv_PwrCtrl_ILLC_Task_100us()_. Most of the states are pretty standard for a digital DC/DC converter state machine (see state diagram below). Perhaps the only states worth describing in detail are the soft-start states, as these differ somewhat from other DC/DC converter state machines. Hence these are described in some detail below.
 
@@ -367,7 +390,7 @@ The main power controller state machine is illustrated below. It is executed eve
 
 <span id="soft-start-states"><a name="soft-start-states"> </a></span>
 
-### __Soft-Starting the Converter__
+#### __Soft-Starting the Converter__
 
 The soft-start ramp is split in 2 parts
 1. Run primary drive PWMs open-loop, at a fixed frequency of 1MHz (max frequency for our design)
@@ -387,7 +410,7 @@ Also note that if we are running in interleaved mode, PG3 setup is identical to 
 
 <span id="soft-start-pre1"><a name="soft-start-pre1"> </a></span>
 
-#### __State PCS_SOFT_START_PRE1__
+##### __State PCS_SOFT_START_PRE1__
 
 In this state, the PWMs are running in open-loop mode (that is, they are not driven by the compensator).
 The frequency is fixed at 1MHz. The on-time of the primary side half-bridge drive signals is set to 50ns. 
@@ -415,13 +438,13 @@ Once we reach the target primary drive on-time (equivalent to 45% duty cycle), w
 
 <span id="soft-start-pre2"><a name="soft-start-pre2"> </a></span>
 
-#### __State PCS_SOFT_START_PRE2__
+##### __State PCS_SOFT_START_PRE2__
 
 In this state, we enable frequency modulation of the PWM outputs by the voltage mode compensator (closed-loop mode of operation). The on-time of the primary side PWM drive signals is fixed at (PG1PER/2 - 50ns). The voltage loop reference is initialized based on the measured output voltage at this point. Once we complete this initialization, we move to the state PCS_SOFT_START_.
 
 <span id="soft-start"><a name="soft-start"> </a></span>
 
-#### __State PCS_SOFT_START__
+##### __State PCS_SOFT_START__
 
 In this state, the reference to the voltage loop compensator is ramped linearly to the target set-point. The compensator controls the frequency of the primary side LLC half-bridge signals. The duty cycle is always set to (PG1PER/2 - 50ns).
 
@@ -444,7 +467,7 @@ A oscilloscope screenshot of the entire start up phase is shown below. The diffe
 
 <span id="fault-protection"><a name="fault-protection"> </a></span>
 
-## __Fault Protection__
+### __Fault Protection__
 
 The fault protection code is executed every 100us at the start of the converter state machine in the function _Drv_PwrCtrl_ILLC_Fault_Check()_. The body of the fault code is located in the files _power_controller/drv_pwr_ctrl_ILLC_fault.c_ and _misc/fault_common.c_.
 
@@ -456,7 +479,7 @@ The firmware fault protection is implemented on the dsPIC on the DP-PIM. The har
 
 <span id="firmware-fault-protection"><a name="firmware-fault-protection"> </a></span>
 
-### __Firmware Fault Protection__
+#### __Firmware Fault Protection__
 
 All of our firmware fault protection has the same functionality. Each fault has a trigger threshold, a clear threshold, a fault blanking time and a fault clear time.
 
@@ -498,14 +521,14 @@ All faults shown in the table below have firmware protection like this. In our f
 
 <span id="hardware-fault-protection"><a name="hardware-fault-protection"> </a></span>
 
-### __Hardware fault protection__
+#### __Hardware fault protection__
 
 The purpose of the hardware fault protection is to prevent catastrophic board damage, particularly from input or output over current.
 Once triggered, it kicks in immediately (there is no fault blanking time). It sets all PWM drive signals to 0, which will turn off the converter. Note that this is completely independent of the dsPIC, so even if there are drive signals coming from the dsPIC when the hardware fault protection is tripped, the hardware protection will over-ride these signals (through AND gates on the hardware) before they get to the FET drivers. 
 
 <p>
   <center>
-    <img src="images/illc-32.png" alt="fault-protection" width="900">
+    <img src="images/illc-32.png" alt="fault-protection" width="400">
     <br>
     ILLC faults with hardware protection
   </center>
@@ -522,7 +545,7 @@ On the dsPIC, output over current protection using comparators and DACs is also 
 * Current transformer phase B secondary sense tied to CMP3DAC (pin 18 of dsPIC)
 
 Either of these comparators tripping will trigger the highest priority interrupt, which disables all PWM drive signals and puts the converter in the "FAULT ACTIVE" state.
-Like the hardware fault protection, this fault protection is also latched, meaning that the dsPIC needs to be reset to restart the converter. If this fault protection is triggered, the RESET flag in the Board Power Visualizer GUI will be set, as shown below, indicating that the dsPIC needs to be reset to re-start the LLC converter.
+Like the hardware fault protection, this fault protection is also latched, meaning that the dsPIC needs to be reset to restart the converter. If this fault protection is triggered, the RESET flag in the Power Board Visualizer GUI will be set, as shown below, indicating that the dsPIC needs to be reset to re-start the LLC converter.
 
 <p>
   <center>
@@ -539,13 +562,13 @@ Like the hardware fault protection, this fault protection is also latched, meani
 
 <span id="pwm-setup"><a name="pwm-setup"> </a></span>
 
-## __PWM Setup__
+### __PWM Setup__
 
 Most of the PWM setup is done by calling initialization functions generated by MCC at the top of _main()_. Some more custom configuration is also done at runtime as required.
 
 <span id="pwm-routing"><a name="pwm-routing"> </a></span>
 
-### __PWM Routing__
+#### __PWM Routing__
 The two simplified schematics below show the routing of the PWM signals for phase A and phase B. PWM1 and PWM3 output are used for the primary drives for phase A and phase B respectively, while PWM2 and PWM4 are used for the SR drives.
 
 The dsPIC is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to pass through the isolation barrier. FET drivers are not shown here, please see the full schematic in the users guide for more detail.
@@ -570,7 +593,7 @@ The switching frequency range of our LLC solution is from 800kHz and 1MHz. To ac
 
 <span id="phase-a-pwm"><a name="phase-a-pwm"> </a></span>
 
-#### __Phase A PWM Setup__
+##### __Phase A PWM Setup__
 
 For a single phase, the LLC primary drive signals should have a fixed duty cycle (50% minus some dead time) and variable frequency, as shown below. The voltage loop compensator output modulates the switching frequency of the converter. The drive signals to the high side and low side of the primary side half-bridge (before the resonant tank) need to be complementary, with a dead time between the falling edge on the high side drive and the rising edge of the low side drive, and visa-versa. 
 
@@ -615,7 +638,7 @@ The PWM2H and PWM2L setup is illustrated below.
 
 <span id="phase-b-pwm"><a name="phase-b-pwm"> </a></span>
 
-#### __Phase B PWM Setup__
+##### __Phase B PWM Setup__
 
 Phase B setup as follows:
 
@@ -679,7 +702,7 @@ The fields that need to be modified for phase B (related to PWM3 and PWM4) are h
 
 <span id="control-method"><a name="control-method"> </a></span>
 
-## __Control Method__
+### __Control Method__
 
 Uses voltage mode control. Elaborate here!!
 
@@ -694,9 +717,112 @@ Uses voltage mode control. Elaborate here!!
 
 <span id="plant-measurement"><a name="plant-measurement"> </a></span>
 
-### __Plant Measurement__
+#### __Plant Measurement__
 
-Discuss how to do this on DP-PIM
+It can be useful to measure the open loop plant gain and phase, to allow the compensator to be designed appropriately. In this section we describe a way to do this. 
+
+Firstly, please read section 1.4 of [[MA330048]](https://www.microchip.com/MA330048). This describes how to measure the gain and phase of the plant using the DP-PIM and a Bode 100.
+
+We made some small modifications to this procedure, see below.
+
+<p>
+  <center>
+    <img src="images/illc-43.png" alt="plant-04" width="600">
+    <br>
+    Plant measurement setup using DP-PIM.
+  </center>
+</p>
+
+In the diagram above, orange colour blocks mean circuitry inside the dsPIC. Blue blocks are measurement circuitry (from the Bode 100 in our case). The Bode 100 generator output (which creates a small signal AC sinusoid, which is swept over frequency) is connected across TP1 and TP2 of the DP-PIM.
+The purpose of the operational amplifier circuit on the DP-PIM is to add a VDD/2 (1.65V) offset, as the ADC on the dsPIC can only digitize positive voltages, and the output of the Bode 100 is AC.
+
+This signal is then digitized by the ADC on pin AN18. The ADC code equivalent to the 1.65V offset is removed in firmware and the result is added to the control signal. Thus in this way the control signal is "disturbed" by this small signal AC sinusoid. 
+
+The plant frequency response measurement includes the digital modulator and so is calculated as "control to output", that is 
+
+<p>
+  <center>
+    <img src="images/illc-45.png" alt="plant-06" width="300">
+    <br>
+    Plant "Control to Output".
+  </center>
+</p>
+
+It is a measure of how much Vout varies in gain and phase as the control signal is disturbed. The disturbance on the control signal is a small AC signal, and the frequency of this AC signal is swept from almost DC to (usually) the ADC sampling frequency / 2.
+
+This means that channel 1 of the Bode 100 should be connected to the disturbance input, as this is the signal that is "disturbing" the control signal. Channel 2 of the Bode 100 should be connected to the output terminals of the converter.
+
+Channel 1 could be connected directly to the AN18 pin. In this case, the pant gain measurement would be accurate, but the phase response will not be accurate at higher frequencies because of the ADC sampling delay (the disturbance and Vout are sampled at a frequency of Fsw/7).  Hence, we take the ADC measurement on AN18 and convert it back to the analog domain by loading the digital value into a DAC on the dsPIC. This leads to a more accurate phase measurement at higher frequencies.
+
+<span id="plant-firmware"><a name="plant-firmware"> </a></span>
+
+##### __Firmware Modifications__
+
+Setup the firmware so that the converter is running in open loop mode, you can even remove the compensator from the code if you wish.
+
+Configure the firmware to run in interleaved mode.
+
+To setup the dsPIC to measure the disturbance on the AN18 pin, MCC can be used as shown below. For our measurement, we used the shared ADC core to measure both the output voltage and the disturbance.
+
+<p>
+  <center>
+    <img src="images/illc-40.png" alt="plant-01" width="900">
+    <br>
+    Adding measurement of disturbance on AN18 with ADC using MCC.
+  </center>
+</p>
+
+We use the shared ADC core to measure both the disturbance and Vout. Firstly, we measure Vout with the shared ADC core. Then the shared ADC core conversion channel is changed manually to measure the voltage on the AN18 pin. For example, the firmware below can be added to the function _ADCAN0Interrupt()_ in the file _driver/drv_adc.c_. It can be added just after the two secondary phase currents are sampled with the ADC. 
+
+
+<p>
+  <center>
+    <img src="images/illc-41.png" alt="plant-02" width="900">
+    <br>
+    Firmware added to ADCCAN0 interrupt for measuring both Vout and the disturbance signal.
+  </center>
+</p>
+
+The measurement of the voltage on AN18 (with the 1.65V DC bias removed) is stored in _pwr_ctrl_adc_data.drv_adc_val_AN18_. Note that since the DC bias has been removed, this result can be negative or positive. This is correct as we want to control signal to move in both directions.
+
+We need to apply this disturbance to the control signal.
+In the function _Drv_PwrCtrl_ILLC_ILPHVoltageLoop()_, we added the following code for this purpose.  
+
+<p>
+  <center>
+    <img src="images/illc-42.png" alt="plant-03" width="900">
+    <br>
+    Adding the disturbance to the control signal
+  </center>
+</p>
+
+In the line highlighted above, the disturbance is added to the control signal. Note that the disturbance at this point has been digitized and the DC bias has been removed, so this line adds the small signal AC disturbance to the control signal. It can cause the control signal to both increase or decrease.
+
+In the final line of the code snippet above, the control signal is converted to a PWM period, as ultimately the switching period is modulated for the LLC topology.
+
+Finally, we take the ADC measurement of the voltage on AN18 (that is, the disturbance input from bode measurement instrument) and load this digital value into DAC2 (which is connected to pin 17, and also to the test point on the top of the DP-PIM). To this end, this line should be added after the control signal is updated. The output of DAC2 is measured with channel 1 of the Bode 100.
+
+<p>
+  <center>
+    <img src="images/illc-44.png" alt="plant-05" width="600">
+    <br>
+    Routing the disturbance back out of the dsPIC on a DAC
+  </center>
+</p>
+
+<span id="plant-results"><a name="plant-results"> </a></span>
+
+##### __Results__
+
+Here we show the results at a single operating point: Vin = 39V, Fsw = 840kHz, Iout = 1A, running in interleaved mode. Note that it is important to run this measurement at different operating points to ensure that the compensator is desginered for worst case conditions.
+
+<p>
+  <center>
+    <img src="images/illc-39.png" alt="plant-00" width="900">
+    <br>
+    Plant measurement 
+  </center>
+</p>
 
 [[back to top](#start-doc)]
 
@@ -704,7 +830,7 @@ Discuss how to do this on DP-PIM
 
 <span id="loop-measurements"><a name="loop-measurements"> </a></span>
 
-### __Loop Measurements__
+#### __Loop Measurements__
 
 
 [[back to top](#start-doc)]
@@ -714,9 +840,9 @@ Discuss how to do this on DP-PIM
 
 <span id="current-balancing"><a name="current-balancing"> </a></span>
 
-## __Phase Current Balancing__
+### __Phase Current Balancing__
 
-A current balancing scheme has been implemented on the demo firmware accompanying this board. The goal is that both phases share the load current equally. This scheme is only run if the total load current is above 1.4A (see the macro _IOUT_SRONIL_ in the firmware), so the thermal stress is shared equally between the phases when the load is high enough that thermal management is warranted.
+A current balancing scheme has been implemented on the demo firmware accompanying this board. The goal is that both phases share the load current equally. This scheme is only run if the total load current is above 1.4A (see the macro _IOUT_SRONIL_ in the firmware). 
 The code is located in the function _Drv_PwrCtrl_ILLC_ILPHVoltageLoop()_, which is in the file _power_controller/drv_pwrctrl_ILLC_SRandControl.c_. This function is called from the ADCAN0 interrupt, which is located in the file _driver/drv_adc.c_. 
 
 <p>
@@ -727,13 +853,15 @@ The code is located in the function _Drv_PwrCtrl_ILLC_ILPHVoltageLoop()_, which 
   </center>
 </p>
 
-The scheme works by changing the duty cycle of the SR drive signals on one phase until both phase currents are approximately the same, while keeping the duty cycle of the SR drives on the other phase fixed. When the scheme is launched, the (filtered) currents of both phases are compared. The phase with the smaller current runs at a fixed (just under 50%) duty cycle, while the duty cycle of the SRs on the phase with the larger current is varied between a min value (100ns) and a max value (just under 50%) until the two currents are as close as possible.
+The scheme works by changing the duty cycle of the SR drive signals on one phase until both phase currents are approximately the same, while keeping the duty cycle of the SR drives on the other phase fixed. 
 
-Decreasing the duty cycle of the SR drives on a phase will decrease the amount of current flowing through this phase and increase the amount of current flowing through the other phase. The total output current remains the same.
+When the scheme is launched, the (filtered) currents of both phases are compared. The phase with the smaller current runs at a fixed (just under 50%) duty cycle, while the duty cycle of the SRs on the phase with the larger current is varied between a min value (100ns) and a max value (just under 50%) until the two currents are as close as possible.
+
+Decreasing the duty cycle of the SR drives on one phase increases the dynamic resistance presented to the secondary current flowing through this phase. This results in less current flowing through the phase and more through the other phase. The total output current remains the same.
 
 <span id="sr-drive-state-machine"><a name="sr-drive-state-machine"> </a></span>
 
-### __SR Drive State Machine__
+#### __SR Drive State Machine__
 
 <p>
   <center>
@@ -749,7 +877,7 @@ The state machine that runs the current balancing algorithm is illustrated above
 
 <span id="standby-state"><a name="standby-state"> </a></span>
 
-#### __STANDBY State__
+##### __STANDBY State__
 Both SRs are disabled, so any conduction is through the body diodes of the SRs. We stay in this state until the output voltage is above 6V (see macro _VOUT_SR_ACTIVE_) and the total output current is above 1.4A (see macro _IOUT_SRONIL_). If both of these conditions are satisfied we go to the enable state. 
 
 <p>
@@ -763,7 +891,7 @@ Both SRs are disabled, so any conduction is through the body diodes of the SRs. 
 <br/>
 <span id="enable-state"><a name="enable-state"> </a></span>
 
-#### __ENABLE State__
+##### __ENABLE State__
 
 Both SRs are still disabled. The two phase currents are compared. In our current balancing algorithm, the phase with the smaller current has a fixed SR duty cycle, and the SR duty of the other phase is varied to get the currents in balance. So the decision on which phase to fix and which to vary is made once at this point, and remains in force while the algorithm is active.
 
@@ -797,7 +925,7 @@ For phase B SR drive, PG4 is used, so PG4TRIGA, PG4TRIGB, PG4PHASE and PG4DC are
 <br/>
 <span id="softstart-state"><a name="softstart-state"> </a></span>
 
-#### __SOFTSTART State__
+##### __SOFTSTART State__
 
 In this state, the duty cycles of the SR drives on both PG2 and PG4 are linearly ramped from the min duty (100ns pulse width) to the max duty (PGxPER/2*250ps - 124ns) in steps of 10ns. 
 
@@ -821,7 +949,7 @@ At the end of the ramp, we change to the UP AND RUNNING state.
 <br/>
 <span id="up-and-running-state"><a name="up-and-running-state"> </a></span>
 
-#### __UP AND RUNNING State__
+##### __UP AND RUNNING State__
 
 <p>
   <center>
@@ -837,7 +965,7 @@ If the output current through the phase being controlled is greater than the cur
 
 If the total output current drops below 1.0A (see macro _IOUT_SROFFIL_), all SR drives are disabled, and we go back to the STANDBY state.
 
-### __Results__
+#### __Results__
 See results below. The two phase currents are out of balance until the total output current reaches 1.4A, at which point the current balancing algorithm kicks in, and the current is shared equally between the phases.
 
 
@@ -867,7 +995,7 @@ Below we show how it works with a load step from 0 to 3A. The time-base is 200us
 
 <span id="plant-frequency-response-simulation-with-mplab-mindi"><a name="plant-frequency-response-simulation-with-mplab-mindi"> </a></span>
 
-## __Plant Frequency Response Simulation with MPLAB® Mindi™__
+### __Plant Frequency Response Simulation with MPLAB® Mindi™__
 Mindi™ is the Microchip-branded demo version of Simplis/SiMetrix. It supports the common features of the Simplis standard license but limits the number of circuit nodes. 
 
 [[back to top](#start-doc)]
@@ -875,3 +1003,4 @@ Mindi™ is the Microchip-branded demo version of Simplis/SiMetrix. It supports 
 ---
 
 &copy; 2021, Microchip Technology Inc.
+ 
