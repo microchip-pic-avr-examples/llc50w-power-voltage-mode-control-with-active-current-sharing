@@ -79,7 +79,7 @@ The 50W Interleaved LLC Converter Development Board is a generic development
 board for this topology that supports rapid prototyping and code development based on dsPIC33 devices. The board provides two identical half-bridge stages with LLC tank circuitry at the primary and voltage doubler rectification at the secondary. The board offers well organized building blocks that include an input filter, power stage, AUX supply, mating socket for Microchip’s newest Digital Power Plug-In Modules (DP PIMs), Human Machine Interface (HMI) and test points.
 The electrical characteristics are prepared to allow safe voltage levels of up to 50 VDC in and up to 12 VDC out. Topology and design are scalable and can be easily turned into real industrial demands targeting 400 VDC or 800 VDC bus operating voltage. A mating socket for dsPIC33 plug-in modules allows the system to be evaluated with different controllers. The pinout is compatible for EP, CK and CH dsPIC® DSC DP PIMs. A Human-Machine-Interface (HMI) and test points allow for easy evaluation and debugging.
 
-<span id="summary"><a name="summary"> </a></span>
+<span id="highlights"><a name="highlights"> </a></span>
 
 ### __Highlights__
 
@@ -1005,7 +1005,7 @@ Below we show how it works with a load step from 0 to 3A. The time-base is 200us
 ### __Plant Frequency Response Simulation with MPLAB® Mindi™__
 Mindi™ is the Microchip-branded demo version of Simplis/SiMetrix. It supports the common features of the Simplis standard license but limits the number of circuit nodes. 
 
-We hav inlcuded a model of the LLC converter in this deployment for educational purposes. See "mindi" folder.
+We have inlcuded a model of the LLC converter in this deployment for educational purposes. See "mindi" folder.
 
 <p>
   <center>
