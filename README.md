@@ -756,7 +756,7 @@ This means that channel 1 of the Bode 100 should be connected as close as possib
 
 Channel 1 could be connected directly to the AN18 pin. In this case, the plant gain measurement would be accurate, but the phase response would not be accurate at higher frequencies because of the ADC sampling delay (as the disturbance and Vout are sampled at a frequency of Fsw/7).  Hence, we take the ADC measurement on AN18 and convert it back to the analog domain by loading the digital value into a DAC on the dsPIC. This leads to a more accurate phase measurements at higher frequencies.
 
-<span id="plant-firmware"><a name="plant-firmware"> </a></span>
+<span id="firmware-modifications"><a name="firmware-modifications"> </a></span>
 
 ##### __Firmware Modifications__
 
@@ -812,7 +812,7 @@ Finally, we take the ADC measurement of the voltage on AN18 (that is, the distur
   </center>
 </p>
 
-<span id="plant-results"><a name="plant-results"> </a></span>
+<span id="results"><a name="results"> </a></span>
 
 ##### __Results__
 
