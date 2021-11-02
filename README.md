@@ -107,7 +107,7 @@ Please always check for the latest data sheets on the respective product website
 - [dsPIC33CK256MP508 Family](https://www.microchip.com/dsPIC33CK256MP508)
 - [dsPIC33CH512MP508 Family](https://www.microchip.com/dsPIC33CH512MP508)
 
-<span id="software-used"><a name="software-used"> </a></span>
+<span id="software-tools-used"><a name="software-tools-used"> </a></span>
 
 ### __Software Tools Used__
 - [Power Board Visualizer GUI](https://www.microchip.com/SWLibraryWeb/product.aspx?product=POWER_BOARD_VISUALIZER)
