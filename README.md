@@ -66,7 +66,7 @@ dsPIC33 Interleaved LLC Converter Power Board
       - [__SOFTSTART State__](#softstart-state)
       - [__UP AND RUNNING State__](#up-and-running-state)
     - [__Results__](#results-1)
-  - [__Plant Frequency Response Simulation with MPLAB® Mindi™__](#plant-frequency-response-simulation-with-mplab-mindi)
+- [__Plant Frequency Response Simulation with MPLAB® Mindi™__](#plant-frequency-response-simulation-with-mplab-mindi)
 
 ---
 <span id="summary"><a name="summary"> </a></span>
@@ -138,13 +138,13 @@ The user's guide can be found [here.](https://www.microchip.com/en-us/developmen
 
 - - -
 
-<span id="quickstart"><a name="quickstart"> </a></span>
+<span id="quick-start-guide"><a name="quick-start-guide"> </a></span>
 
 ## __Quick Start Guide__
 
 In this section we describe how to bring up the board both in open loop and closed loop modes, and with and without using the Power Board Visualizer GUI.
 
-<span id="hmi"><a name="hmi"> </a></span>
+<span id="human-machine-interface"><a name="human-machine-interface"> </a></span>
 
 ### __Human Machine Interface__
 
@@ -178,7 +178,7 @@ The board status as shown by the LEDs on the ILLC power board and the DP-PIM is 
   </center>
 </p>
 
-<span id="open-loop-test"><a name="open-loop-test"> </a></span>
+<span id="testing-the-board-in-open-loop-mode"><a name="testing-the-board-in-open-loop-mode"> </a></span>
 
 ### __Testing the Board in Open-Loop Mode__
 The hardware connections for running the board in open loop mode is shown below.
@@ -219,7 +219,7 @@ Please follow these steps to run the ILLC board in open loop mode.
 
 Note that at power-up, the firmware checks if a potentiometer is connected, and if so, the voltage on the potentiometer wiper sets the output voltage reference. If a potentiometer is not connected, the output voltage reference is fixed at 9V. The firmware will not detect that the poti is present if the poti is connected after power up, so you need to reset the dsPIC if this is the case.
 
-<span id="closed-loop-test"><a name="closed-loop-test"> </a></span>
+<span id="testing-the-board-in-closed-loop-mode"><a name="testing-the-board-in-closed-loop-mode"> </a></span>
 
 ### __Testing the Board in Closed-Loop Mode__
 
@@ -237,7 +237,7 @@ Note that at power-up, the firmware checks if a potentiometer is connected, and 
 
 - - - 
 
-<span id="bpv-gui"><a name="bpv-gui"> </a></span>
+<span id="setting-up-and-connecting-the-power-board-visualizer-gui"><a name="setting-up-and-connecting-the-power-board-visualizer-gui"> </a></span>
 
 ### __Setting Up and Connecting the Power Board Visualizer GUI__
 
@@ -339,7 +339,7 @@ We now will go into more detail on certain parts of the firmware project that we
 
 - - - 
 
-<span id="modes-of-operation"><a name="modes-of-operation"> </a></span>
+<span id="llc-modes-of-operation-single-phase-or-interleaved"><a name="llc-modes-of-operation-single-phase-or-interleaved"> </a></span>
 
 ### __LLC Modes of Operation: Single Phase or Interleaved__
 
@@ -374,7 +374,7 @@ If neither or both are defined, you will get a compile error.
 - - -
 
 
-<span id="state-machine"><a name="state-machine"> </a></span>
+<span id="converter-state-machine"><a name="converter-state-machine"> </a></span>
 
 ### __Converter State Machine__
 
@@ -388,7 +388,7 @@ The main power controller state machine is illustrated below. It is executed eve
   </center>
 </p>
 
-<span id="soft-start-states"><a name="soft-start-states"> </a></span>
+<span id="soft-starting-the-converter"><a name="soft-starting-the-converter"> </a></span>
 
 #### __Soft-Starting the Converter__
 
@@ -408,7 +408,7 @@ Note that the SRs drives (PWM2 for phase A and PWM4 for phase B) are switched of
 Also note that if we are running in interleaved mode, PG3 setup is identical to PG1, but PG3 lags PG1 by 90 degrees. 
 
 
-<span id="soft-start-pre1"><a name="soft-start-pre1"> </a></span>
+<span id="state-pcs_soft_start_pre1"><a name="state-pcs_soft_start_pre1"> </a></span>
 
 ##### __State PCS_SOFT_START_PRE1__
 
@@ -436,13 +436,13 @@ This continues until the duty cycle is 45% (as we allow for a dead-time of 50ns)
 
 Once we reach the target primary drive on-time (equivalent to 45% duty cycle), we move to the state PCS_SOFT_START_PRE2.
 
-<span id="soft-start-pre2"><a name="soft-start-pre2"> </a></span>
+<span id="state-pcs_soft_start_pre2"><a name="state-pcs_soft_start_pre2"> </a></span>
 
 ##### __State PCS_SOFT_START_PRE2__
 
 In this state, we enable frequency modulation of the PWM outputs by the voltage mode compensator (closed-loop mode of operation). The on-time of the primary side PWM drive signals is fixed at (PG1PER/2 - 50ns). The voltage loop reference is initialized based on the measured output voltage at this point. Once we complete this initialization, we move to the state PCS_SOFT_START_.
 
-<span id="soft-start"><a name="soft-start"> </a></span>
+<span id="state-pcs_soft_start"><a name="state-pcs_soft_start"> </a></span>
 
 ##### __State PCS_SOFT_START__
 
@@ -591,7 +591,7 @@ The dsPIC is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to pas
 
 The switching frequency range of our LLC solution is from 800kHz and 1MHz. To achieve robust operation in this frequency range with a PWM resolution of 250ps, we needed some special PWM module configuration, which will be describe in the following sections.
 
-<span id="phase-a-pwm"><a name="phase-a-pwm"> </a></span>
+<span id="phase-a-pwm-setup"><a name="phase-a-pwm-setup"> </a></span>
 
 ##### __Phase A PWM Setup__
 
@@ -636,7 +636,7 @@ The PWM2H and PWM2L setup is illustrated below.
   </center>
 </p>
 
-<span id="phase-b-pwm"><a name="phase-b-pwm"> </a></span>
+<span id="phase-b-pwm-setup"><a name="phase-b-pwm-setup"> </a></span>
 
 ##### __Phase B PWM Setup__
 
@@ -1002,7 +1002,7 @@ Below we show how it works with a load step from 0 to 3A. The time-base is 200us
 
 <span id="plant-frequency-response-simulation-with-mplab-mindi"><a name="plant-frequency-response-simulation-with-mplab-mindi"> </a></span>
 
-### __Plant Frequency Response Simulation with MPLAB® Mindi™__
+## __Plant Frequency Response Simulation with MPLAB® Mindi™__
 Mindi™ is the Microchip-branded demo version of Simplis/SiMetrix. It supports the common features of the Simplis standard license but limits the number of circuit nodes. 
 
 We have inlcuded a model of the LLC converter in this deployment for educational purposes. See "mindi" folder.
