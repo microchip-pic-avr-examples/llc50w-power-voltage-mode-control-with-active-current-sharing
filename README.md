@@ -845,7 +845,7 @@ Here we show the results at a single operating point: Vin = 39V, Fsw = 840kHz, I
 ---
 
 
-<span id="current-balancing"><a name="current-balancing"> </a></span>
+<span id="phase-current-balancing"><a name="phase-current-balancing"> </a></span>
 
 ### __Phase Current Balancing__
 
@@ -971,6 +971,8 @@ In this state, one of the SR drives of either phase A or phase B runs at a fixed
 If the output current through the phase being controlled is greater than the current through the other (fixed duty) phase, we decrease the duty cycle of the SR drives by 2ns. If the current is smaller, we increase the duty cycle on the SR drives by 2ns. The on-time of the SR drives is clamped at a max value of [PGxPER/2*250ps - 124ns], and at a min value of 100ns.
 
 If the total output current drops below 1.0A (see macro _IOUT_SROFFIL_), all SR drives are disabled, and we go back to the STANDBY state.
+
+<span id="results-1"><a name="results-1"> </a></span>
 
 #### __Results__
 See results below. The two phase currents are out of balance until the total output current reaches 1.4A, at which point the current balancing algorithm kicks in, and the current is shared equally between the phases.
