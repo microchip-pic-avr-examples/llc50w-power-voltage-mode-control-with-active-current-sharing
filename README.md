@@ -54,11 +54,12 @@ dsPIC33 Interleaved LLC Converter Power Board
     - [__PWM Routing__](#pwm-routing)
       - [__Phase A PWM Setup__](#phase-a-pwm-setup)
       - [__Phase B PWM Setup__](#phase-b-pwm-setup)
-  - [__Control Method__](#control-method)
-    - [__Plant Measurement__](#plant-measurement)
+  - [__Regulating the Output Voltage__](#regulating-the-output-voltage)
+    - [__Plant Measurements__](#plant-measurements)
       - [__Firmware Modifications__](#firmware-modifications)
       - [__Results__](#results)
-    - [__Loop Measurements__](#loop-measurements)
+    - [__Compensator__](#compensator)
+      - [__Loop Measurements__](#loop-measurements)
   - [__Phase Current Balancing__](#phase-current-balancing)
     - [__SR Drive State Machine__](#sr-drive-state-machine)
       - [__STANDBY State__](#standby-state)
@@ -700,24 +701,16 @@ The fields that need to be modified for phase B (related to PWM3 and PWM4) are h
 
 - - -
 
-<span id="control-method"><a name="control-method"> </a></span>
+<span id="regulating-the-output-voltage"><a name="regulating-the-output-voltage"> </a></span>
 
-### __Control Method__
+### __Regulating the Output Voltage__
 
-Uses voltage mode control. Elaborate here!!
-
-<p>
-  <center>
-    <img src="images/illc-18.png" alt="ILLC current balancing block dia" width="900">
-    <br>
-    Block diagram of LLC control loop with current balancing 
-  </center>
-</p>
+Insert Introductory text!
 
 
 <span id="plant-measurement"><a name="plant-measurement"> </a></span>
 
-#### __Plant Measurement__
+#### __Plant Measurements__
 
 It can be useful to measure the open loop frequency response of the plant, to allow the compensator to be designed appropriately.
 In this section we describe a way to do this on this LLC demo board. 
@@ -890,11 +883,25 @@ Thus it is important to run these measurement at many different operating points
   </center>
 </p>
 
-
-* Why 840kHz?
 * ask Milan to relate hardware to poles and zeros
 * response at different operating points
-* SRs on or off?
+
+
+<span id="compensator"><a name="compensator"> </a></span>
+
+#### __Compensator__
+
+Uses voltage mode control. Elaborate here!!
+2p2z cause of plant. Compensator DCDT. Why poles and zeros at different locations? Show open loop gain measurements at different operating points.
+
+<p>
+  <center>
+    <img src="images/illc-18.png" alt="ILLC current balancing block dia" width="900">
+    <br>
+    Block diagram of LLC control loop with current balancing 
+  </center>
+</p>
+
 
 [[back to top](#start-doc)]
 
@@ -902,7 +909,7 @@ Thus it is important to run these measurement at many different operating points
 
 <span id="loop-measurements"><a name="loop-measurements"> </a></span>
 
-#### __Loop Measurements__
+##### __Loop Measurements__
 
 
 [[back to top](#start-doc)]
