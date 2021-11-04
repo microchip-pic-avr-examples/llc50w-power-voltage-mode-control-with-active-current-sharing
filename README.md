@@ -735,7 +735,7 @@ In this instance, we made some small modifications to the procedure described in
   </center>
 </p>
 
-In the diagram above, circuitry inside the dsPIC is designated by an orange colour. Blue blocks are measurement circuitry (from the Bode 100 in our case). The plant is shown in green. The Bode 100 generator output (which creates a small AC sinusoid that is swept over frequency as part of the open loop frequency response measurement) is connected across TP1 and TP2 of the DP-PIM. This signal then passes through an operational amplifier circuit on the DP-PIM.
+In the diagram above, circuitry inside the dsPIC is designated by an orange colour. Blue blocks are measurement circuitry (from the Bode 100 in our case). The plant is shown in green. The operational amplifier circuitry is on the DP-PIM. The Bode 100 generator output (which creates a small AC sinusoid that is swept over frequency as part of the open loop frequency response measurement) is connected across TP1 and TP2 of the DP-PIM. This signal then passes through an operational amplifier circuit on the DP-PIM.
 The purpose of the operational amplifier circuit is to add an offset of 1.65V to the AC signal, as the ADC on the dsPIC can only digitize positive voltages and the output of the Bode 100 is AC.
 
 This AC signal with a 1.65V DC offset is then digitized by the ADC on pin AN18 of the dsPIC. The ADC code equivalent to the 1.65V DC offset is subtracted in the firmware, and the result (which is a digitized AC signal) is added to the control input. Thus the control input is "disturbed" by this digitized AC sinusoid. For an LLC, the control input modulates the switching frequency. So as the control input moves up and down, so will the switching frequency. 
@@ -816,15 +816,80 @@ Finally, we take the ADC measurement of the voltage on AN18 (that is, the distur
 
 ##### __Results__
 
-Here we show the results at a single operating point: Vin = 39V, Fsw = 840kHz, Iout = 1A, running in interleaved mode. Note that it is important to run this measurement at different operating points to ensure that the compensator is designed for worst case conditions.
+Here we show the results at multiple operating points, running in interleaved mode. We use the potentiometer to change the switching frequency in open loop mode for these measurements. A resistive load is used.
+
+Note that the gain and phase response moves quite a bit depending on the switching frequency and load. For an LLC converter, the plant is "dynamic" and thus pole and zero positions will move depending on the operating conditions.
+
+For example, at 1A load, the SRs on the secondary side are disabled, this adds dynamic resistance in the conduction path and changes the measured plant frequency response. At 2A load, the SRs are enabled, meaing less dynamic resistance. This can be seen in the plots below.
+
+Thus it is important to run these measurement at many different operating points to ensure that the compensator is designed for worst case conditions.
 
 <p>
   <center>
-    <img src="images/illc-39.png" alt="plant-00" width="900">
+    <img src="images/illc-47.png" alt="plant-00" width="900">
     <br>
-    Plant measurement.
+    Plant measurement: Vin = 39V, Fs = 810kHz, Iload = 1A.
   </center>
 </p>
+
+<p>
+  <center>
+    <img src="images/illc-48.png" alt="plant-01" width="900">
+    <br>
+    Plant measurement: Vin = 39V, Fs = 810kHz, Iload = 2A.
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-49.png" alt="plant-02" width="900">
+    <br>
+    Plant measurement: Vin = 39V, Fs = 840kHz, Iload = 1A.
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-50.png" alt="plant-03" width="900">
+    <br>
+    Plant measurement: Vin = 39V, Fs = 840kHz, Iload = 2A.
+  </center>
+</p>
+
+
+<p>
+  <center>
+    <img src="images/illc-51.png" alt="plant-04" width="900">
+    <br>
+    Plant measurement: Vin = 39V, Fs = 900kHz, Iload = 1A.
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-52.png" alt="plant-05" width="900">
+    <br>
+    Plant measurement: Vin = 39V, Fs = 900kHz, Iload = 2A.
+  </center>
+</p>
+
+
+<p>
+  <center>
+    <img src="images/illc-53.png" alt="plant-06" width="900">
+    <br>
+    Plant measurement: Vin = 39V, Fs = 970kHz, Iload = 1A.
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-54.png" alt="plant-07" width="900">
+    <br>
+    Plant measurement: Vin = 39V, Fs = 970kHz, Iload = 2A.
+  </center>
+</p>
+
 
 * Why 840kHz?
 * ask Milan to relate hardware to poles and zeros
