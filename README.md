@@ -265,9 +265,9 @@ On the "Schematic diagram" tab there is the power supply block diagram with onli
 
 <p>
   <center>
-    <img src="images/illc-27.png" alt="board-power-visualizer-01" width="1500">
+    <img src="images/illc-27.png" alt="board-power-visualizer-01" width="1000">
     <br>
-    Power Board Visualizer Landing Page
+    Power Board Visualizer Schematic Diagram page
   </center>
 </p>
 
@@ -293,7 +293,7 @@ There are 5 interrupt sources.
 
 <p>
   <center>
-    <img src="images/illc-34.png" alt="firmware-0" width="1500">
+    <img src="images/illc-34.png" alt="firmware-0" width="1000">
     <br>
     Firmware overview
   </center>
@@ -313,7 +313,7 @@ The main files are as follows:
 
 <p>
   <center>
-    <img src="images/illc-36.png" alt="firmware-0" width="1500">
+    <img src="images/illc-36.png" alt="firmware-0" width="1000">
     <br>
     Firmware block diagram
   </center>
@@ -321,7 +321,7 @@ The main files are as follows:
 
 <p>
   <center>
-    <img src="images/illc-35.png" alt="firmware-0" width="1500">
+    <img src="images/illc-35.png" alt="firmware-0" width="1000">
     <br>
     Firmware block details
   </center>
@@ -365,7 +365,7 @@ If neither or both are defined, you will get a compile error.
 
 <p>
   <center>
-    <img src="images/illc-38.png" alt="project-settings" width="1200">
+    <img src="images/illc-38.png" alt="project-settings" width="900">
     <br>
     Configuration #defines
   </center>
@@ -493,7 +493,7 @@ When the fault is active, if the fault source stays below the fault clear thresh
 
 <p>
   <center>
-    <img src="images/illc-29.png" alt="fault-protection" width="1500">
+    <img src="images/illc-29.png" alt="fault-protection" width="1000">
     <br>
     Firmware Fault protection
   </center>
@@ -503,7 +503,7 @@ This is shown in more detail in a flowchart below. When "fault active == true", 
 
 <p>
   <center>
-    <img src="images/illc-30.png" alt="fault-protection" width="1500">
+    <img src="images/illc-30.png" alt="fault-protection" width="1000">
     <br>
     Flowchart illustrating the firmware fault protection
   </center>
@@ -513,7 +513,7 @@ All faults shown in the table below have firmware protection like this. In our f
 
 <p>
   <center>
-    <img src="images/illc-31.png" alt="fault-protection" width="1500">
+    <img src="images/illc-31.png" alt="fault-protection" width="900">
     <br>
     ILLC faults with firmware protection
   </center>
@@ -980,7 +980,7 @@ See results below. The two phase currents are out of balance until the total out
 
 <p>
   <center>
-    <img src="images/illc-16.png" alt="ibalance-0" width="1500">
+    <img src="images/illc-16.png" alt="ibalance-0" width="1000">
     <br>
     Current Balancing 
   </center>
@@ -990,7 +990,7 @@ Below we show how it works with a load step from 0 to 3A. The time-base is 200us
 
 <p>
   <center>
-    <img src="images/illc-17.png" alt="ibalance-1" width="1500">
+    <img src="images/illc-17.png" alt="ibalance-1" width="1000">
     <br>
     Current Balancing with load step.
   </center>
@@ -1011,7 +1011,7 @@ We have inlcuded a model of the LLC converter in this deployment for educational
 
 <p>
   <center>
-    <img src="images/illc-46.png" alt="mindi-00" width="1500">
+    <img src="images/illc-46.png" alt="mindi-00" width="1000">
     <br>
     Mindi Model of LLC converter.
   </center>
