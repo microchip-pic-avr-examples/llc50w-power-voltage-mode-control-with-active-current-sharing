@@ -720,12 +720,12 @@ Uses voltage mode control. Elaborate here!!
 #### __Plant Measurement__
 
 It can be useful to measure the open loop frequency response of the plant, to allow the compensator to be designed appropriately.
-In this section we describe a way to do this. 
+In this section we describe a way to do this on this LLC demo board. 
 
-Firstly, please read section 1.4 of [[MA330048]](https://www.microchip.com/MA330048). 
-This describes how to measure the loop-gain of the plant using the DP-PIM and a vector network analyzer such as the Bode 100.
+First please read section 1.4 of [[MA330048]](https://www.microchip.com/MA330048). 
+This describes how to measure the loop-gain of the plant using the dsPIC33CK256MP506 Digital Power Plug-In Module (DP-PIM) and a vector network analyzer such as the Bode 100 from Omnicron.
 
-For this design, we made some small modifications to this procedure, see below.
+In this instance, we made some small modifications to the procedure described in the DP-PIM user's guide.
 
 <p>
   <center>
@@ -752,9 +752,9 @@ The plant frequency response measurement includes the digital modulator and so i
 
 This is a measure of how much Vout varies in gain and phase as the control input is disturbed. Each measurement point corresponds to a frequency, this is the frequency of the AC signal disturbing the control input. The frequency of the AC disturbance is swept from almost DC to (usually) the ADC sampling frequency / 2.
 
-This means that channel 1 of the Bode 100 should be connected as close as possible to where the control input is disturbed, as this is the signal that is "disturbing" the control input. Channel 2 of the Bode 100 should be connected to the output of the converter.
+This means that channel 1 of the Bode 100 should be connected as close as possible to where the control input is disturbed. Channel 2 of the Bode 100 should be connected to the output of the converter.
 
-Channel 1 could be connected directly to the AN18 pin. In this case, the plant gain measurement would be accurate, but the phase response would not be accurate at higher frequencies because of the ADC sampling delay (as the disturbance and Vout are sampled at a frequency of Fsw/7).  Hence, we take the ADC measurement on AN18 and convert it back to the analog domain by loading the digital value into a DAC on the dsPIC. This leads to a more accurate phase measurements at higher frequencies.
+Channel 1 could be connected directly to the AN18 pin. In this case, the plant gain measurement would be accurate, but the measurement of the phase response would not be accurate at higher frequencies because of the ADC sampling delay (as the disturbance and Vout are sampled at a frequency of Fsw/7).  Hence, we take the ADC measurement on AN18 and convert it back to the analog domain by loading the digital value into a DAC on the dsPIC. This leads to a more accurate phase measurements at higher frequencies.
 
 <span id="firmware-modifications"><a name="firmware-modifications"> </a></span>
 
@@ -816,7 +816,7 @@ Finally, we take the ADC measurement of the voltage on AN18 (that is, the distur
 
 ##### __Results__
 
-Here we show the results at a single operating point: Vin = 39V, Fsw = 840kHz, Iout = 1A, running in interleaved mode. Note that it is important to run this measurement at different operating points to ensure that the compensator is desginered for worst case conditions.
+Here we show the results at a single operating point: Vin = 39V, Fsw = 840kHz, Iout = 1A, running in interleaved mode. Note that it is important to run this measurement at different operating points to ensure that the compensator is designed for worst case conditions.
 
 <p>
   <center>
