@@ -91,8 +91,9 @@ This design implements an innovative current sharing technique to accurately ach
 TODO: Finish this section!
 What is special about this that can't easily be done in analog? What is the USP?
 
-* Digitally-Controlled Two-Phase Interleaved LLC Resonant DC-DC Converter
-* Excellent Current Sharing Between Phases Without Any Additional Hardware
+* Digitally-Controlled Two-Phase Interleaved LLC Resonant DC-DC Converter.
+* Excellent Current Sharing Between Phases Without Any Additional Hardware.
+* Smooth soft-start utilizing both variably duty and variable frequency modes of operation.
 
 [[back to top](#start-doc)]
 
