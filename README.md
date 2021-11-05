@@ -887,7 +887,7 @@ Thus it is important to run these measurement at many different operating points
 * response at different operating points
 
 
-<span id="compensator"><a name="compensator"> </a></span>
+<span id="compensator-settings"><a name="compensator-settings"> </a></span>
 
 #### __Compensator Settings__
 
@@ -949,7 +949,6 @@ For these measurements, the Bode 100 output was connected across the 20R resisto
     Measuring the open loop gain on the LLC demo board
   </center>
 </p>
-
 
 Channel 2 of the Bode 100 was connected to TP120, and Channel 1 was connected to TP121.
 See below for measurements taken across different load settings and input voltage settings.
