@@ -80,14 +80,16 @@ The 50W Interleaved LLC Converter Development Board is a generic development
 board for this topology that supports rapid prototyping and code development based on dsPIC33 devices. The board provides two identical half-bridge stages with LLC tank circuitry at the primary and voltage doubler rectification at the secondary. The board offers well organized building blocks that include an input filter, power stage, AUX supply, mating socket for Microchip’s newest Digital Power Plug-In Modules (DP PIMs), Human Machine Interface (HMI) and test points.
 The electrical characteristics are prepared to allow safe voltage levels of up to 50 VDC in and up to 12 VDC out. Topology and design are scalable and can be easily turned into real industrial demands targeting 400 VDC or 800 VDC bus operating voltage. A mating socket for dsPIC33 plug-in modules allows the system to be evaluated with different controllers. The pinout is compatible for EP, CK and CH dsPIC® DSC DP PIMs. A Human-Machine-Interface (HMI) and test points allow for easy evaluation and debugging.
 
+[[back to top](#start-doc)]
+- - -
+
 <span id="highlights"><a name="highlights"> </a></span>
 
 ### __Highlights__
 
 What is special about this that can't easily be done in analog? What is the USP?
-Showcases
 * current sharing
-* interleaved mode
+* interleaving?
 
 
 [[back to top](#start-doc)]
@@ -179,6 +181,9 @@ The board status as shown by the LEDs on the ILLC power board and the DP-PIM is 
   </center>
 </p>
 
+[[back to top](#start-doc)]
+- - -
+
 <span id="testing-the-board-in-open-loop-mode"><a name="testing-the-board-in-open-loop-mode"> </a></span>
 
 ### __Testing the Board in Open-Loop Mode__
@@ -219,6 +224,9 @@ Please follow these steps to run the ILLC board in open loop mode.
 16. With the poti wiper at the min setting, the signal on TP100 should have a frequency of 800kHz and a duty cycle of 45%. With a 0.5A load, the output voltage should be around 10.7V.
 
 Note that at power-up, the firmware checks if a potentiometer is connected, and if so, the voltage on the potentiometer wiper sets the output voltage reference. If a potentiometer is not connected, the output voltage reference is fixed at 9V. The firmware will not detect that the poti is present if the poti is connected after power up, so you need to reset the dsPIC if this is the case.
+
+[[back to top](#start-doc)]
+- - -
 
 <span id="testing-the-board-in-closed-loop-mode"><a name="testing-the-board-in-closed-loop-mode"> </a></span>
 
@@ -300,8 +308,6 @@ There are 5 interrupt sources.
   </center>
 </p>
 
-[[back to top](#start-doc)]
-
 Microchip Code Configurator (MCC) is used to configure the peripherals. They are configured at run-time at the start of _main()_, before the background loop is initiated.
 
 The main files are as follows:
@@ -372,6 +378,7 @@ If neither or both are defined, you will get a compile error.
   </center>
 </p>
 
+[[back to top](#start-doc)]
 - - -
 
 
@@ -391,6 +398,9 @@ The main power controller state machine is illustrated below. It is executed eve
 
 <span id="soft-starting-the-converter"><a name="soft-starting-the-converter"> </a></span>
 
+[[back to top](#start-doc)]
+- - -
+
 #### __Soft-Starting the Converter__
 
 The soft-start ramp is split in 2 parts
@@ -408,6 +418,8 @@ Note that the SRs drives (PWM2 for phase A and PWM4 for phase B) are switched of
 
 Also note that if we are running in interleaved mode, PG3 setup is identical to PG1, but PG3 lags PG1 by 90 degrees. 
 
+[[back to top](#start-doc)]
+- - -
 
 <span id="state-pcs_soft_start_pre1"><a name="state-pcs_soft_start_pre1"> </a></span>
 
@@ -437,11 +449,17 @@ This continues until the duty cycle is 45% (as we allow for a dead-time of 50ns)
 
 Once we reach the target primary drive on-time (equivalent to 45% duty cycle), we move to the state PCS_SOFT_START_PRE2.
 
+[[back to top](#start-doc)]
+- - -
+
 <span id="state-pcs_soft_start_pre2"><a name="state-pcs_soft_start_pre2"> </a></span>
 
 ##### __State PCS_SOFT_START_PRE2__
 
 In this state, we enable frequency modulation of the PWM outputs by the voltage mode compensator (closed-loop mode of operation). The on-time of the primary side PWM drive signals is fixed at (PG1PER/2 - 50ns). The voltage loop reference is initialized based on the measured output voltage at this point. Once we complete this initialization, we move to the state PCS_SOFT_START_.
+
+[[back to top](#start-doc)]
+- - -
 
 <span id="state-pcs_soft_start"><a name="state-pcs_soft_start"> </a></span>
 
@@ -477,6 +495,9 @@ There are two types of protection:
 2. Hardware fault protection
 
 The firmware fault protection is implemented on the dsPIC on the DP-PIM. The hardware fault protection is implemented on the LLC power board. It's purpose is to prevent catastrophic board damage, particularly due to input and output over current events.
+
+[[back to top](#start-doc)]
+- - -
 
 <span id="firmware-fault-protection"><a name="firmware-fault-protection"> </a></span>
 
@@ -519,6 +540,9 @@ All faults shown in the table below have firmware protection like this. In our f
     ILLC faults with firmware protection
   </center>
 </p>
+
+[[back to top](#start-doc)]
+- - -
 
 <span id="hardware-fault-protection"><a name="hardware-fault-protection"> </a></span>
 
@@ -592,6 +616,9 @@ The dsPIC is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to pas
 
 The switching frequency range of our LLC solution is from 800kHz and 1MHz. To achieve robust operation in this frequency range with a PWM resolution of 250ps, we needed some special PWM module configuration, which will be describe in the following sections.
 
+[[back to top](#start-doc)]
+- - -
+
 <span id="phase-a-pwm-setup"><a name="phase-a-pwm-setup"> </a></span>
 
 ##### __Phase A PWM Setup__
@@ -636,6 +663,9 @@ The PWM2H and PWM2L setup is illustrated below.
     PWM2 setup
   </center>
 </p>
+
+[[back to top](#start-doc)]
+- - -
 
 <span id="phase-b-pwm-setup"><a name="phase-b-pwm-setup"> </a></span>
 
@@ -749,6 +779,9 @@ This means that channel 1 of the Bode 100 should be connected as close as possib
 
 Channel 1 could be connected directly to the AN18 pin. In this case, the plant gain measurement would be accurate, but the measurement of the phase response would not be accurate at higher frequencies because of the ADC sampling delay (as the disturbance and Vout are sampled at a frequency of Fsw/7).  Hence, we take the ADC measurement on AN18 and convert it back to the analog domain by loading the digital value into a DAC on the dsPIC. This leads to a more accurate phase measurements at higher frequencies.
 
+[[back to top](#start-doc)]
+- - -
+
 <span id="firmware-modifications"><a name="firmware-modifications"> </a></span>
 
 ##### __Firmware Modifications__
@@ -804,6 +837,9 @@ Finally, we take the ADC measurement of the voltage on AN18 (that is, the distur
     Routing the disturbance back out of the dsPIC on a DAC.  
   </center>
 </p>
+
+[[back to top](#start-doc)]
+- - -
 
 <span id="results"><a name="results"> </a></span>
 
@@ -887,6 +923,9 @@ Thus it is important to run these measurement at many different operating points
 * response at different operating points
 
 
+[[back to top](#start-doc)]
+- - -
+
 <span id="compensator-settings"><a name="compensator-settings"> </a></span>
 
 #### __Compensator Settings__
@@ -904,7 +943,7 @@ On the pop-up window that appears, click "Open", which will open the "VMC" DCDT 
 On the next window that appears (shown below) click on the compensator block.
 <p>
   <center>
-    <img src="images/illc-56.png" alt="compensator-00" width="500">
+    <img src="images/illc-56.png" alt="compensator-00" width="900">
     <br>
     Opening 2P2Z compensator in LLC DCDT project.
   </center>
@@ -933,6 +972,7 @@ The pole at origin is set to get as much DC gain as possible.
 So when designing this compensator, we started with a conservative coefficient set and iterated movements of the zero and pole at origin until we obtained our desired open loop frequency response. 
 
 [[back to top](#start-doc)]
+- - -
 
 <span id="open-loop-gain-measurements"><a name="open-loop-gain-measurements"> </a></span>
 
@@ -958,7 +998,7 @@ At 0.5A load, the SRs (and current balancing scheme) are disabled, which slows d
 
 <p>
   <center>
-    <img src="images/illc-59.png" alt="olgain-0" width="900">
+    <img src="images/illc-58.png" alt="olgain-0" width="900">
     <br>
     Open-loop gain/phase with Vin = 39V and Iload = 0.5A.
   </center>
@@ -966,7 +1006,7 @@ At 0.5A load, the SRs (and current balancing scheme) are disabled, which slows d
 
 <p>
   <center>
-    <img src="images/illc-60.png" alt="olgain-1" width="900">
+    <img src="images/illc-59.png" alt="olgain-1" width="900">
     <br>
     Open-loop gain/phase with Vin = 39V and Iload = 2.0A.
   </center>
@@ -974,7 +1014,7 @@ At 0.5A load, the SRs (and current balancing scheme) are disabled, which slows d
 
 <p>
   <center>
-    <img src="images/illc-61.png" alt="olgain-2" width="900">
+    <img src="images/illc-60.png" alt="olgain-2" width="900">
     <br>
     Open-loop gain/phase with Vin = 42V and Iload = 0.5A.
   </center>
@@ -982,7 +1022,7 @@ At 0.5A load, the SRs (and current balancing scheme) are disabled, which slows d
 
 <p>
   <center>
-    <img src="images/illc-62.png" alt="olgain-3" width="900">
+    <img src="images/illc-61.png" alt="olgain-3" width="900">
     <br>
     Open-loop gain/phase with Vin = 42V and Iload = 2.0A.
   </center>
@@ -990,8 +1030,7 @@ At 0.5A load, the SRs (and current balancing scheme) are disabled, which slows d
 
 
 [[back to top](#start-doc)]
-
----
+- - -
 
 
 <span id="phase-current-balancing"><a name="phase-current-balancing"> </a></span>
@@ -1015,6 +1054,9 @@ When the scheme is launched, the (filtered) currents of both phases are compared
 
 Decreasing the duty cycle of the SR drives on one phase increases the dynamic resistance presented to the secondary current flowing through this phase. This results in less current flowing through the phase and more through the other phase. The total output current remains the same.
 
+[[back to top](#start-doc)]
+- - -
+
 <span id="sr-drive-state-machine"><a name="sr-drive-state-machine"> </a></span>
 
 #### __SR Drive State Machine__
@@ -1031,6 +1073,10 @@ The state machine that runs the current balancing algorithm is illustrated above
 <br/>
 <br/>
 
+
+[[back to top](#start-doc)]
+- - -
+
 <span id="standby-state"><a name="standby-state"> </a></span>
 
 ##### __STANDBY State__
@@ -1043,6 +1089,9 @@ Both SRs are disabled, so any conduction is through the body diodes of the SRs. 
     Flowchart for STANDBY state 
   </center>
 </p>
+
+[[back to top](#start-doc)]
+- - -
 
 <br/>
 <span id="enable-state"><a name="enable-state"> </a></span>
@@ -1078,6 +1127,9 @@ For phase A, the rising edge of PWM2H is set via the PG2TRIGA register (so the e
 
 For phase B SR drive, PG4 is used, so PG4TRIGA, PG4TRIGB, PG4PHASE and PG4DC are used to set the rising and falling edges on PG4H and PG4L in the same way as for PG2.  
 
+[[back to top](#start-doc)]
+- - -
+
 <br/>
 <span id="softstart-state"><a name="softstart-state"> </a></span>
 
@@ -1102,6 +1154,9 @@ The ramp is stopped when the rising edge of PG2PHASE is 74ns from the start of t
 
 At the end of the ramp, we change to the UP AND RUNNING state.
 
+[[back to top](#start-doc)]
+- - -
+
 <br/>
 <span id="up-and-running-state"><a name="up-and-running-state"> </a></span>
 
@@ -1120,6 +1175,9 @@ In this state, one of the SR drives of either phase A or phase B runs at a fixed
 If the output current through the phase being controlled is greater than the current through the other (fixed duty) phase, we decrease the duty cycle of the SR drives by 2ns. If the current is smaller, we increase the duty cycle on the SR drives by 2ns. The on-time of the SR drives is clamped at a max value of [PGxPER/2*250ps - 124ns], and at a min value of 100ns.
 
 If the total output current drops below 1.0A (see macro _IOUT_SROFFIL_), all SR drives are disabled, and we go back to the STANDBY state.
+
+[[back to top](#start-doc)]
+- - -
 
 <span id="results-1"><a name="results-1"> </a></span>
 
