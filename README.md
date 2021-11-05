@@ -76,9 +76,10 @@ dsPIC33 Interleaved LLC Converter Power Board
 
 This solution demonstrates the implementation of an interleaved (2 phase) LLC converter using voltage mode control on the 50W Interleaved LLC Converter Development Board.
 
-The 50W Interleaved LLC Converter Development Board is a generic development 
-board for this topology that supports rapid prototyping and code development based on dsPIC33 devices. The board provides two identical half-bridge stages with LLC tank circuitry at the primary and voltage doubler rectification at the secondary. The board offers well organized building blocks that include an input filter, power stage, AUX supply, mating socket for Microchip’s newest Digital Power Plug-In Modules (DP PIMs), Human Machine Interface (HMI) and test points.
+The 50W Interleaved LLC Converter Development Board is a generic development board for this topology that supports rapid prototyping and code development based on dsPIC33 devices. The board provides two identical half-bridge stages with LLC tank circuitry at the primary and voltage doubler rectification at the secondary. The board offers well organized building blocks that include an input filter, power stage, AUX supply, mating socket for Microchip’s newest Digital Power Plug-In Modules (DP PIMs), Human Machine Interface (HMI) and test points.
 The electrical characteristics are prepared to allow safe voltage levels of up to 50 VDC in and up to 12 VDC out. Topology and design are scalable and can be easily turned into real industrial demands targeting 400 VDC or 800 VDC bus operating voltage. A mating socket for dsPIC33 plug-in modules allows the system to be evaluated with different controllers. The pinout is compatible for EP, CK and CH dsPIC® DSC DP PIMs. A Human-Machine-Interface (HMI) and test points allow for easy evaluation and debugging.
+
+This design implements an innovative current sharing technique to accurately achieve current balancing between phases.
 
 [[back to top](#start-doc)]
 - - -
@@ -86,11 +87,12 @@ The electrical characteristics are prepared to allow safe voltage levels of up t
 <span id="highlights"><a name="highlights"> </a></span>
 
 ### __Highlights__
+
 TODO: Finish this section!
 What is special about this that can't easily be done in analog? What is the USP?
-* current sharing
-* interleaving?
 
+* Digitally-Controlled Two-Phase Interleaved LLC Resonant DC-DC Converter
+* Excellent Current Sharing Between Phases Without Any Additional Hardware
 
 [[back to top](#start-doc)]
 
@@ -938,6 +940,8 @@ TODO:
 
 Since the plant frequency response is single pole system, it is sufficient to use voltage mode control to compensate for the plant, using a 2P2Z compensator.
 
+As this is a frequency controlled converter, the control algorithm controls the PWM switching frequency to regulate the output voltage.
+
 [Digital Compensator Design Tool](https://www.microchip.com/developmenttools/ProductDetails/DCDT), abbreviated to DCDT, was used to design the 2P2Z compensator.
 
 To download and install DCDT, please follow the instructions at the link above.
@@ -1043,7 +1047,9 @@ At 0.5A load, the SRs (and thus the current balancing scheme) are disabled, whic
 
 ### __Phase Current Balancing__
 
-A current balancing scheme has been implemented on the demo firmware accompanying this board. The goal is that both phases share the load current equally. This scheme is only run if the total load current is above 1.4A (see the macro _IOUT_SRONIL_ in the firmware). 
+When two or more identical half-bridge LLC converters are interleaved, any differences in their tank circuits will lead to unequal sharing of the load current between individual phases. Unequal load sharing is a major problem in interleaving resonant converters as it decreases thermal stability and can lead to high-circulating currents and even converter failure. 
+
+A innovative current balancing scheme has been implemented on the demo firmware accompanying this board. The goal is that both phases share the load current equally. This scheme is only run if the total load current is above 1.4A (see the macro _IOUT_SRONIL_ in the firmware). 
 The code is located in the function _Drv_PwrCtrl_ILLC_ILPHVoltageLoop()_, which is in the file _power_controller/drv_pwrctrl_ILLC_SRandControl.c_. This function is called from the ADCAN0 interrupt, which is located in the file _driver/drv_adc.c_. 
 
 <p>
