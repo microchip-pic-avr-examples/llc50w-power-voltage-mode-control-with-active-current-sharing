@@ -58,9 +58,8 @@ dsPIC33 Interleaved LLC Converter Power Board
     - [__Plant Measurements__](#plant-measurements)
       - [__Firmware Modifications__](#firmware-modifications)
       - [__Results__](#results)
-    - [__Compensator__](#compensator)
-    - [__Open Loop Gain Measurements__](#open-loop-gain-measurements)
-      - [__Loop Measurements__](#loop-measurements)
+    - [__Compensator Settings__](#compensator-settings)
+      - [__Open Loop Gain Measurements__](#open-loop-gain-measurements)
   - [__Phase Current Balancing__](#phase-current-balancing)
     - [__SR Drive State Machine__](#sr-drive-state-machine)
       - [__STANDBY State__](#standby-state)
@@ -890,9 +889,9 @@ Thus it is important to run these measurement at many different operating points
 
 <span id="compensator"><a name="compensator"> </a></span>
 
-#### __Compensator__
+#### __Compensator Settings__
 
-Since the plant frequency response is single pole system it is sufficient to use voltage mode control to compensate for the plant, using a 2P2Z compensator.
+Since the plant frequency response is single pole system, it is sufficient to use voltage mode control to compensate for the plant, using a 2P2Z compensator.
 
 [Digital Compensator Design Tool](https://www.microchip.com/developmenttools/ProductDetails/DCDT), abbreviated to DCDT, was used to design the 2P2Z compensator.
 
@@ -905,7 +904,7 @@ On the pop-up window that appears, click "Open", which will open the "VMC" DCDT 
 On the next window that appears (shown below) click on the compensator block.
 <p>
   <center>
-    <img src="images/illc-56.png" alt="compensator-00" width="900">
+    <img src="images/illc-56.png" alt="compensator-00" width="500">
     <br>
     Opening 2P2Z compensator in LLC DCDT project.
   </center>
@@ -915,7 +914,7 @@ The compensator settings in DCDT are shown below.
 
 <p>
   <center>
-    <img src="images/illc-57.png" alt="compensator-00" width="900">
+    <img src="images/illc-57.png" alt="compensator-00" width="1000">
     <br>
     Compensator settings in DCDT.
   </center>
@@ -937,9 +936,21 @@ So when designing this compensator, we started with a conservative coefficient s
 
 <span id="open-loop-gain-measurements"><a name="open-loop-gain-measurements"> </a></span>
 
-#### __Open Loop Gain Measurements__
+##### __Open Loop Gain Measurements__
 
-For these measurements, the Bode 100 output was connected across the 20R resistor, using the test points TP120 and TP121.
+In this section we shown the open loop gain and phase response. To clarify, these are the "open loop" measurements of the closed loop system - so the measurements include the plant, the voltage feedback network and the 2P2Z compensator. 
+
+For these measurements, the Bode 100 output was connected across the 20R resistor R120, using the test points TP120 and TP121. This resistor was placed between the output terminal of the converter and the resistor divider used for output voltage sensing by the dsPIC.
+
+<p>
+  <center>
+    <img src="images/illc-62.png" alt="olgain-4" width="800">
+    <br>
+    Measuring the open loop gain on the LLC demo board
+  </center>
+</p>
+
+
 Channel 2 of the Bode 100 was connected to TP120, and Channel 1 was connected to TP121.
 See below for measurements taken across different load settings and input voltage settings.
 
@@ -977,15 +988,6 @@ At 0.5A load, the SRs (and current balancing scheme) are disabled, which slows d
     Open-loop gain/phase with Vin = 42V and Iload = 2.0A.
   </center>
 </p>
-
-
-[[back to top](#start-doc)]
-
----
-
-<span id="loop-measurements"><a name="loop-measurements"> </a></span>
-
-##### __Loop Measurements__
 
 
 [[back to top](#start-doc)]
