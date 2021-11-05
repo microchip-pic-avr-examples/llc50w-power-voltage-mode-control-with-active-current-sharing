@@ -739,7 +739,8 @@ The fields that need to be modified for phase B (related to PWM3 and PWM4) are h
 
 ### __Regulating the Output Voltage__
 
-In this section we show how to measure the open loop gain and phase of the plant and show some measured results. We then discuss the compensator used to regulate the output voltage and show some open loop gain measurements of the closed loop system.
+In this section we describe  how to measure the open loop gain and phase of the plant, and show some results that we took from the LLC board. 
+We then discuss the compensator used to regulate the output voltage and show some open loop gain measurements of the closed loop system at different operating points.
 
 - - - 
 
@@ -965,13 +966,13 @@ The compensator settings in DCDT are shown below.
 </p>
 
 As can be seen above, for our 2P2Z compensator (which has 2 poles and 1 zero), we placed
-* the pole at origin at 2kHz.
-* the second pole at 200kHz.
+* the pole at origin at 2kHz,
+* the second pole at 200kHz,
 * the zero at 1kHz.
 
 Note that for this demo firmware, we tuned the compensator empirically.
 For a 2P2Z compensator, typically the second pole is placed at high frequency (usually half of the ADC sampling frequency) to filter the effects of high frequency ripple and noise on the loop. 
-The zero is typically placed at a low frequency, perhaps starting somewhere between 200Hz and 500Hz. The purpose of this zero is to ensure that you have enough phase at the cross-over frequency.
+The zero is typically placed at a low frequency, perhaps somewhere between 200Hz and 500Hz to begin with. The purpose of this zero is to ensure that you have enough phase at the cross-over frequency.
 The pole at origin is set to get as much DC gain as possible. 
 
 In this example, we started with a conservative coefficient set and moved the zero and pole at origin until our measured frequency response was deemed satisfactory. 
