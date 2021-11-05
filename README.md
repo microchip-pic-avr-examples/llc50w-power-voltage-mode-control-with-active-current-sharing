@@ -59,6 +59,7 @@ dsPIC33 Interleaved LLC Converter Power Board
       - [__Firmware Modifications__](#firmware-modifications)
       - [__Results__](#results)
     - [__Compensator__](#compensator)
+    - [__Open Loop Gain Measurements__](#open-loop-gain-measurements)
       - [__Loop Measurements__](#loop-measurements)
   - [__Phase Current Balancing__](#phase-current-balancing)
     - [__SR Drive State Machine__](#sr-drive-state-machine)
@@ -891,14 +892,89 @@ Thus it is important to run these measurement at many different operating points
 
 #### __Compensator__
 
-Uses voltage mode control. Elaborate here!!
-2p2z cause of plant. Compensator DCDT. Why poles and zeros at different locations? Show open loop gain measurements at different operating points.
+Since the plant frequency response is single pole system it is sufficient to use voltage mode control to compensate for the plant, using a 2P2Z compensator.
+
+[Digital Compensator Design Tool](https://www.microchip.com/developmenttools/ProductDetails/DCDT), abbreviated to DCDT, was used to design the 2P2Z compensator.
+
+To download and install DCDT, please follow the instructions at the link above.
+
+To open DCDT from MPLABx, click "Tools -> Embedded -> Digital Compensator Design Tool".
+
+On the pop-up window that appears, click "Open", which will open the "VMC" DCDT project associated with the LLC MPLABx project.
+
+On the next window that appears (shown below) click on the compensator block.
+<p>
+  <center>
+    <img src="images/illc-56.png" alt="compensator-00" width="900">
+    <br>
+    Opening 2P2Z compensator in LLC DCDT project.
+  </center>
+</p>
+
+The compensator settings in DCDT are shown below. 
 
 <p>
   <center>
-    <img src="images/illc-18.png" alt="ILLC current balancing block dia" width="900">
+    <img src="images/illc-57.png" alt="compensator-00" width="900">
     <br>
-    Block diagram of LLC control loop with current balancing 
+    Compensator settings in DCDT.
+  </center>
+</p>
+
+As can be seen above, for our 2P2Z compensator (which has 2 poles and 1 zero), we placed
+* the pole at origin at 2kHz.
+* the second pole at 200kHz.
+* the zero at 1kHz.
+
+Note that for this demo firmware, we tuned the compensator empirically.
+For a 2P2Z compensator, typically the second pole is placed at high frequency (usually half of the ADC sampling frequency) to filter the effects of high frequency ripple and noise on the loop. 
+The zero is typically placed at a low frequency, perhaps starting somewhere between 200Hz and 500Hz. The purpose of this zero is to ensure that you have enough phase at the cross-over frequency.
+The pole at origin is set to get as much DC gain as possible. 
+
+So when designing this compensator, we started with a conservative coefficient set and iterated movements of the zero and pole at origin until we obtained our desired open loop frequency response. 
+
+[[back to top](#start-doc)]
+
+<span id="open-loop-gain-measurements"><a name="open-loop-gain-measurements"> </a></span>
+
+#### __Open Loop Gain Measurements__
+
+For these measurements, the Bode 100 output was connected across the 20R resistor, using the test points TP120 and TP121.
+Channel 2 of the Bode 100 was connected to TP120, and Channel 1 was connected to TP121.
+See below for measurements taken across different load settings and input voltage settings.
+
+Note that the crossover frequency, phase margin and slope of gain at the crossover frequency changes depending on the load and input voltage.
+At 0.5A load, the SRs (and current balancing scheme) are disabled, which slows down the loop response versus the measurements taken at 2.0A load.
+
+<p>
+  <center>
+    <img src="images/illc-59.png" alt="olgain-0" width="900">
+    <br>
+    Open-loop gain/phase with Vin = 39V and Iload = 0.5A.
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-60.png" alt="olgain-1" width="900">
+    <br>
+    Open-loop gain/phase with Vin = 39V and Iload = 2.0A.
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-61.png" alt="olgain-2" width="900">
+    <br>
+    Open-loop gain/phase with Vin = 42V and Iload = 0.5A.
+  </center>
+</p>
+
+<p>
+  <center>
+    <img src="images/illc-62.png" alt="olgain-3" width="900">
+    <br>
+    Open-loop gain/phase with Vin = 42V and Iload = 2.0A.
   </center>
 </p>
 
