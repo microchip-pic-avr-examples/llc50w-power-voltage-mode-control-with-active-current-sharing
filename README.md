@@ -158,7 +158,7 @@ The interleaved LLC board has a simple Human-Machine-Interface (HMI) with LEDs s
   <center>
     <img src="images/illc-28.png" alt="hmi-control" width="1200">
     <br>
-    HMI LEDs and push buttons on the ILLC power board
+    HMI LEDs and push buttons on the ILLC power board.
   </center>
 </p>
 
@@ -168,7 +168,7 @@ The USER button control action is outlined in the table below.
   <center>
     <img src="images/illc-24.png" alt="hmi-control" width="900">
     <br>
-    HMI control USER push button action
+    HMI control USER push button action.
   </center>
 </p>
 
@@ -178,7 +178,7 @@ The board status as shown by the LEDs on the ILLC power board and the DP-PIM is 
   <center>
     <img src="images/illc-25.png" alt="hmi-status" width="900">
     <br>
-    HMI status LEDs
+    HMI status LEDs.
   </center>
 </p>
 
@@ -195,7 +195,7 @@ The hardware connections for running the board in open loop mode is shown below.
   <center>
     <img src="images/illc-23.png" alt="state-machine" width="900">
     <br>
-    Hardware connections
+    Hardware connections.
   </center>
 </p>
 
@@ -270,7 +270,7 @@ On the "Status" tab we show an example below with the main values like voltages 
   <center>
     <img src="images/illc-26.png" alt="board-power-visualizer-00" width="1500">
     <br>
-    Power Board Visualizer Landing Page
+    Power Board Visualizer Landing Page.
   </center>
 </p>
 
@@ -280,7 +280,7 @@ On the "Schematic diagram" tab there is the power supply block diagram with onli
   <center>
     <img src="images/illc-27.png" alt="board-power-visualizer-01" width="1000">
     <br>
-    Power Board Visualizer Schematic Diagram page
+    Power Board Visualizer Schematic Diagram page.
   </center>
 </p>
 
@@ -307,7 +307,7 @@ There are 5 interrupt sources.
   <center>
     <img src="images/illc-34.png" alt="firmware-0" width="1000">
     <br>
-    Firmware overview
+    Firmware overview.
   </center>
 </p>
 
@@ -326,7 +326,7 @@ The main files are as follows:
   <center>
     <img src="images/illc-36.png" alt="firmware-0" width="1000">
     <br>
-    Firmware block diagram
+    Firmware block diagram.
   </center>
 </p>
 
@@ -334,7 +334,7 @@ The main files are as follows:
   <center>
     <img src="images/illc-35.png" alt="firmware-0" width="1000">
     <br>
-    Firmware block details
+    Firmware block details.
   </center>
 </p>
 
@@ -362,7 +362,7 @@ To configure the mode of operation, open the header file "project_settings.h".
   <center>
     <img src="images/illc-37.png" alt="project-settings" width="400">
     <br>
-    Location of project_settings.h
+    Location of project_settings.h.
   </center>
 </p>
 
@@ -378,7 +378,7 @@ If neither or both are defined, you will get a compile error.
   <center>
     <img src="images/illc-38.png" alt="project-settings" width="900">
     <br>
-    Configuration #defines
+    Configuration #defines.
   </center>
 </p>
 
@@ -395,7 +395,7 @@ The main power controller state machine is illustrated below. It is executed eve
   <center>
     <img src="images/illc-19.png" alt="state-machine" width="500">
     <br>
-    Power supply state machine
+    Power supply state machine.
   </center>
 </p>
 
@@ -441,7 +441,7 @@ This continues until the duty cycle is 45% (as we allow for a dead-time of 50ns)
   <center>
     <img src="images/illc-20.png" alt="ss-pre1-00" width="1000">
     <br>
-    Half bridge high and low switching signals at power-on
+    Half bridge high and low switching signals at power-on.
   </center>
 </p>
 
@@ -449,7 +449,7 @@ This continues until the duty cycle is 45% (as we allow for a dead-time of 50ns)
   <center>
     <img src="images/illc-21.png" alt="ss-pre1-01" width="1000">
     <br>
-    Half bridge high and low switching signals during open-loop duty cycle ramp, with fixed Fsw = 1MHz
+    Half bridge high and low switching signals during open-loop duty cycle ramp, with fixed Fsw = 1MHz.
   </center>
 
 </p>
@@ -482,7 +482,7 @@ A oscilloscope screenshot of the entire start up phase is shown below. The diffe
   <center>
     <img src="images/illc-22.png" alt="ss-00" width="1300">
     <br>
-    Soft-start with different stages highlighted and described
+    Soft-start with different stages highlighted and described.
   </center>
 </p>
 
@@ -524,7 +524,7 @@ When the fault is active, if the fault source stays below the fault clear thresh
   <center>
     <img src="images/illc-29.png" alt="fault-protection" width="1000">
     <br>
-    Firmware Fault protection
+    Firmware Fault protection.
   </center>
 </p>
 
@@ -534,7 +534,7 @@ This is shown in more detail in a flowchart below. When "fault active == true", 
   <center>
     <img src="images/illc-30.png" alt="fault-protection" width="1000">
     <br>
-    Flowchart illustrating the firmware fault protection
+    Flowchart illustrating the firmware fault protection.
   </center>
 </p>
 
@@ -544,7 +544,7 @@ All faults shown in the table below have firmware protection like this. In our f
   <center>
     <img src="images/illc-31.png" alt="fault-protection" width="900">
     <br>
-    ILLC faults with firmware protection
+    ILLC faults with firmware protection.
   </center>
 </p>
 
@@ -562,7 +562,7 @@ Once triggered, it kicks in immediately (there is no fault blanking time). It se
   <center>
     <img src="images/illc-32.png" alt="fault-protection" width="400">
     <br>
-    ILLC faults with hardware protection
+    ILLC faults with hardware protection.
   </center>
 </p>
 
@@ -585,7 +585,7 @@ Like the hardware fault protection, this fault protection is also latched, meani
   <center>
     <img src="images/illc-33.png" alt="fault-protection" width="250">
     <br>
-    ILLC faults with hardware protection
+    ILLC faults with hardware protection.
   </center>
 </p>
 
@@ -613,7 +613,7 @@ The dsPIC is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to pas
   <center>
     <img src="images/illc-07.png" alt="PWM phase A" width="700">
     <br>
-    PWM routing for phase A
+    PWM routing for phase A.
   </center>
 </p>
 
@@ -621,7 +621,7 @@ The dsPIC is on the secondary side, so PWM1H, PWM1L, PWM3H and PWM3L have to pas
   <center>
     <img src="images/illc-08.png" alt="PWM phase B" width="700">
     <br>
-    PWM routing for phase B
+    PWM routing for phase B.
   </center>
 </p>
 
@@ -653,7 +653,7 @@ The primary drive signals for phase A (from PWM1 peripheral) are shown below.
   <center>
     <img src="images/illc-09.png" alt="PWM1 setup" width="1100">
     <br>
-    PWM1 setup
+    PWM1 setup.
   </center>
 </p>
 
@@ -661,7 +661,7 @@ The primary drive signals for phase A (from PWM1 peripheral) are shown below.
   <center>
     <img src="images/illc-10.png" alt="PWM1 config" width="600">
     <br>
-    PWM mode: independent edge, dual output
+    PWM mode: independent edge, dual output.
   </center>
 </p>
 
@@ -672,7 +672,7 @@ The PWM2H and PWM2L setup is illustrated below.
   <center>
     <img src="images/illc-11.png" alt="PWM2 setup" width="1100">
     <br>
-    PWM2 setup
+    PWM2 setup.
   </center>
 </p>
 
@@ -701,7 +701,7 @@ The synchronization scheme works as follows:
   <center>
     <img src="images/illc-15.png" alt="PWM2 setup" width="1100">
     <br>
-    phase A and phase B sync
+    phase A and phase B sync.
   </center>
 </p>
 
@@ -715,7 +715,7 @@ The "easy setup" view for all 4 PWM modules is shown below.
   <center>
     <img src="images/illc-12.png" alt="PWM config MCC" width="1500">
     <br>
-    PWM configuration in MCC (easy setup)
+    PWM configuration in MCC (easy setup).
   </center>
 </p>
 
@@ -725,7 +725,7 @@ Some registers in the "registers" view also need to be modified. The fields that
   <center>
     <img src="images/illc-13.png" alt="phase A config MCC" width="1500">
     <br>
-    Phase A configuration in MCC (additional register settings)
+    Phase A configuration in MCC (additional register settings).
   </center>
 </p>
 
@@ -735,7 +735,7 @@ The fields that need to be modified for phase B (related to PWM3 and PWM4) are h
   <center>
     <img src="images/illc-14.png" alt="phase B config MCC" width="1500">
     <br>
-    Phase B configuration in MCC (additional register settings)
+    Phase B configuration in MCC (additional register settings).
   </center>
 </p>
 
@@ -833,7 +833,7 @@ In the function _Drv_PwrCtrl_ILLC_ILPHVoltageLoop()_, we added the following cod
   <center>
     <img src="images/illc-42.png" alt="plant-03" width="900">
     <br>
-    Adding the disturbance to the control input
+    Adding the disturbance to the control input.
   </center>
 </p>
 
@@ -1004,7 +1004,7 @@ For these measurements, the Bode 100 output was connected across the 20R resisto
   <center>
     <img src="images/illc-62.png" alt="olgain-4" width="800">
     <br>
-    Measuring the open loop gain on the LLC demo board
+    Measuring the open loop gain on the LLC demo board.
   </center>
 </p>
 
@@ -1062,7 +1062,7 @@ The code is located in the function_Drv_PwrCtrl_ILLC_ILPHVoltageLoop()_, which i
   <center>
     <img src="images/illc-18.png" alt="ILLC current balancing block dia" width="900">
     <br>
-    Block diagram of LLC control loop with current balancing
+    Block diagram of LLC control loop with current balancing.
   </center>
 </p>
 
@@ -1083,7 +1083,7 @@ Decreasing the duty cycle of the SR drives on one phase increases the dynamic re
   <center>
     <img src="images/illc-01.png" alt="ILLC current balancing state machine" width="500">
     <br>
-    Current balancing state machine
+    Current balancing state machine.
   </center>
 </p>
 The state machine that runs the current balancing algorithm is illustrated above. It is run in the ADCAN0 interrupt, which is executed every 6th PWM period.
@@ -1104,7 +1104,7 @@ Both SRs are disabled, so any conduction is through the body diodes of the SRs. 
   <center>
     <img src="images/illc-02.png" alt="standby-state-flowchart" width="450">
     <br>
-    Flowchart for STANDBY state
+    Flowchart for STANDBY state.
   </center>
 </p>
 
@@ -1124,7 +1124,7 @@ Note that the phase current measurements used for the comparison are filtered to
   <center>
     <img src="images/illc-03.png" alt="enable-state-flowchart" width="400">
     <br>
-    Flowchart for ENABLE state
+    Flowchart for ENABLE state.
   </center>
 </p>
 
@@ -1134,7 +1134,7 @@ After the comparison is made, PWM2 and PWM4 (the PWMs used to drive the SRs for 
   <center>
     <img src="images/illc-04.png" alt="pwm2-setup" width="800">
     <br>
-    PWM 2 setup
+    PWM 2 setup.
   </center>
 </p>
 
@@ -1158,7 +1158,7 @@ In this state, the duty cycles of the SR drives on both PG2 and PG4 are linearly
   <center>
     <img src="images/illc-05.png" alt="enable-state-flowchart" width="800">
     <br>
-    PWM2 signal during soft-start
+    PWM2 signal during soft-start.
   </center>
 </p>
 
@@ -1183,7 +1183,7 @@ At the end of the ramp, we change to the UP AND RUNNING state.
   <center>
     <img src="images/illc-06.png" alt="up-and-running-state-flowchart" width="1000">
     <br>
-    Flowchart illustrating the UP AND RUNNING state
+    Flowchart illustrating the UP AND RUNNING state.
   </center>
 </p>
 
@@ -1206,7 +1206,7 @@ See results below. The two phase currents are out of balance until the total out
   <center>
     <img src="images/illc-16.png" alt="ibalance-0" width="1000">
     <br>
-    Current Balancing
+    Current Balancing.
   </center>
 </p>
 
