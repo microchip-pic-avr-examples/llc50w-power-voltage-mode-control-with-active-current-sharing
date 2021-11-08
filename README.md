@@ -88,12 +88,10 @@ This design implements an innovative current sharing technique to accurately ach
 
 ### __Highlights__
 
-TODO: Finish this section!
-What is special about this that can't easily be done in analog? What is the USP?
-
 * Digitally-Controlled Two-Phase Interleaved LLC Resonant DC-DC Converter.
-* Excellent Current Sharing Between Phases Without Any Additional Hardware.
-* Soft-start utilizes both duty cycle modulation and frequency modulation for smooth output voltage ramp without input current surges.
+* Excellent current haring between phases without any additional hardware.
+* Utilization of dsPIC peripherals to achieve switching frequency range between 800kHz and 1MHz.
+* Soft-start with both duty cycle and frequency modulation for smooth output voltage ramp without current surges.
 
 [[back to top](#start-doc)]
 
@@ -747,7 +745,7 @@ We then discuss the compensator used to regulate the output voltage and show som
 
 - - - 
 
-<span id="plant-measurement"><a name="plant-measurement"> </a></span>
+<span id="plant-measurements"><a name="plant-measurements"> </a></span>
 
 #### __Plant Measurements__
 
@@ -927,9 +925,6 @@ Thus it is important to run these measurement at many different operating points
     Plant measurement: Vin = 39V, Fs = 970kHz, Iload = 2A.
   </center>
 </p>
-
-TODO:
-* ask Milan to relate measured results to hardware poles/zeros etc.
 
 
 [[back to top](#start-doc)]
