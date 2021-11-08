@@ -220,8 +220,8 @@ Please follow these steps to run the ILLC board in open loop mode.
 
 11. Set the DC source to 40V. Set current limit to 1.2A or lower. Turn on DC source.
 12. Short press the USER button on the LLC power board. This turns on the converter. The status LEDs should behave as follows:
-    - Green LED on power board constant on, indicating that the power supply is running.
-    - Red LED on power board slow-blinking, indicating that open-loop mode is active.
+- Green LED on power board constant on, indicating that the power supply is running.
+- Red LED on power board slow-blinking, indicating that open-loop mode is active.
 13. Check the PWM signal on TP100 with an oscilloscope. The signal should have a frequency of around 1MHz, and a duty cycle of 45%.
 14. Check the output voltage with the voltmeter: with 0.5A load, it should be around 7.4V.
 15. Move the poti wiper slowly towards the min setting. While doing this, observe the signal on TP100 and the output voltage, you should see the frequency of the signal on TP100 decreasing, the duty staying (approximately) the same, and the output voltage increasing.
@@ -791,7 +791,7 @@ This is a measure of how much Vout varies in gain and phase as the control input
 
 This means that channel 1 of the Bode 100 should be connected as close as possible to where the control input is disturbed. Channel 2 of the Bode 100 should be connected to the output of the converter.
 
-Channel 1 could be connected directly to the AN18 pin. In this case, the plant gain measurement would be accurate, but the measurement of the phase response would not be accurate at higher frequencies because of the ADC sampling delay (as the disturbance and Vout are sampled at a frequency of Fsw/7).  Hence, we take the ADC measurement on AN18 and convert it back to the analog domain by loading the digital value into a DAC on the dsPIC. This leads to a more accurate phase measurements at higher frequencies.
+Channel 1 could be connected directly to the AN18 pin. In this case, the plant gain measurement would be accurate, but the measurement of the phase response would not be accurate at higher frequencies because of the ADC sampling delay (as the disturbance and Vout are sampled at a frequency of Fsw/6).  Hence, we take the ADC measurement on AN18 and convert it back to the analog domain by loading the digital value into a DAC on the dsPIC. This leads to a more accurate phase measurements at higher frequencies.
 
 [[back to top](#start-doc)]
 - - -
@@ -940,6 +940,14 @@ Thus it is important to run these measurement at many different operating points
 Since the plant frequency response is single pole system, it is sufficient to use voltage mode control to compensate for the plant, using a 2P2Z compensator.
 
 As this is a frequency controlled converter, the control algorithm controls the PWM switching frequency to regulate the output voltage.
+
+<p>
+  <center>
+    <img src="images/illc-55.png" alt="compensator-15" width="900">
+    <br>
+    Simplified block diagram of the control elements.
+  </center>
+</p>
 
 [Digital Compensator Design Tool](https://www.microchip.com/developmenttools/ProductDetails/DCDT), abbreviated to DCDT, was used to design the 2P2Z compensator.
 
