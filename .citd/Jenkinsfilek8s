@@ -9,7 +9,7 @@
 pipeline {
     agent {
         kubernetes {
-            inheritFrom '4swbbevb-power-average-current-mode-control-github-deployment'
+            inheritFrom 'interleaved-llc-github-deployment'
             defaultContainer 'xc16-mplabx-sonar-fmpp-python'
             yamlFile '.citd/cloudprovider.yml'
         }

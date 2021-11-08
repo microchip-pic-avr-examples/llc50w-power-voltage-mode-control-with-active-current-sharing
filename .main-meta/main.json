@@ -3,26 +3,26 @@
    "category":"com.microchip.ide.project",
    "content":{
       "metaDataVersion":"1.0.0",
-      "name":"com.microchip.mplabx.project.illc-voltage-mode-control",
+      "name":"com.microchip.mplabx.project.dspic33c-interleaved-llc",
       "version":"1.0.0",
-      "displayName":"Interleaved LLC voltage mode control",
-      "projectName":"illc-voltage-mode-control",
-      "shortDescription":"Digital control loop implementation of a simple average current mode controller regulating the output voltage of a 4-switch buck-boost converter",
+      "displayName":"Interleaved LLC Converter with phase current balancing",
+      "projectName":"dspic33c-interleaved-llc,
+      "shortDescription":"Digital control loop implementation of two phase interleaved LLC convereter with phase current balancing",
       "ide":{
          "name":"MPLABX",
-         "semverRange":">=5.40.0"
+         "semverRange":">=5.50.0"
       },
       "compiler":{
          "name":"XC16",
-         "semverRange":"^1.50.0"
+         "semverRange":"^1.70.0"
       },
       "dfp":{
          "name":"dsPIC33CK-MP_DFP",
-         "semverRange":">=1.4.102"
+         "semverRange":">=1.6.176"
       },
 	  "configurator": {
          "name": "MCC",
-         "semverRange": ">=4.0.1"
+         "semverRange": ">=5.0.3"
       },
       "device":{
          "metaDataVersion":"1.0.0",
