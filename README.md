@@ -76,8 +76,6 @@ This solution demonstrates the implementation of an interleaved (2 phase) LLC co
 The 50W Interleaved LLC Converter Development Board is a generic development board for this topology that supports rapid prototyping and code development based on dsPIC33 devices. The board provides two identical half-bridge stages with LLC tank circuitry at the primary and voltage doubler rectification at the secondary. The board offers well organized building blocks that include an input filter, power stage, AUX supply, mating socket for Microchip’s newest Digital Power Plug-In Modules (DP PIMs), Human Machine Interface (HMI) and test points.
 The electrical characteristics are prepared to allow safe voltage levels of up to 50 VDC in and up to 12 VDC out. Topology and design are scalable and can be easily turned into real industrial demands targeting 400 VDC or 800 VDC bus operating voltage. A mating socket for dsPIC33 plug-in modules allows the system to be evaluated with different controllers. The pinout is compatible for EP, CK and CH dsPIC® DSC DP PIMs. A Human-Machine-Interface (HMI) and test points allow for easy evaluation and debugging.
 
-This design implements an innovative current sharing technique to accurately achieve current balancing between phases.
-
 [[back to top](#start-doc)]
 - - -
 
@@ -86,7 +84,7 @@ This design implements an innovative current sharing technique to accurately ach
 ### __Highlights__
 
 - Digitally-Controlled Two-Phase Interleaved LLC Resonant DC-DC Converter.
-- Excellent current haring between phases without any additional hardware.
+- Accurate current sharing between phases without any additional hardware.
 - Utilization of dsPIC peripherals to achieve switching frequency range between 800kHz and 1MHz.
 - Soft-start with both duty cycle and frequency modulation for smooth output voltage ramp without current surges.
 
