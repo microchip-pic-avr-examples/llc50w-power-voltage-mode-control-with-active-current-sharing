@@ -1236,7 +1236,7 @@ We have included a model of the LLC converter in this deployment for educational
   <center>
     <img src="images/illc-46.png" alt="mindi-00" width="1000">
     <br>
-    Mindi Model of LLC converter.
+    Mindi Model of LLC converter.  
   </center>
 </p>
 
