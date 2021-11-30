@@ -53,8 +53,9 @@ void __attribute__((__interrupt__, auto_psv)) _ADCAN0Interrupt(void)
   static uint32_t s_ct1_flt = 1;
   uint16_t SHRChannel_zw;
 
+  TP192_SetHigh();
   
-  TP34_RX_SetHigh(); 
+  //TP34_RX_SetHigh();
   
   //200ns
   pwr_ctrl_adc_data.drv_adc_val_FB_S_CT1_FLT = ADCBUF0;
@@ -66,19 +67,19 @@ void __attribute__((__interrupt__, auto_psv)) _ADCAN0Interrupt(void)
   s_ct1_flt -= pwr_ctrl_adc_data.drv_adc_fltval_FB_S_CT1_FLT;
   //--
 
-  TP193_SetHigh();
+//  TP193_SetHigh();
   SHRChannel_zw = ADCON3Lbits.CNVCHSEL;
   ADCON3Lbits.CNVCHSEL = ADC_CHANNEL_AN12_FB_VOUT;
   while (!ADSTATLbits.AN12RDY);
   pwr_ctrl_adc_data.drv_adc_val_FB_Vout = ADCBUF12;
-  TP193_SetLow();
+//  TP193_SetLow();
 #if defined POWER_STAGE_CONFIG_PHASE_A_ONLY  
   Drv_PwrCtrl_ILLC_PH1VoltageLoop();
 #endif
 #if defined POWER_STAGE_CONFIG_INTERLEAVED  
   Drv_PwrCtrl_ILLC_ILPHVoltageLoop();
 #endif
-  TP193_SetLow();
+//  TP193_SetLow();
   
   if(SHRChannel_zw == ADC_CHANNEL_AN15_POTIREF)
     ADCON3Lbits.CNVCHSEL = ADC_CHANNEL_AN19_FB_P_CT1_FLT;
@@ -134,8 +135,9 @@ void __attribute__((__interrupt__, auto_psv)) _ADCAN0Interrupt(void)
 
   IFS5bits.ADCAN0IF = 0; //clear the channel_AN0 interrupt flag
 
-  TP34_RX_SetLow();   
+  //TP34_RX_SetLow();
 
+  TP192_SetLow();
 }
 
 //-------------------------------------------------------------------------------------------------------
@@ -147,6 +149,7 @@ void __attribute__((__interrupt__, auto_psv)) _ADCAN1Interrupt(void)
 
   static uint32_t s_ct2_flt = 1;
 
+  TP192_SetHigh();
 
   TP36_TX_SetHigh();
 
@@ -168,6 +171,7 @@ void __attribute__((__interrupt__, auto_psv)) _ADCAN1Interrupt(void)
   IFS5bits.ADCAN1IF = 0;
 
   TP36_TX_SetLow();
+  TP192_SetLow();
 }
 
 //-------------------------------------------------------------------------------------------------------

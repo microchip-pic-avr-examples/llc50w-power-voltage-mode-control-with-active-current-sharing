@@ -205,6 +205,7 @@ void Drv_PwrCtrl_ILLC_Task_100us(void)
 
       //------------------------------------------------------------------------
     case PCS_WAIT_IF_FAULT_ACTIVE: //2
+      TP193_SetLow();
       if ((ILLCFaults.CollectiveFaults == 0))
       {
         pwr_ctrl_state = PCS_STANDBY;
@@ -212,6 +213,7 @@ void Drv_PwrCtrl_ILLC_Task_100us(void)
       break;
       //------------------------------------------------------------------------
     case PCS_STANDBY: //3
+      TP193_SetLow();
       if (ILLCFaults.CollectiveFaults)
       {
         pwr_ctrl_state = PCS_WAIT_IF_FAULT_ACTIVE;
@@ -229,6 +231,7 @@ void Drv_PwrCtrl_ILLC_Task_100us(void)
       break;
       //------------------------------------------------------------------------
     case PCS_SOFT_START_PRE1: //5 
+      TP193_SetHigh();
       if (ILLCFaults.CollectiveFaults)
       {
         pwr_ctrl_state = PCS_WAIT_IF_FAULT_ACTIVE;

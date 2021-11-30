@@ -83,7 +83,9 @@
 void Tasks_Realtime_100us(void)
 {
     // put your application specific code here that needs to be called every 100 micro seconds from the interrupt
+    TP191_SetHigh();
     Drv_PwrCtrl_ILLC_Task_100us();
+    TP191_SetLow();
 }
 
 //=======================================================================================================
@@ -153,7 +155,7 @@ void Tasks_1s(void)
 //=======================================================================================================
 void Tasks_Background(void)
 {
-
+    TP194_Toggle();
     // put your application specific code here that needs to be called in the background.
     // your application needs to take care of it's timing.
 }

@@ -56,7 +56,7 @@ void Drv_PwrCtrl_ILLC_ILSR_Adaptive_Enable(void)
   if (((pwr_ctrl_adc_data.drv_adc_fltval_FB_S_CT1_FLT + pwr_ctrl_adc_data.drv_adc_fltval_FB_S_CT2_FLT) > IOUT_SRONIL)
           && (!pwr_ctrl_flagbits.SR1on) && (!pwr_ctrl_flagbits.SR2on))
   {
-    TP192_SetHigh();
+//    TP192_SetHigh();
     phaseIL2zw = (((PG1PER >> 1) - DTH_L) - SRStartDC);
     pwr_ctrl_flagbits.SR1on = 1;
 
@@ -66,7 +66,7 @@ void Drv_PwrCtrl_ILLC_ILSR_Adaptive_Enable(void)
     Drv_PwrCtrl_ILLC_ILSR_Adaptive_SetPWMValues(phaseIL2zw, phaseIL4zw);
 
     sr_ctrl_state = SRCS_ENABLE;
-    TP192_SetLow();
+//    TP192_SetLow();
   }
 }
 
@@ -223,7 +223,7 @@ void Drv_PwrCtrl_ILLC_ILPHVoltageLoop(void)
       ILLC_PHASE2_PWM_UPDATE_PER_TRIGA_TRIGB_TRIGC((Controller_ILLC._OpenLoopPeriod) & 0xFFF8); //0xFFF8 needed !!
     }
     
-    TP193_SetHigh();
+//    TP193_SetHigh();
     ///*
     //SR enable check during softstart at Vin depending or at state RUN 
     //1070ns
@@ -283,14 +283,14 @@ void Drv_PwrCtrl_ILLC_ILPHVoltageLoop(void)
     }
     //END SR 
     //*/
-    TP193_SetLow();
+//    TP193_SetLow();
     
     ILLC_PHASE1_PWM_UPDATE_REGS(); //Update all PG3 and PG4 regs
     ILLC_PHASE2_PWM_UPDATE_REGS(); //Update all PG1 and PG1 regs
 
   }
   // END handle PWMs for primary switches and SR switches ----------------------
-  TP193_SetHigh();
+  //TP193_SetHigh();
   //100ns
   if ((PG1PER == 4000 || PG3PER == 4000) && (pwr_ctrl_ref_data.val_VoutRef_internal <
           (pwr_ctrl_adc_data.drv_adc_val_FB_Vout - (pwr_ctrl_adc_data.drv_adc_val_FB_Vout >> 5)))
