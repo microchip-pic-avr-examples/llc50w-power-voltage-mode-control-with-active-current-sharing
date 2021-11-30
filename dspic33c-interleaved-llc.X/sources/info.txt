@@ -1,0 +1,17 @@
+================================================================================
+									info.txt
+================================================================================
+
+Test points:
+
+Test point		Signal name		PIM Socket num		dsPIC33CKMP506 pin
+TP190			GPIO_1			25					RC10_RP58
+TP191			GPIO_2			27					RC11_RP59
+TP192			GPIO_3			24					RC08_RP56ASDA1
+TP193			GPIO_4			26					RD14
+TP194			GPIO_5			28					RD9
+
+These test points can be found right of the PIM Socket next to the 6-pin-header and the lower right ground plane.
+
+
+

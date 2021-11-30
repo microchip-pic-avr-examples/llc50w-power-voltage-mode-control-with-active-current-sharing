@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><dcdt>
+    <project type="Single-Loop" name="vmc">
+        <compensator type="2P2Z">
+            <pole type="0" value="2000.000"/>
+            <pole type="2" value="200000.000"/>
+            <zero type="1" value="1000.000"/>
+            <gain type="kdc" value="1.000"/>
+            <setting type="warp" value="false"/>
+            <pwm type="frequency" value="800000.000"/>
+            <pwm type="ratio" value="4"/>
+            <pwm type="PWM Max Resolution" value="2.500e-10"/>
+            <pwm type="computational delay" value="1.350e-06"/>
+            <pwm type="gate drive delay" value="1.500e-07"/>
+            <clamp type="min" value="4000"/>
+            <clamp type="max" value="5000"/>
+        </compensator>
+        <plant type="pole zero" value="Hsys">
+            <pole type="1" value="0.000e+00"/>
+            <pole type="2" value="0.000e+00"/>
+            <pole type="3" value="0.000e+00"/>
+            <pole type="4" value="0.000e+00"/>
+            <pole type="5" value="0.000e+00"/>
+            <zero type="1" value="0.000e+00"/>
+            <zero type="2" value="0.000e+00"/>
+            <zero type="3" value="0.000e+00"/>
+            <zero type="4" value="0.000e+00"/>
+            <zero type="5" value="0.000e+00"/>
+            <gain type="kdc" value="1.000"/>
+        </plant>
+        <feedback type="rc network" value="Hfb">
+            <resister type="1" value="3300"/>
+            <resister type="2" value="1000"/>
+            <capacitor type="1" value="0.000e+00"/>
+            <adc type="resolution" value="12-bit"/>
+            <adc type="latency" value="300"/>
+            <adc type="voltage range" value="3.300e+00"/>
+            <adc type="output" value="5.000e+00"/>
+            <adc type="Kr" value="0.0000"/>
+        </feedback>
+    </project>
+</dcdt>
