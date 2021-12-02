@@ -171,19 +171,19 @@ void App_GUI_ProtocolHandler(uint16_t length, uint8_t* data)
     
     if (cmd == GUI_CMD_SET_REF_FROM_POTI)
     {
-        if (!App_HMI_useFixedRef)
-            App_HMI_useRefFromPoti = true;
+        App_HMI_useFixedRef = false;
+        App_HMI_useRefFromPoti = true;
         App_HMI_useRefFromGUI = false;
     }
     else if (cmd == GUI_CMD_SET_VOLTAGE)
     {
         if (length >= 3)
         {
-            volatile uint8_t highbyte = data[1];
-            volatile uint8_t lowbyte = data[2];
-            //Gui_VoutRef = (data[1] << 8) + data[2];
+            uint8_t highbyte = data[1];
+            uint8_t lowbyte = data[2];
             Gui_VoutRef = (highbyte << 8) + lowbyte;
             Drv_PwrCtrl_ILLC_SetReferenceRaw(Gui_VoutRef); // raw adc vaule
+            App_HMI_useFixedRef = false;
             App_HMI_useRefFromPoti = false;
             App_HMI_useRefFromGUI = true;
         }
