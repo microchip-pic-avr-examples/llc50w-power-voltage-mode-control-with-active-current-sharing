@@ -298,6 +298,7 @@ void GuiComm_Rcv_Task(void)
 	static uint16_t	rcv_data_index = 0;
 	static uint16_t	rcv_CRC_calculated = 0;
 	static uint16_t	rcv_CRC = 0;
+    static bool     rcv_CRC_inUse = false;
 	static uint16_t	rcv_timeout = 0;
 	uint8_t	data;
 	
@@ -334,6 +335,15 @@ void GuiComm_Rcv_Task(void)
 				break;
 
 			case RCV_READ_LENGTH_HIGHBYTE:
+                if (data && 0x80)
+                {
+                    rcv_CRC_inUse = true;
+                    data &= 0x7f;
+                }
+                else
+                {
+                    rcv_CRC_inUse = false;
+                }
 				rcv_data_length = data<<8;
 				rcv_state = RCV_READ_LENGTH_LOWBYTE;
 				break;
