@@ -3,11 +3,11 @@
    "category":"com.microchip.ide.project",
    "content":{
       "metaDataVersion":"1.0.0",
-      "name":"com.microchip.mplabx.project.dspic33c-interleaved-llc",
+      "name":"com.microchip.mplabx.project.lvllc-power-voltage-mode-control-with-active-current-sharing",
       "version":"1.0.0",
-      "displayName":"Interleaved LLC Converter with phase current balancing",
-      "projectName":"dspic33c-interleaved-llc,
-      "shortDescription":"Digital control loop implementation of two phase interleaved LLC convereter with phase current balancing",
+      "displayName":"Interleaved LLC Converter with Phase Current Balancing",
+      "projectName":"lvllc-power-voltage-mode-control-with-active-current-sharing",
+      "shortDescription":"Two phase interleaved 50W LLC converter with digitally implemented voltage mode control and phase current balancing.",
       "ide":{
          "name":"MPLABX",
          "semverRange":">=5.50.0"
@@ -34,22 +34,26 @@
             "versionRange":"*"
          }
       },
-      "peripherals":[
-        "UART",
-        "Analog Comparator",
-        "SMPS PWM",
-        "ADC",
-        "TIMER"
+		"peripherals":[
+		"UART",
+		"Analog Comparator",
+		"SMPS PWM",
+		"ADC",
+		"TIMER"
+		"PWM",
+		"SCCP"
       ],
       "subcategories": [
-		"Power"
+		"Power",
+		"Power Management and Conversion"
        ],
        "keywords": [
 		"dsPIC",
-        "DSC",
-        "Digital Power Conversion",
-        "Power Conversion",
-        "Power Supply",
+		"DSC",
+		"Digital Power Conversion",
+		"Digital Filters",
+		"Power Conversion",
+		"Power Supply",
 		"SMPS"
        ]
      }
