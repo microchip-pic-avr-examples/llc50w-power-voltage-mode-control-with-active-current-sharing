@@ -1,6 +1,6 @@
 ![image](images/microchip.jpg) 
 
-## %repoDescritpion%
+## LLC50W POWER VOLTAGE MODE CONTROL WITH ACTIVE CURRENT SHARING
 
 Board Image if any.
 
