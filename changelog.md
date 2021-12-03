@@ -1,4 +1,4 @@
-# lvllc-power-voltage-mode-control-with-active-current-sharing, release v1.0.0
+# llc50w-power-voltage-mode-control-with-active-current-sharing, release v1.0.0
 
 ### Release Highlights
 - Digitally-Controlled Two-Phase Interleaved LLC Resonant DC-DC Converter.

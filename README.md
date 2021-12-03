@@ -58,7 +58,7 @@ The electrical characteristics are prepared to allow safe voltage levels of up t
 
 __Firmware documentation__
 
-- [Online Firmware Documentation of this Code Example](https://microchip-pic-avr-examples.github.io/lvllc-power-voltage-mode-control-with-active-current-sharing/)
+- [Online Firmware Documentation of this Code Example](https://microchip-pic-avr-examples.github.io/llc50w-power-voltage-mode-control-with-active-current-sharing)
 
 
 __Hardware Documentation__
