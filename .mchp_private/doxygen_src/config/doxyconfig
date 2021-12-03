@@ -13,9 +13,9 @@
 
 # 1) Project Information
 
-PROJECT_NAME        = "Doxygen Example from Include File"
-PROJECT_NUMBER      = DV330101-r5.0
-PROJECT_BRIEF       = "Brief Project Description from Include File"
+PROJECT_NAME        = "Interleaved LLC Converter Firmware"
+PROJECT_NUMBER      = EV84C64A
+PROJECT_BRIEF       = "Interleaved LLC Converter with Voltage Mode Control and Phase Current Balancing Example"
 
 # 2) Project File Location and Path Declarations
 #

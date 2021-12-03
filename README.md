@@ -7,13 +7,13 @@
 
 ### 2 phase Interleaved LLC converter with voltage mode control and phase current balancing. 
 
-<p><center><a target="_blank" href="https://www.microchip.com/en-us/development-tool/DV330102" rel="nofollow">
+<p><center><a target="_blank" href="https://www.microchip.com/en-us/development-tool/EV84C64A" rel="nofollow">
 <img src="images/illc-00.png" alt="dsPIC33C Interleaved LLC Converter" width="700">
 </a></center></p>
 
 <p>
 <center>
-<a target="_blank" href="https://www.microchip.com/en-us/development-tool/DV330102" rel="nofollow">
+<a target="_blank" href="https://www.microchip.com/en-us/development-tool/EV84C64A" rel="nofollow">
 dsPIC33 Interleaved LLC Converter Power Board.
 </a>
 </center>
@@ -40,7 +40,7 @@ The electrical characteristics are prepared to allow safe voltage levels of up t
 
 <span id="highlights"><a name="highlights"> </a></span>
 
-### Highlights
+## Highlights
 
 - Digitally-Controlled Two-Phase Interleaved LLC Resonant DC-DC Converter.
 - Accurate current sharing between phases without any additional hardware.
@@ -63,7 +63,7 @@ __Firmware documentation__
 
 __Hardware Documentation__
 
-- [Interleaved LLC Development Board Product Webpage](https://www.microchip.com/en-us/development-tool/DV330102)
+- [Interleaved LLC Development Board Product Webpage](https://www.microchip.com/en-us/development-tool/EV84C64A)
 
 __Target Device Documentation__
 
@@ -94,10 +94,9 @@ __Please always check for the latest data sheets on the respective product websi
 
 ## Hardware Used
 
-- Interleaved LLC Development Board, Part-No. [DV330102](https://www.microchip.com/en-us/development-tool/DV330102)
+- Interleaved LLC Development Board, Part-No. [EV84C64A](https://www.microchip.com/en-us/development-tool/EV84C64A)
 - dsPIC33CK256MP506 Digital Power PIM, Part-No. [MA330048](https://www.microchip.com/MA330048)
 
-<span id="how-to-use-this-document"><a name="how-to-use-this-document"> </a></span>
 
 [[back to top](#start-doc)]
 
@@ -166,29 +165,43 @@ Note that we use the ICD4 in-circuit debugger to program the dsPIC, but any type
 
 Please follow these steps to run the ILLC board in open loop mode.
 
-1. Connect computer directly to DP-PIM via USB cable (USB Micro Type-B on DP-PIM).
-2. Connect computer to ICD4 via USB cable, connect ICD4 to 6 pin header on DP-PIM via RJ11 cable and RJ11 to ICSP adapter.
-3. Connect poti (5kR or 10kR) to 6 pin header on LLC power board as shown above.
-4. Set poti wiper to max setting.
-5. Connect input terminal of LLC power board to DC source capable of providing at least 40V. Leave DC source off for now.
-6. Connect scope probe to TP100 (this is phase A high-side primary drive signal) ensuring to ground the scope at GND_S (not GND_P).
-7. Connect a voltmeter to the output terminals of the LLC power board.
-8. Connect output terminals of LLC power board to resistive or constant current load (set current load to around 0.5A or resistive load to around 20R), turn on the load if it is an e-load.
-9. Open ILLC project in MPLABx. Set as the main project, then download the firmware to the dsPIC on the DP-PIM.
-10. When the firmware is running, you should see
+(1) Connect computer directly to DP-PIM via USB cable (USB Micro Type-B on DP-PIM).
+
+(2) Connect computer to ICD4 via USB cable, connect ICD4 to 6 pin header on DP-PIM via RJ11 cable and RJ11 to ICSP adapter.
+
+(3) Connect poti (5kR or 10kR) to 6 pin header on LLC power board as shown above.
+
+(4) Set poti wiper to max setting.
+
+(5) Connect input terminal of LLC power board to DC source capable of providing at least 40V. Leave DC source off for now.
+
+(6) Connect scope probe to TP100 (this is phase A high-side primary drive signal) ensuring to ground the scope at GND_S (not GND_P).
+
+(7) Connect a voltmeter to the output terminals of the LLC power board.
+
+(8) Connect output terminals of LLC power board to resistive or constant current load (set current load to around 0.5A or resistive load to around 20R), turn on the load if it is an e-load.
+
+(9) Open ILLC project in MPLABx. Set as the main project, then download the firmware to the dsPIC on the DP-PIM.
+
+(10) When the firmware is running, you should see
 
 - the red LED on the DP-PIM slow blinking, indicating that the firmware is running.
 - the green LED on the power board slow blinking, indicating that the power supply is not running.
 - the red LED on the power board is on, indicating that a fault is active.
 
-11. Set the DC source to 40V. Set current limit to 1.2A or lower. Turn on DC source.
-12. Short press the USER button on the LLC power board. This turns on the converter. The status LEDs should behave as follows:
+(11) Set the DC source to 40V. Set current limit to 1.2A or lower. Turn on DC source.
+
+(12) Short press the USER button on the LLC power board. This turns on the converter. The status LEDs should behave as follows:
 - Green LED on power board constant on, indicating that the power supply is running.
 - Red LED on power board slow-blinking, indicating that open-loop mode is active.
-13. Check the PWM signal on TP100 with an oscilloscope. The signal should have a frequency of around 1MHz, and a duty cycle of 45%.
-14. Check the output voltage with the voltmeter: with 0.5A load, it should be around 7.4V.
-15. Move the poti wiper slowly towards the min setting. While doing this, observe the signal on TP100 and the output voltage, you should see the frequency of the signal on TP100 decreasing, the duty staying (approximately) the same, and the output voltage increasing.
-16. With the poti wiper at the min setting, the signal on TP100 should have a frequency of 800kHz and a duty cycle of 45%. With a 0.5A load, the output voltage should be around 10.7V.
+
+(13) Check the PWM signal on TP100 with an oscilloscope. The signal should have a frequency of around 1MHz, and a duty cycle of 45%.
+
+(14) Check the output voltage with the voltmeter: with 0.5A load, it should be around 7.4V.
+
+(15) Move the poti wiper slowly towards the min setting. While doing this, observe the signal on TP100 and the output voltage, you should see the frequency of the signal on TP100 decreasing, the duty staying (approximately) the same, and the output voltage increasing.
+
+(16) With the poti wiper at the min setting, the signal on TP100 should have a frequency of 800kHz and a duty cycle of 45%. With a 0.5A load, the output voltage should be around 10.7V.
 
 Note that at power-up, the firmware checks if a potentiometer is connected, and if so, the voltage on the potentiometer wiper sets the output voltage reference. If a potentiometer is not connected, the output voltage reference is fixed at 9V. The firmware will not detect that the poti is present if the poti is connected after power up, so you need to reset the dsPIC if this is the case.
 
