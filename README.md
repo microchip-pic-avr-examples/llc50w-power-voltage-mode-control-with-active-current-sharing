@@ -244,9 +244,9 @@ On the "Status" tab we show an example below with the main values like voltages 
 
 <p>
   <center>
-    <img src="images/illc-26.png" alt="board-power-visualizer-00" width="1500">
+    <img src="images/illc-26.png" alt="board-power-visualizer-00" width="1200">
     <br>
-    Power Board Visualizer Landing Page.
+    Power Board Visualizer Landing Page.  
   </center>
 </p>
 
