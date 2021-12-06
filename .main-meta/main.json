@@ -43,9 +43,6 @@
 		"PWM",
 		"SCCP"
       ],
-      "subcategories": [
-		"Power"
-       ],
        "keywords": [
 		"dsPIC",
 		"DSC",
