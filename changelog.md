@@ -7,5 +7,5 @@
 - Soft-start with both duty cycle and frequency modulation for smooth output voltage ramp without current surges.
 
 ### Features Added\Updated
-
+- This is the initial release version
 
