@@ -39,7 +39,7 @@
 		"Analog Comparator",
 		"SMPS PWM",
 		"ADC",
-		"TIMER"
+		"TIMER",
 		"PWM",
 		"SCCP"
       ],
