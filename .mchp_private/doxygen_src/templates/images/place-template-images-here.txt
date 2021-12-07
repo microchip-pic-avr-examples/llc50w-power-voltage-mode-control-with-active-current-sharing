@@ -1,0 +1,24 @@
+The main index of the online help output ned to be established manually by defining groups. 
+Each group will be a index. Groups can point to each other to establish a tree structure
+under which documentation pages can be sorted.
+
+Example:
+
+@defgroup group1 Index1 Level 1
+
+@defgroup group1.1 Index1 Level 2
+@ingroup group1
+
+@defgroup group2 Index2 Level 1
+
+
+will result in a tree structure looking like this:
+
+
+  +-[Index1 Level 1]
+  |     |
+  |     |
+  |     +-[Index1 Level 2]
+  |
+  |
+  +-[Index2 Level 1]

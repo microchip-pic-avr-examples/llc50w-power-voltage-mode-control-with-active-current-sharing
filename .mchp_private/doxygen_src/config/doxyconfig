@@ -1,0 +1,126 @@
+####################################################################################
+# Doxymple: Doxygen usage example for MPLAB X deployment projects
+# 
+# Description:
+# These project-specific settings will overwrite and/or extend default settings 
+# declared in the doxyfile template configuration, where tags assigned with '=' 
+# will overwrite the original setting while tags assigned with '+=' will extend 
+# the default settings specified in the doxyfile template configuration.
+# 
+# doxyfile template location: .mchp_private/doxygen_src/templates
+#
+####################################################################################
+
+# 1) Project Information
+
+PROJECT_NAME        = "Interleaved LLC Converter Firmware"
+PROJECT_NUMBER      = EV84C64A
+PROJECT_BRIEF       = "Interleaved LLC Converter with Voltage Mode Control and Phase Current Balancing Example"
+
+# 2) Project File Location and Path Declarations
+#
+# a) Input Files
+#
+# 	 Description:
+#	 The INPUT tag is used to specify the files and/or directories that contain
+#	 documented source files. You may enter file names like myfile.cpp or
+#	 directories like /usr/src/myproject. Separate the files or directories with
+#	 spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
+#	 Note: If this tag is empty the current directory is searched.
+
+INPUT               += ../../../doxymple.X/sources
+INPUT				+= ../../../
+
+# b) Include File Path Reference 
+#
+# 	 Description:
+#	 The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
+#	 path mentioned in the documentation of a class, which tells the reader which
+#	 header file to include in order to use a class. If left blank only the name of
+#	 the header file containing the class definition is used. Otherwise one should
+#	 specify the list of include paths that are normally passed to the compiler
+#	 using the -I flag.
+
+STRIP_FROM_INC_PATH = ../../../doxymple.X/sources
+
+# b) General File Path Reference 
+#
+# 	 Description:
+#	 The STRIP_FROM_PATH tag can be used to strip a user-defined part of the path.
+#	 Stripping is only done if one of the specified strings matches the left-hand
+#	 part of the path. The tag can be used to show relative paths in the file list.
+#	 If left blank the directory from which doxygen is run is used as the path to
+#	 strip.
+#
+#	 Note that you can specify absolute paths here, but also relative paths, which
+#	 will be relative from the directory where doxygen is started.
+#	 This tag requires that the tag FULL_PATH_NAMES is set to YES.
+
+STRIP_FROM_PATH     = ../../../
+
+# 3) Pre-Definitions of common macros, which are not visible to the doxygen parser
+#    (e.g. XC16 C-Compiler macros defined in MPLAB X project properties
+#
+#	 Description:
+# 	 The PREDEFINED tag can be used to specify one or more macro names that are
+#	 defined before the preprocessor is started (similar to the -D option of e.g.
+#	 gcc). The argument of the tag is a list of macros of the form: name or
+#	 name=definition (no spaces). If the definition and the "=" are omitted, "=1"
+#	 is assumed. To prevent a macro definition from being undefined via #undef or
+#	 recursively expanded use the := operator instead of the = operator.
+#	 This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
+
+PREDEFINED          += __attribute__(x)=
+PREDEFINED			+= MY_OPTION
+
+# 4) File extensions of file types which should be included in the documentation 
+#    in addition to the common file types of embedded C programs. Predefined
+# 	 file types are *.c, *.h, *.s, *.S, *.inc, *.dox, *.md 
+#    Add any additional file extension pattern as needed here
+#
+#    Description:
+#	 If the value of the INPUT tag contains directories, you can use the
+#	 FILE_PATTERNS tag to specify one or more wild-card patterns (like *.cpp and
+#	 *.h) to filter out the source-files in the directories.
+#
+#	 Note that for custom extensions or not directly supported extensions you also
+#	 need to set EXTENSION_MAPPING for the extension otherwise the files are not
+#	 read by doxygen.
+#
+#	 Note the list of default checked file patterns might differ from the list of
+#	 default file extension mappings (see above).
+
+# 	 Example: FILE_PATTERNS       += *.txt
+
+FILE_PATTERNS		+=
+
+# 5) Exclude files and/or directories from being parsed and included in documentation 
+#    These settings must be used to exclude markdown files of subtree repositories to
+#    prevent conflicts with in-code declarations
+# 
+# 	 Description:
+# 	 The EXCLUDE tag can be used to specify files and/or directories that should be
+# 	 excluded from the INPUT source files. This way you can easily exclude a
+# 	 subdirectory from a directory tree whose root is specified with the INPUT tag.
+#
+# 	 Note that relative paths are relative to the directory from which doxygen is
+# 	 run.
+
+EXCLUDE					+= ../../../dspic33c-interleaved-llc.X
+EXCLUDE					+= ../../../changelog.md
+
+# 6) Add macros for section definitions if @cond or @if condition tags are used 
+#
+#	 Description:
+# 	 The ENABLED_SECTIONS tag can be used to enable conditional documentation
+# 	 sections, marked by \if <section_label> ... \endif and \cond <section_label>
+# 	 ... \endcond blocks.
+#
+#	 Example:
+# 	 ENABLED_SECTIONS        += INCLUDE_BOOST
+# 	 ENABLED_SECTIONS        += INCLUDE_LCD
+
+ENABLED_SECTIONS    += MY_OPTION_LABEL
+ENABLED_SECTIONS    += MY_OPTION_LABEL2
+
+# END OF FILE
