@@ -83,12 +83,12 @@ __Please always check for the latest data sheets on the respective product websi
 
 ## Software Used
 
-- [Power Board Visualizer GUI](https://www.microchip.com/SWLibraryWeb/product.aspx?product=POWER_BOARD_VISUALIZER)
+- [Power Board Visualizer GUI](https://www.microchip.com/en-us/software-library/power_board_visualizer)
 - [MPLAB&reg; X IDE v5.50](https://www.microchip.com/mplabx-ide-windows-installer)
 - [MPLAB&reg; XC16 Compiler v1.70](https://www.microchip.com/mplabxc16windows)
 - [Microchip Code Configurator v5.0.3](https://www.microchip.com/mplab/mplab-code-configurator)
 - [Digital Compensator Design Tool](https://www.microchip.com/developmenttools/ProductDetails/DCDT)
-- [MPLAB&reg; Mindi™ Simulator](https://www.microchip.com/SWLibraryWeb/producttc.aspx?product=AnalogSimMPLABMindi)
+- [MPLAB&reg; Mindi™ Simulator](https://www.microchip.com/en-us/development-tools-tools-and-software/embedded-software-center/mplab-mindi-analog-simulator)
 
 <span id="hardware-used"><a name="hardware-used"> </a></span>
 
