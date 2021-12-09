@@ -1,5 +1,0 @@
-Flowcharts generated via Graphviz scripts should be saved as *.gv files and placed in this directory.
-The doxygen documentation configuration (doxyfile) is set up to parse this directory for *.dot/*.gv files.
-As all externally generated graphics have to be refrenced in the comment section of the documented sources, 
-this path will be recognized without having to be specified. This is convenient if a graphic is refrenced
-in a source file and this source file gets moved or directories of the path get renamed.
